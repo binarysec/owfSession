@@ -38,8 +38,8 @@ class session extends wf_agg {
 	public $session_me;
 	public $session_my_perms;
 	private $session_data;
-	private $session_timeout;
-	private $session_var;
+	public $session_timeout;
+	public $session_var;
 	
 	
 	public function loader($wf) {
@@ -235,7 +235,8 @@ class session extends wf_agg {
 			"remote_hostname"   => gethostbyaddr($_SERVER["REMOTE_ADDR"])
 		);
 		$this->user->modify($update, (int)$this->session_me["id"]);
-
+		$this->session_me = array_merge($this->session_me, $update);
+		
 // 		/* merge data & update */
 // 		$this->session_me = array_merge($this->session_me, $update);
 		

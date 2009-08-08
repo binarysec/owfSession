@@ -47,10 +47,26 @@ class wfm_session extends wf_module {
 				WF_ROUTE_HIDE,
 				array("session:admin")
 			),
-			"/session/permissions/search" => array(
+			"/session/permissions/user" => array(
 				WF_ROUTE_ACTION,
 				"session/permissions",
-				"show_acl",
+				"add_user",
+				"Logout",
+				WF_ROUTE_HIDE,
+				array("session:admin")
+			),
+			"/session/permissions/delete" => array(
+				WF_ROUTE_ACTION,
+				"session/permissions",
+				"delete_user",
+				"Logout",
+				WF_ROUTE_HIDE,
+				array("session:admin")
+			),
+			"/session/permissions/matrix" => array(
+				WF_ROUTE_ACTION,
+				"session/permissions",
+				"edit_user",
 				"Logout",
 				WF_ROUTE_HIDE,
 				array("session:admin")

@@ -2,8 +2,9 @@
 
 class session_db_user extends session_driver_user {
 	private $data = array();
-
-	public function loader($wf) {
+	private $session;
+	
+	public function __construct($wf) {
 		$this->wf = $wf;
 		
 		$struct = array(
@@ -16,52 +17,66 @@ class session_db_user extends session_driver_user {
 			"session_time_auth" => WF_INT,
 			"session_time" => WF_INT,
 			"session_data" => WF_DATA,
-			"remote_address" => WF_VARCHAR,
+			"remote_address" => WF_INT,
 			"remote_hostname" => WF_VARCHAR,
-			"forwarded_remote_address" => WF_VARCHAR,
-			"forwarded_remote_hostname" => WF_VARCHAR,
-			"data" => WF_DATA
+			"forwarded_remote_address" => WF_INT,
+			"forwarded_remote_hostname" => WF_VARCHAR
 		);
 		$this->wf->db->register_zone(
-			"session_db_user", 
+			"session_user", 
 			"Core session table", 
 			$struct
 		);
+		
+		$this->session = $this->wf->session();
+		
+		$this->add(
+			"wf@binarysec.com", 
+			"lala", 
+			"Open Web Framework", 
+			"session:admin"
+		);
+		
 	}
 	
 	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 	 *
 	 * 
 	 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-	public function add($data) {
+	public function add($email, $password, $name, $type) {
+
 		/* sanatization */
-		if(!$data["email"] || !$data["password"])
+		if(!$email || !$password)
 			return(FALSE);
 
 		/* vérification si l'utilisateur existe */
-		if($this->get("email", $data["email"]))
+		$r = $this->get("email", $email);
+		if(is_array($r[0]))
 			return(FALSE);
 
-		if(count($data["permissions"]) <= 0)
-			$data["permissions"] = array(WF_USER_SIMPLE);
-		
+
 		/* input */
 		$insert = array(
-			"email" => $data["email"],
-			"name" => $data["name"],
-			"password" => md5($data["password"]),
-			"create_time" => time(),
-			"data" => serialize($data["data"])
+			"email" => $email,
+			"name" => $name,
+			"password" => $this->wf->hash($password),
+			"create_time" => time()
 		);
 
 		/* sinon on ajoute l'utilisateur */
-		$q = new core_db_insert("session_db_user", $insert);
+		$q = new core_db_insert("session_user", $insert);
 		$this->wf->db->query($q);
-		$uid = $this->wf->db->get_last_insert_id('session_db_user_id_seq');
+		$uid = $this->wf->db->get_last_insert_id('session_user_id_seq');
 
 		/* reprend les informations */
-		$user = $this->get("email", $data["email"]);
-
+		$user = $this->get("email", $email);
+		
+		/* add initials permissions */
+		$this->session->perm->user_add(
+			$user[0]["id"],
+			$type
+		);
+		
 		/* retourne l'identifiant de l'utisateur créé */
 		return($uid);
 	}
@@ -76,7 +91,7 @@ class session_db_user extends session_driver_user {
 			return(FALSE);
 			
 		$q = new core_db_delete(
-			"session_db_user", 
+			"session_user", 
 			array("id" => (int)$uid)
 		);
 		$this->wf->db->query($q);
@@ -89,11 +104,15 @@ class session_db_user extends session_driver_user {
 	 * 
 	 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 	public function modify($data, $uid) {
-		if(!$insert)
+		if(!$data)
 			return(TRUE);
 
-		$q = new core_db_update("session_db_user");
-		$where = array("id" => $uid);
+		if($data["password"])
+			$data["password"] = $this->wf->hash($data["password"]);
+	
+		
+		$q = new core_db_update("session_user");
+		$where = array("id" => (int)$uid);
 		$q->where($where);
 		$q->insert($data);
 		$this->wf->db->query($q);
@@ -105,45 +124,17 @@ class session_db_user extends session_driver_user {
 	 * 
 	 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 	public function get($conds, $extra=NULL) {
-		if($extra && is_string($conds))
-			$where = array($conds, $extra);
+		if(is_array($conds))
+			$where = $conds;
 		else
-			$where = &$conds;
-			
-		$q = new core_db_select("session_db_user");
+			$where = array($conds => $extra);
+	
+		$q = new core_db_select("session_user");
 		$q->where($where);
 		$this->wf->db->query($q);
 		$res = $q->get_result();
 		return($res);
 	}
 
-	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-	 *
-	 * Add user specific information
-	 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-	public function set_data($data, $uid) {
-		$this->data = array_merge($this->data, $data);
 
-		/* update les informations dans la bdd */
-		$q = new core_db_update("session_db_user");
-		$where = array(
-			"id" => (int)$uid
-		);
-		$update = array(
-			"session_data" => serialize($this->data)
-		);
-
-		$q->where($where);
-		$q->insert($update);
-		$this->wf->db->query($q);
-	}
-	
-	public function unset_data($list) {
-		foreach($list as $v)
-			unset($this->data[$v]);
-	}
-	
-	public function get_data($key) {
-		return($this->data[$key]);
-	}
 }

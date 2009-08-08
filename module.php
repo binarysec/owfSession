@@ -21,6 +21,91 @@ class wfm_session extends wf_module {
 	
 	public function get_actions() {
 		return(array(
+			"/session/login" => array(
+				WF_ROUTE_ACTION,
+				"session/logon",
+				"login",
+				"Login",
+				WF_ROUTE_HIDE,
+				array("session:anon")
+			),
+			"/session/logout" => array(
+				WF_ROUTE_ACTION,
+				"session/logon",
+				"logout",
+				"Logout",
+				WF_ROUTE_HIDE,
+				array("session:anon")
+			),
+			
+			/* permission editor */
+			"/session/permissions" => array(
+				WF_ROUTE_ACTION,
+				"session/permissions",
+				"show_acl",
+				"Logout",
+				WF_ROUTE_HIDE,
+				array("session:admin")
+			),
+			"/session/permissions/search" => array(
+				WF_ROUTE_ACTION,
+				"session/permissions",
+				"show_acl",
+				"Logout",
+				WF_ROUTE_HIDE,
+				array("session:admin")
+			),
+			
+			/* user/group/perm */
+			"/admin/session" => array(
+				WF_ROUTE_REDIRECT,
+				"/admin/session/user",
+				"Sessions",
+				WF_ROUTE_SHOW,
+				array("session:admin")
+			),
+
+			"/admin/session/user" => array(
+				WF_ROUTE_ACTION,
+				"session/admin_user",
+				"admin_user",
+				"Gestion des utilisateurs",
+				WF_ROUTE_SHOW,
+				array("session:admin:user")
+			),
+			"/admin/session/user/add" => array(
+				WF_ROUTE_ACTION,
+				"session/admin_user",
+				"add",
+				"Ajoute un utilisateur",
+				WF_ROUTE_HIDE,
+				array("session:admin:user:add")
+			),
+			"/admin/session/user/edit" => array(
+				WF_ROUTE_ACTION,
+				"session/admin_user",
+				"edit",
+				"Ajoute un utilisateur",
+				WF_ROUTE_HIDE,
+				array("session:admin:user:edit")
+			),
+			"/admin/session/user/showedit" => array(
+				WF_ROUTE_ACTION,
+				"session/admin_user",
+				"show_edit",
+				"Ajoute un utilisateur",
+				WF_ROUTE_HIDE,
+				array("session:admin:user:edit")
+			),
+			"/admin/session/user/delete" => array(
+				WF_ROUTE_ACTION,
+				"session/admin_user",
+				"delete",
+				"Ajoute un utilisateur",
+				WF_ROUTE_HIDE,
+				array("session:admin:user:delete")
+			),
+
 // 			"/session/login" => array(
 // 				WF_ROUTE_ACTION,
 // 				"session",

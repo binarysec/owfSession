@@ -50,12 +50,12 @@ class wfr_session_session_logon extends wf_route_request {
 					$link = $this->wf->linker('/');
 				
 				header("X-Owf-Session: ".$ret["session_id"]);
-				header("X-Owf-Session-Var: ".$this->a_session->sess_var);
+				header("X-Owf-Session-Var: ".$this->a_session->session_var);
 				header("Location: ".$link);
 				exit(0);
 			}
 			header("X-Owf-Session: ".$ret["session_id"]);
-			header("X-Owf-Session-Var: ".$this->a_session->sess_var);
+			header("X-Owf-Session-Var: ".$this->a_session->session_var);
 			header("Location: ".$url);
 			exit(0);
 		}

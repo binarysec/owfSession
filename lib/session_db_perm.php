@@ -41,7 +41,7 @@ class session_db_perm extends session_driver_perm {
 	 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 	public function user_add($uid, $objtype, $oid=NULL, $data=NULL) {
 		/* sanatize */
-		if(!$uid || !$objtype)
+		if($uid == NULL || $objtype == NULL)
 			return(FALSE);
 		
 		/* resolv object type */
@@ -110,10 +110,8 @@ class session_db_perm extends session_driver_perm {
 	 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 	public function user_mod($update, $where, $extra=NULL) {
 	
-		if(is_array($conds))
-			$where = $conds;
-		else
-			$where = array($conds => $extra);
+		if(!is_array($where))
+			$where = array($where => $extra);
 		$where["ptr_type"] = SESSION_PERM_USER;
 		$q = new core_db_update("session_perm");
 		$q->where($where);
@@ -136,8 +134,8 @@ class session_db_perm extends session_driver_perm {
 		}
 		
 		if(is_string($obj_type)) {
-			$r = $this->get_type("name", $objtype);
-			$where["obj_type"] = (int)$obj_type;
+			$r = $this->get_type("name", $obj_type);
+			$where["obj_type"] = (int)$r[0]["id"];
 			$cl .= "/ts$obj_type";
 		}
 		else if(is_int($obj_type)) {
@@ -145,11 +143,11 @@ class session_db_perm extends session_driver_perm {
 			$cl .= "/ti$obj_type";
 		}
 	
-		if(is_int($obj_id)) {
+		if($obj_id) {
 			$where["obj_id"] = $obj_id;
 			$cl .= "/ii$obj_id";
 		}
-		
+
 		/* restoring cache */
 		
 		/* executing request */

@@ -27,23 +27,39 @@ define("SESSION_TIMEOUT",      2);
 define("SESSION_USER_UNKNOWN", 3);
 define("SESSION_AUTH_FAILED",  4);
 
+
 class session extends wf_agg {
-	private $user;
-	private $perm;
-	private $me;
-	private $core_pref;
+	public $user;
+	public $perm;
 	
+	private $core_pref;
+	private $data_cache = array();
+	
+	public $session_me;
+	public $session_my_perms;
+	private $session_data;
 	private $session_timeout;
 	private $session_var;
+	
 	
 	public function loader($wf) {
 		$this->wf = $wf;
 		
+		/* load permission interface */
+		$this->perm = new session_db_perm($wf);
+		define("SESSION_USER_GOD",     $this->perm->register("session:god"));
+		define("SESSION_USER_ADMIN",   $this->perm->register("session:admin"));
+		define("SESSION_USER_SIMPLE",  $this->perm->register("session:simple"));
+		define("SESSION_USER_ANON",    $this->perm->register("session:anon"));
+		define("SESSION_USER_RANON",   $this->perm->register("session:ranon"));
+		define("SESSION_USER_WS",      $this->perm->register("session:ws"));
+
 		/* load user interface */
 		$this->user = new session_db_user($wf);
 		
+		
 		/* registre session preferences group */
-		$this->core_pref = $this->core_pref()->register_group(
+		$this->core_pref = $this->wf->core_pref()->register_group(
 			"session", 
 			"Session"
 		);
@@ -71,24 +87,80 @@ class session extends wf_agg {
 
 	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 	 *
+	 * Get current user
+	 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+	public function get_user() {
+		return($this->session_me);
+	}
+	
+	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+	 *
+	 * Get current permissions
+	 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+	public function get_perms() {
+		return($this->session_my_perms);
+	}
+	
+	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+	 *
+	 * Check permissions
+	 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+	public function check_permission($need) {
+		/* bypass */
+		if(
+			$this->session_my_perms["session:god"] ||
+			$this->session_my_perms["session:admin"]
+			) {
+			return(TRUE);
+		}
+		
+		/* check permission */
+		$ret = array();
+		foreach($need as $k => $v) {
+			if(!$this->session_my_perms[$v])
+				return(FALSE);
+		}
+		
+		return(TRUE);
+	}
+	
+	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+	 *
+	 * User online?
+	 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+	public function is_online($uid=NULL) {
+		if($uid) {
+			$res = $this->user->get("id", $uid);
+			$res = $res[0];
+		}
+		else
+			$res = $this->get_user();
+		$online = time() - $res['session_time'];
+		if($online > $this->session_timeout) 
+			return(FALSE);
+		return(TRUE);
+	}
+	
+	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+	 *
 	 * Checking session
 	 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 	public function check_session($session_id=NULL) {
 		/* try to get existing session */
 		$session = $_COOKIE[$this->session_var];
-		$res = $this->cache->get("auth_$session");
-		if(!$res) {
+// 		$res = $this->cache->get("auth_$session");
+// 		if(!$res) {
 			$res = $this->user->get("session_id", $session);
-			if(count($res) != 0)
-				$this->cache->store("auth_$session", $res);
-		}
+// 			if(count($res) != 0)
+// 				$this->cache->store("auth_$session", $res);
+// 		}
 
 		/* no existing session, open anonymous session */
-		if(!$session || count($res) == 0) {
+		if(count($res) == 0) {
 			if($this->wf->ini_arr["session"]["allow_anonymous"]) {
-				$this->me = array(
+				$this->session_me = array(
 					"id"              => -1,
-					"remote_address"  => $_SERVER["REMOTE_ADDR"],
+					"remote_address"  => ip2long($_SERVER["REMOTE_ADDR"]),
 					"remote_hostname" => gethostbyaddr($_SERVER["REMOTE_ADDR"]),
 					"session_time"    => time()
 				);
@@ -99,25 +171,28 @@ class session extends wf_agg {
 			}
 		}
 
-		$this->me = $res[0];
+		/* point to the data */
+		$this->session_me = $res[0];
 
+		/* load user permissions */
+		$this->session_my_perms = $this->perm->user_get($res[0]["id"]);
+ 
 		/* vérfication du timeout */
-		if(time() - $this->me["session_time"] > $this->session_timeout) {
+		if(time() - $this->session_me["session_time"] > $this->session_timeout) {
 			return(SESSION_TIMEOUT);
 		}
 
 		/* modification de l'adresse en base + time update */
 		$update = array(
-			"remote_address"  => $_SERVER["REMOTE_ADDR"],
+			"remote_address"  => ip2long($_SERVER["REMOTE_ADDR"]),
 			"remote_hostname" => gethostbyaddr($_SERVER["REMOTE_ADDR"]),
 			"session_time"    => time()
 		);
-		$res = $this->user->modify($update, (int)$this->me["id"]);
+		$res = $this->user->modify($update, (int)$this->session_me["id"]);
 		
 		$where = array(
-			"id" => (int)$this->me["id"]
+			"id" => (int)$this->session_me["id"]
 		);
-
 
 		/* utilisation d'un cookie */
 		setcookie(
@@ -139,37 +214,41 @@ class session extends wf_agg {
 		/* vérification si l'utilisateur existe */
 		$res = $this->user->get(array(
 			"email" => $user,
-			"password" => md5($pass)
+			"password" => $this->wf->hash($pass)
 		));
 
-		if(count($res[0]))
+		if(!is_array($res[0]))
 			return(FALSE);
-		
-		$this->me = $res[0];
+	
+		/* point to the data */
+		$this->session_me = $res[0];
 
+		/* load user permissions */
+		$this->session_my_perms = $this->perm->user_get($res[0]["id"]);
+		
 		/* update les informations dans la bdd */
 		$update = array(
 			"session_id"        => $this->generate_session_id(),
 			"session_time_auth" => time(),
 			"session_time"      => time(),
-			"remote_address"    => $_SERVER["REMOTE_ADDR"],
+			"remote_address"    => ip2long($_SERVER["REMOTE_ADDR"]),
 			"remote_hostname"   => gethostbyaddr($_SERVER["REMOTE_ADDR"])
 		);
-		$this->user->modify($update, (int)$this->me["id"]);
+		$this->user->modify($update, (int)$this->session_me["id"]);
 
 // 		/* merge data & update */
-// 		$this->me = array_merge($this->me, $update);
+// 		$this->session_me = array_merge($this->session_me, $update);
 		
 		/* utilisation d'un cookie */
 		setcookie(
-			$this->sess_var,
+			$this->session_var,
 			$update["session_id"],
-			time()+$this->sess_timeout,
+			time()+$this->session_timeout,
 			"/"
 		);
 
 		/* !! attention redirection necessaire */
-		return($this->me);
+		return($this->session_me);
 	}
 	
 	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -178,14 +257,41 @@ class session extends wf_agg {
 	 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 	public function logout() {
 		$update = array(
-			"remote_address"    => $_SERVER["REMOTE_ADDR"],
+			"remote_address"    => ip2long($_SERVER["REMOTE_ADDR"]),
 			"remote_hostname"   => gethostbyaddr($_SERVER["REMOTE_ADDR"]),
 			"session_id"        => '',
 			"session_time"      => NULL
 		);
-		$this->user->modify($update, (int)$this->me["id"]);
+		$this->user->modify($update, (int)$this->session_me["id"]);
 		return(TRUE);
 	}
-
 	
+	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+	 *
+	 * Generate a session id
+	 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+	private function generate_session_id() {
+		$s1 = $this->wf->get_rand();
+		$s2 = $this->wf->get_rand();
+		return("E".$this->wf->hash($s1).$this->wf->hash($s2));
+	}
+	
+	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+	 *
+	 * Get a registered permissions view
+	 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+	public function get_pview($view) {
+		/** \todo caching */
+		$r = $this->wf->execute_hook("session_permissions_view");
+		foreach($r as $h) {
+			if($h[$view])
+				return($h);
+		}
+		return(NULL);
+	}
+	
+	
+	
+	
+
 }

@@ -3,7 +3,7 @@
 abstract class session_driver_user {
 	protected $wf;
 	
-	abstract public function loader($wf);
+	abstract public function __construct($wf);
 	
 	
 	public function generate_session_id() {

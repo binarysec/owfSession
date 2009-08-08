@@ -4,7 +4,7 @@
 class session_db_perm extends session_driver_perm {
 
 
-	public function loader($wf) {
+	public function __construct($wf) {
 		$this->wf = $wf;
 		
 		$struct = array(
@@ -23,8 +23,8 @@ class session_db_perm extends session_driver_perm {
 			"create_t" => WF_INT,
 			"ptr_type" => WF_INT,
 			"ptr_id" => WF_INT,
-			"obj_type" => WF_VARCHAR,
-			"obj_id" => WF_VARCHAR,
+			"obj_type" => WF_INT,
+			"obj_id" => WF_INT,
 			"data" => WF_DATA
 		);
 		$this->wf->db->register_zone(
@@ -33,17 +33,15 @@ class session_db_perm extends session_driver_perm {
 			$struct
 		);
 
-
 	}
-	
 
 	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 	 *
 	 * 
 	 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-	public function user_add($uid, $objtype, $oid, $data) {
+	public function user_add($uid, $objtype, $oid=NULL, $data=NULL) {
 		/* sanatize */
-		if(!$uid || !$objtype || !$oid)
+		if(!$uid || !$objtype)
 			return(FALSE);
 		
 		/* resolv object type */
@@ -57,7 +55,9 @@ class session_db_perm extends session_driver_perm {
 			);
 			$q = new core_db_insert("session_perm_type", $insert);
 			$this->wf->db->query($q);
-			$objtype_id = $this->wf->db->get_last_insert_id('session_perm_type_seq');
+			$objtype_id = $this->wf->db->get_last_insert_id(
+				'session_perm_type_seq'
+			);
 		}
 		else
 			$objtype_id = &$r[0]["id"];
@@ -94,10 +94,10 @@ class session_db_perm extends session_driver_perm {
 	 * 
 	 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 	public function user_remove($conds, $extra=NULL) {
-		if($extra && is_string($conds))
-			$where = array($conds, $extra);
+		if(is_array($conds))
+			$where = $conds;
 		else
-			$where = &$conds;
+			$where = array($conds => $extra);
 		$where["ptr_type"] = SESSION_PERM_USER;
 		$q = new core_db_delete("session_perm", $where);
 		$this->wf->db->query($q);
@@ -110,10 +110,10 @@ class session_db_perm extends session_driver_perm {
 	 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 	public function user_mod($update, $where, $extra=NULL) {
 	
-		if($extra && is_string($conds))
-			$where = array($conds, $extra);
+		if(is_array($conds))
+			$where = $conds;
 		else
-			$where = &$conds;
+			$where = array($conds => $extra);
 		$where["ptr_type"] = SESSION_PERM_USER;
 		$q = new core_db_update("session_perm");
 		$q->where($where);
@@ -125,11 +125,88 @@ class session_db_perm extends session_driver_perm {
 	 *
 	 * 
 	 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+	public function user_get($uid=NULL, $obj_type=NULL, $obj_id=NULL) {
+		
+		/* begin the search */
+		$where = array("ptr_type" => SESSION_PERM_USER);
+		$cl = "session/db/sdbp";
+		if($uid) {
+			$where["ptr_id"] = (int)$uid;
+			$cl .= "/$uid";
+		}
+		
+		if(is_string($obj_type)) {
+			$r = $this->get_type("name", $objtype);
+			$where["obj_type"] = (int)$obj_type;
+			$cl .= "/ts$obj_type";
+		}
+		else if(is_int($obj_type)) {
+			$where["obj_type"] = $obj_type;
+			$cl .= "/ti$obj_type";
+		}
+	
+		if(is_int($obj_id)) {
+			$where["obj_id"] = $obj_id;
+			$cl .= "/ii$obj_id";
+		}
+		
+		/* restoring cache */
+		
+		/* executing request */
+		$q = new core_db_select("session_perm");
+		$q->where($where);
+		$this->wf->db->query($q);
+		$res = $q->get_result();
+
+		/* managing datas */
+		$ret = array();
+		foreach($res as $t) {
+			$gt = $this->get_type("id", $t["obj_type"]);
+			$i = array(
+				"obj_type" => (int)$t["obj_type"],
+				"obj_id" => (int)$t["obj_id"],
+				"name" => $gt[0]["name"],
+				"value" => unserialize($t["value"])
+			);
+			if(!is_array($ret[$i["name"]]))
+				$ret[$i["name"]] = array();
+			$ret[$i["name"]][] = $i;
+		}
+
+		/* store $ret */
+		return($ret);
+	}
+	
+	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+	 *
+	 * 
+	 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+	public function register($name) {
+		$res = $this->get_type("name", $name);
+		if(!is_array($res[0])) {
+			$insert = array(
+				"create_t" => time(),
+				"name" => $name
+			);
+			$q = new core_db_insert("session_perm_type", $insert);
+			$this->wf->db->query($q);
+			$pid = $this->wf->db->get_last_insert_id('session_perm_type_seq');
+			return($pid);
+		}
+		
+		return($res[0]["id"]);
+		
+	}
+	
+	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+	 *
+	 * 
+	 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 	public function get($conds, $extra=NULL) {
-		if($extra && is_string($conds))
-			$where = array($conds, $extra);
+		if(is_array($conds))
+			$where = $conds;
 		else
-			$where = &$conds;
+			$where = array($conds => $extra);
 			
 		$q = new core_db_select("session_perm");
 		$q->where($where);
@@ -143,10 +220,10 @@ class session_db_perm extends session_driver_perm {
 	 * 
 	 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 	public function get_type($conds, $extra=NULL) {
-		if($extra && is_string($conds))
-			$where = array($conds, $extra);
+		if(is_array($conds))
+			$where = $conds;
 		else
-			$where = &$conds;
+			$where = array($conds => $extra);
 			
 		$q = new core_db_select("session_perm_type");
 		$q->where($where);

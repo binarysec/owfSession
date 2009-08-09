@@ -19,7 +19,6 @@ class wfr_session_session_admin_user extends wf_route_request {
 
 	public function admin_user() {
 		$this->a_admin_html->set_title("Administration / Sessions / Utilisateurs");
-		$this->a_admin_html->set_subtitle("Gestionnaire d'utilisateur");
 		$this->a_admin_html->rendering($this->render_list());
 	}
 	
@@ -286,9 +285,7 @@ class wfr_session_session_admin_user extends wf_route_request {
 		$dset->set_row_callback(array($this, 'callback_row'));
 
 		/* template utilisateur */
-		$tplset = array(
-// 			'scripts' => $this->render_dialogs()
-		);
+		$tplset = array();
 		$dview = new core_dataview($this->wf, $dset);
 
 		
@@ -298,10 +295,7 @@ class wfr_session_session_admin_user extends wf_route_request {
 			"dataset",
 			$dview->render(NULL, $tplset)
 		);
-		$tpl->set(
-			"scripts",
-			$this->render_dialogs()
-		);
+
 		
 		return($tpl->fetch("session/users/list"));
 	}
@@ -354,20 +348,18 @@ class wfr_session_session_admin_user extends wf_route_request {
 		}
 		
 		/* actions */
-		$actions = '<a href="#" onclick="'.
+		$actions = '<a class="btn one" href="#" onclick="'.
 			"set_form_edit_user('".
 			$datum['id'].
-			"')\">Edit</a>".
-			
-			" | ".
-			
+			"')\">Edit</a> ".
+
 // 			'<a href="'.
 // 			$this->wf->linker("/admin/system/profiles/show/".$datum['id']).
 // 			"\">Profile</a>".
 // 			
 // 			" | ".
 			
-			'<a href="#" onclick="'.
+			'<a class="btn" href="#" onclick="'.
 			"set_form_delete_user('".
 			$datum['id']."', '".
 			$datum['email'].
@@ -385,56 +377,4 @@ class wfr_session_session_admin_user extends wf_route_request {
 		));
 	}
 	
-	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-	 *
-	 * All function to render form etc...
-	 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-	private function render_add_form() {
-		$tpl = new core_tpl($this->wf);
-		return($tpl->fetch('session/users/form_add'));
-	}
-
-	private function render_edit_form() {
-		$tpl = new core_tpl($this->wf);
-		return($tpl->fetch('session/users/form_edit'));
-	}
-
-	private function render_delete_form() {
-		$tpl = new core_tpl($this->wf);
-		return($tpl->fetch('session/users/form_delete'));
-	}
-
-	private function render_add_dialog() {
-		$dlg = new ajax_dialog($this->wf, 'add_user');
-		$dlg->title = 'Ajouter un nouvel utilisateur';
-		$dlg->content = $this->render_add_form();
-		return($dlg->render());
-	}
-
-	private function render_edit_dialog() {
-		$dlg = new ajax_dialog($this->wf, 'edit_user');
-		$dlg->title = '&Eacute;diter l\'utilisateur';
-		$dlg->content = $this->render_edit_form();
-		return($dlg->render());
-	}
-
-	private function render_delete_dialog() {
-		$dlg = new ajax_dialog($this->wf, 'delete_user');
-		$dlg->title = 'Supprimer l\'utilisateur';
-		$dlg->content = $this->render_delete_form();
-		return($dlg->render());
-	}
-
-	private function render_dialogs() {
-		$buf .= $this->render_add_dialog();
-		$buf .= $this->render_edit_dialog();
-		$buf .= $this->render_delete_dialog();
-		
-		$ar = new ajax_async_req($this->wf, 'user_edition');
-		$ar->resp_id = 'user_edition';
-		$buf .= $ar->render();
-
-		return($buf);
-	}
-
 }

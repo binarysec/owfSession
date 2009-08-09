@@ -193,7 +193,6 @@ class wfr_session_session_permissions extends wf_route_request {
 		$this->object = new ${on}($this->wf, $this->pview_name, $this->oid);
 		
 		$title = $this->object->get_title();
-
 		$tpl = new core_tpl($this->wf);
 		
 		$tpl->set(

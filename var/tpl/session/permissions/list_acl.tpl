@@ -55,21 +55,18 @@
 	
 	<td style="padding-right: 4px;">
 		<a class="btn" href="#" onclick="javascript:session_pview_reset_matrix();">
-			<img src="{link '/data/icons/22x22/add.png'}" />
 			{@ 'Annuler les modifications'}
 		</a>
 	</td>
 	
 	<td style="padding-right: 4px;">
 		<a class="btn one" onclick="javascript:session_pview_send_matrix();">
-			<img src="{link '/data/icons/22x22/add.png'}" />
 			{@ 'Sauvegarder les permissions'}
 		</a>
 	</td>
 
 	<td style="padding-right: 4px;">
 		<a class="btn two" onclick="javascript:session_pview_send_user();">
-			<img src="{link '/data/icons/22x22/add.png'}" />
 			{@ 'Ajouter l\'utilisateur'}
 		</a>
 	</td>
@@ -84,7 +81,7 @@
 	
 	</tr>
 
-</table>
+</table><br>
 
 <form id="session_pview_matrix" method="POST" action="{link '/session/permissions/matrix'}">
 <input type="hidden" name="pview" value="{$pview}"/>

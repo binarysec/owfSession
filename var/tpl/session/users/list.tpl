@@ -167,7 +167,6 @@
 <a class="btn two" onclick="javascript:
 	set_form_add_user();
 	YAHOO.dialog_add_user.myDialog.show();">
-	<img src="{link '/data/icons/22x22/add.png'}" />
 	{@ 'Ajouter un utilisateur'}
 </a><br><br>
 

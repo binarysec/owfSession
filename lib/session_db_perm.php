@@ -3,7 +3,9 @@
 
 class session_db_perm extends session_driver_perm {
 
-
+	private $core_cache;
+	private $gcache;
+	
 	public function __construct($wf) {
 		$this->wf = $wf;
 		
@@ -32,6 +34,9 @@ class session_db_perm extends session_driver_perm {
 			"Session permissions", 
 			$struct
 		);
+		
+		$this->core_cache = $this->wf->core_cacher();
+		$this->gcache = $this->core_cache->create_group("session_db_perm_gcache");
 
 	}
 
@@ -206,10 +211,24 @@ class session_db_perm extends session_driver_perm {
 		else
 			$where = array($conds => $extra);
 			
+		/* create cache line */
+		$cl = "get";
+		foreach($where as $k => $v)
+			$cl .= "_$k:$v";
+		
+		/* get cache */
+		if(($cache = $this->gcache->get($cl)))
+			return($cache);
+		
+		/* try query */
 		$q = new core_db_select("session_perm");
 		$q->where($where);
 		$this->wf->db->query($q);
 		$res = $q->get_result();
+		
+		/* store cache */
+		$this->gcache->store($cl, $res);
+		
 		return($res);
 	}
 	
@@ -222,11 +241,25 @@ class session_db_perm extends session_driver_perm {
 			$where = $conds;
 		else
 			$where = array($conds => $extra);
-			
+		
+		/* create cache line */
+		$cl = "get_type";
+		foreach($where as $k => $v)
+			$cl .= "_$k:$v";
+		
+		/* get cache */
+		if(($cache = $this->gcache->get($cl)))
+			return($cache);
+		
+		/* try query */
 		$q = new core_db_select("session_perm_type");
 		$q->where($where);
 		$this->wf->db->query($q);
 		$res = $q->get_result();
+		
+		/* store cache */
+		$this->gcache->store($cl, $res);
+		
 		return($res);
 	}
 	

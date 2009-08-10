@@ -45,7 +45,7 @@ class session_pview {
 	 * 
 	 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 	public function get_link($name, $oid=NULL) {
-		$buf = '<a href="'.
+		$buf = '<a class="btn three" href="'.
 			$this->wf->linker("/session/permissions").
 			'?pview='.
 			$this->view_name;

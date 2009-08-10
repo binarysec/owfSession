@@ -2,7 +2,12 @@
 
 class session_db_user extends session_driver_user {
 	private $data = array();
+	
 	private $session;
+	private $core_cache;
+	
+	private $gcache;
+	private $ucache = array();
 	
 	public function __construct($wf) {
 		$this->wf = $wf;
@@ -29,7 +34,10 @@ class session_db_user extends session_driver_user {
 		);
 		
 		$this->session = $this->wf->session();
-		
+
+		$this->core_cache = $this->wf->core_cacher();
+		$this->gcache = $this->core_cache->create_group("session_db_user_gcache");
+
 		$this->add(
 			"wf@binarysec.com", 
 			"lala", 
@@ -110,7 +118,6 @@ class session_db_user extends session_driver_user {
 		if($data["password"])
 			$data["password"] = $this->wf->hash($data["password"]);
 	
-		
 		$q = new core_db_update("session_user");
 		$where = array("id" => (int)$uid);
 		$q->where($where);
@@ -129,10 +136,49 @@ class session_db_user extends session_driver_user {
 		else
 			$where = array($conds => $extra);
 	
+		/* create cache line */
+		$cl = "session_get";
+		foreach($where as $k => $v)
+			$cl .= "_$k:$v";
+		
+// 		echo $cl;
+// 		/* select cache */
+// 		if($where["id"]) {
+// 			/* check if the user exists */
+// 			$r = $this->gcache->get("session_db_user_id".$where["id"]);
+// 			if($r) {
+// 				$this->ucache[$where["id"]] = $this->core_cache->create_group(
+// 					"session_db_user_gc".
+// 					$where["id"]
+// 				);
+// 				$c = &$this->ucache[$where["id"]];
+// 			}
+// 			else
+// 				$c = &$this->gcache;
+// 				
+// 			$isthere_id = true;
+// 			
+// 		}
+// 		else {
+// 			$c = &$this->gcache;
+// 			$isthere_id = false;
+// 		}
+
+		/* get cache */
+		if(($cache = $this->gcache->get($cl))) {
+			return($cache);
+		}
+		
+		/* try query */
 		$q = new core_db_select("session_user");
 		$q->where($where);
 		$this->wf->db->query($q);
 		$res = $q->get_result();
+
+		/* store cache */
+		if(count($res) > 0)
+			$this->gcache->store($cl, $res);
+			
 		return($res);
 	}
 

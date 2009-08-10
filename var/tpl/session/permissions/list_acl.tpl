@@ -42,7 +42,7 @@
 
 <h1>{$title}</h1>
 
-<table>
+<table border="0">
 	<tr>
 <!--	<td>
 		<button onclick="javascript:
@@ -53,21 +53,21 @@
 		</button>
 	</td>-->
 	
-	<td>
+	<td style="padding-right: 4px;">
 		<a class="btn" href="#" onclick="javascript:session_pview_reset_matrix();">
 			<img src="{link '/data/icons/22x22/add.png'}" />
 			{@ 'Annuler les modifications'}
 		</a>
 	</td>
 	
-	<td>
+	<td style="padding-right: 4px;">
 		<a class="btn one" onclick="javascript:session_pview_send_matrix();">
 			<img src="{link '/data/icons/22x22/add.png'}" />
 			{@ 'Sauvegarder les permissions'}
 		</a>
 	</td>
 
-	<td>
+	<td style="padding-right: 4px;">
 		<a class="btn two" onclick="javascript:session_pview_send_user();">
 			<img src="{link '/data/icons/22x22/add.png'}" />
 			{@ 'Ajouter l\'utilisateur'}

@@ -162,6 +162,8 @@
 </script>
 {/literal}
 
+<h1>Gestion de la base de données utilisateur</h1>
+
 <a class="btn two" onclick="javascript:
 	set_form_add_user();
 	YAHOO.dialog_add_user.myDialog.show();">

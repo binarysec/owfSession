@@ -72,7 +72,6 @@
 
 		YAHOO.dialog_add_user.myDialog = new YAHOO.widget.Dialog(
 			"add_user", {
-				width : "450px",
 				fixedcenter : true,
 				visible : false,
 				constraintoviewport : true,
@@ -105,7 +104,6 @@
 
 		YAHOO.dialog_edit_user.myDialog = new YAHOO.widget.Dialog(
 			"edit_user", {
-				width : "450px",
 				fixedcenter : true,
 				visible : false,
 				constraintoviewport : true,
@@ -138,7 +136,6 @@
 
 		YAHOO.dialog_delete_user.myDialog = new YAHOO.widget.Dialog(
 			"delete_user", {
-				width : "450px",
 				fixedcenter : true,
 				visible : false,
 				constraintoviewport : true,

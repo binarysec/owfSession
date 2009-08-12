@@ -40,7 +40,7 @@
 </script>
 {/literal}
 
-<h1>{$title}</h1>
+<h1><img src="{link '/data/session/title_perm.png'}"/>{$title}</h1>
 
 <table border="0">
 	<tr>

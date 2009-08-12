@@ -79,6 +79,10 @@
 					{text:"Valider", handler:handleSubmit, isDefault:true},
 					{text:"Annuler", handler:handleCancel}
 				],
+				effect: { 
+					effect: YAHOO.widget.ContainerEffect.FADE,
+					duration: 0.25
+				},
 				postmethod : "form"		}
 		);
 	
@@ -143,6 +147,10 @@
 					{text:"Supprimer", handler:handleSubmit, isDefault:true},
 					{text:"Annuler", handler:handleCancel}
 				],
+				effect: { 
+					effect: YAHOO.widget.ContainerEffect.FADE,
+					duration: 0.25
+				},
 				postmethod : "form"		}
 		);
 	
@@ -159,7 +167,7 @@
 </script>
 {/literal}
 
-<h1>Gestion de la base de données utilisateur</h1>
+<h1><img src="{link '/data/session/title_user.png'}"/>Gestion de la base de données utilisateur</h1>
 
 <a class="btn two" onclick="javascript:
 	set_form_add_user();

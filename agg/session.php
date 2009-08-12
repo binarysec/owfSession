@@ -220,8 +220,18 @@ class session extends wf_agg {
 			"password" => $this->wf->hash($pass)
 		));
 
-		if(!is_array($res[0]))
+		if(!is_array($res[0])) {
+			/* log */
+			$this->wf->log(
+				"Login ATTEMPT from ".
+				$_SERVER["REMOTE_ADDR"].
+				' ('.
+				gethostbyaddr($_SERVER["REMOTE_ADDR"]).
+				')'
+			);
+		
 			return(FALSE);
+		}
 	
 		/* point to the data */
 		$this->session_me = $res[0];
@@ -251,6 +261,19 @@ class session extends wf_agg {
 			"/"
 		);
 
+		/* log */
+		$this->wf->log(
+			"Login SUCCESS for user ".
+			$this->session_me["name"].
+			' ('.
+			$this->session_me["email"].
+			') from '.
+			$_SERVER["REMOTE_ADDR"].
+			' ('.
+			$this->session_me["remote_hostname"].
+			')'
+		);
+		
 		/* !! attention redirection necessaire */
 		return($this->session_me);
 	}

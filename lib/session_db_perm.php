@@ -61,7 +61,7 @@ class session_db_perm extends session_driver_perm {
 			$q = new core_db_insert("session_perm_type", $insert);
 			$this->wf->db->query($q);
 			$objtype_id = $this->wf->db->get_last_insert_id(
-				'session_perm_type_seq'
+				'session_perm_type_id_seq'
 			);
 		}
 		else
@@ -90,7 +90,7 @@ class session_db_perm extends session_driver_perm {
 		);
 		$q = new core_db_insert("session_perm", $insert);
 		$this->wf->db->query($q);
-		$pid = $this->wf->db->get_last_insert_id('session_perm_seq');
+		$pid = $this->wf->db->get_last_insert_id('session_perm_id_seq');
 		return($pid);
 	}
 	
@@ -197,7 +197,7 @@ class session_db_perm extends session_driver_perm {
 			);
 			$q = new core_db_insert("session_perm_type", $insert);
 			$this->wf->db->query($q);
-			$pid = $this->wf->db->get_last_insert_id('session_perm_type_seq');
+			$pid = $this->wf->db->get_last_insert_id('session_perm_type_id_seq');
 			return($pid);
 		}
 		

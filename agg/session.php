@@ -116,9 +116,12 @@ class session extends wf_agg {
 		
 		/* check permission */
 		$ret = array();
-		foreach($need as $k => $v) {
-			if(!$this->session_my_perms[$v])
-				return(FALSE);
+
+		if(is_array($need)) {
+			foreach($need as $k => $v) {
+				if($v != "session:anon" && !$this->session_my_perms[$v])
+					return(FALSE);
+			}
 		}
 		
 		return(TRUE);

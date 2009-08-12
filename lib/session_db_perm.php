@@ -137,24 +137,26 @@ class session_db_perm extends session_driver_perm {
 			$where["ptr_id"] = (int)$uid;
 			$cl .= "/$uid";
 		}
-		
-		if(is_string($obj_type)) {
+	
+		if((int)$obj_type != 0) {
+			$where["obj_type"] = $obj_type;
+			$cl .= "/ti$obj_type";
+		}
+		else if(is_string($obj_type)) {
 			$r = $this->get_type("name", $obj_type);
 			$where["obj_type"] = (int)$r[0]["id"];
 			$cl .= "/ts$obj_type";
 		}
-		else if(is_int($obj_type)) {
-			$where["obj_type"] = $obj_type;
-			$cl .= "/ti$obj_type";
-		}
-	
+		
 		if($obj_id) {
 			$where["obj_id"] = $obj_id;
 			$cl .= "/ii$obj_id";
 		}
 
-		/* restoring cache */
-		
+		/* get cache */
+		if(($cache = $this->gcache->get($cl)))
+			return($cache);
+			
 		/* executing request */
 		$q = new core_db_select("session_perm");
 		$q->where($where);
@@ -169,14 +171,16 @@ class session_db_perm extends session_driver_perm {
 				"obj_type" => (int)$t["obj_type"],
 				"obj_id" => (int)$t["obj_id"],
 				"name" => $gt[0]["name"],
-				"value" => unserialize($t["value"])
+				"value" => unserialize($t["data"])
 			);
 			if(!is_array($ret[$i["name"]]))
 				$ret[$i["name"]] = array();
 			$ret[$i["name"]][] = $i;
 		}
 
-		/* store $ret */
+		/* store cache */
+		$this->gcache->store($cl, $ret);
+		
 		return($ret);
 	}
 	

@@ -291,11 +291,10 @@ class wfr_session_session_permissions extends wf_route_request {
 		$create_time = date(DATE_RFC822, $createtime);
 		
 		/* type icon */
-		if($perm["session:god"] || $perm["session:admin"]) {
+		if($perm["session:admin"]) {
 			$type_icon = '<img src="'.
 				$this->wf->linker('/data/session/t_admin.png').
 				'" alt="[Administrateur]" title="Administrateur" />';
-		
 		}
 		else if($perm["session:simple"]) {
 			$type_icon = '<img src="'.
@@ -306,6 +305,11 @@ class wfr_session_session_permissions extends wf_route_request {
 			$type_icon = '<img src="'.
 				$this->wf->linker('/data/session/t_webservice.png').
 				'" alt="[Web service]" title="Web service" />';
+		}
+		else if($perm["session:god"]) {
+			$type_icon = '<img src="'.
+				$this->wf->linker('/data/session/t_god.png').
+				'" alt="[God]" title="God" />';
 		}
 		
 		/* build action */

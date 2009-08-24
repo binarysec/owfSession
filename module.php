@@ -76,7 +76,7 @@ class wfm_session extends wf_module {
 			"/admin/session" => array(
 				WF_ROUTE_REDIRECT,
 				"/admin/session/user",
-				"Sessions",
+				$this->ts("Sessions"),
 				WF_ROUTE_SHOW,
 				array("session:admin")
 			),
@@ -85,7 +85,7 @@ class wfm_session extends wf_module {
 				WF_ROUTE_ACTION,
 				"session/admin_user",
 				"admin_user",
-				"Gestion des utilisateurs",
+				$this->ts("Gestion des utilisateurs"),
 				WF_ROUTE_SHOW,
 				array("session:admin:user")
 			),

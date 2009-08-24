@@ -52,7 +52,6 @@ class session_db_user extends session_driver_user {
 	 * 
 	 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 	public function add($email, $password, $name, $type) {
-
 		/* sanatization */
 		if(!$email || !$password)
 			return(FALSE);
@@ -61,7 +60,6 @@ class session_db_user extends session_driver_user {
 		$r = $this->get("email", $email);
 		if(is_array($r[0]))
 			return(FALSE);
-
 
 		/* input */
 		$insert = array(

@@ -169,6 +169,8 @@
 
 <h1><img src="{link '/data/session/title_user.png'}"/>Gestion de la base de données utilisateur</h1>
 
+<div class="admin_content">
+
 <a class="btn two" onclick="javascript:
 	set_form_add_user();
 	YAHOO.dialog_add_user.myDialog.show();">
@@ -235,3 +237,5 @@
 </div>
 
 {$dataset}
+
+</div>

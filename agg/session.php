@@ -164,7 +164,7 @@ class session extends wf_agg {
 				$this->session_me = array(
 					"id"              => -1,
 					"remote_address"  => ip2long($_SERVER["REMOTE_ADDR"]),
-					"remote_hostname" => gethostbyaddr($_SERVER["REMOTE_ADDR"]),
+// 					"remote_hostname" => gethostbyaddr($_SERVER["REMOTE_ADDR"]),
 					"session_time"    => time()
 				);
 				return(SESSION_VALID);
@@ -188,7 +188,7 @@ class session extends wf_agg {
 		/* modification de l'adresse en base + time update */
 		$update = array(
 			"remote_address"  => ip2long($_SERVER["REMOTE_ADDR"]),
-			"remote_hostname" => gethostbyaddr($_SERVER["REMOTE_ADDR"]),
+// 			"remote_hostname" => gethostbyaddr($_SERVER["REMOTE_ADDR"]),
 			"session_time"    => time()
 		);
 		$res = $this->user->modify($update, (int)$this->session_me["id"]);
@@ -226,7 +226,7 @@ class session extends wf_agg {
 				"Login ATTEMPT from ".
 				$_SERVER["REMOTE_ADDR"].
 				' ('.
-				gethostbyaddr($_SERVER["REMOTE_ADDR"]).
+// 				gethostbyaddr($_SERVER["REMOTE_ADDR"]).
 				')'
 			);
 		
@@ -245,7 +245,7 @@ class session extends wf_agg {
 			"session_time_auth" => time(),
 			"session_time"      => time(),
 			"remote_address"    => ip2long($_SERVER["REMOTE_ADDR"]),
-			"remote_hostname"   => gethostbyaddr($_SERVER["REMOTE_ADDR"])
+// 			"remote_hostname"   => gethostbyaddr($_SERVER["REMOTE_ADDR"])
 		);
 		$this->user->modify($update, (int)$this->session_me["id"]);
 		$this->session_me = array_merge($this->session_me, $update);
@@ -285,7 +285,7 @@ class session extends wf_agg {
 	public function logout() {
 		$update = array(
 			"remote_address"    => ip2long($_SERVER["REMOTE_ADDR"]),
-			"remote_hostname"   => gethostbyaddr($_SERVER["REMOTE_ADDR"]),
+// 			"remote_hostname"   => gethostbyaddr($_SERVER["REMOTE_ADDR"]),
 			"session_id"        => '',
 			"session_time"      => NULL
 		);

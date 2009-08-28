@@ -42,6 +42,8 @@
 
 <h1><img src="{link '/data/session/title_perm.png'}"/>{$title}</h1>
 
+<div class="admin_content">
+
 <table border="0">
 	<tr>
 <!--	<td>
@@ -89,3 +91,4 @@
 {$dataset}
 </form>
 
+</div>

@@ -173,6 +173,7 @@ class wfr_session_session_permissions extends wf_route_request {
 		$this->oid = $this->wf->get_var("oid");
 		
 		$pview = $this->a_session->get_pview($this->pview_name);
+
 		if(!$pview)
 			exit(0);
 

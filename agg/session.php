@@ -75,7 +75,8 @@ class session extends wf_agg {
 				"session".rand()
 			);
 		}
-
+		
+		
 		/* session timeout */
 		$this->session_timeout = $this->core_pref->register(
 			"timeout",
@@ -309,7 +310,8 @@ class session extends wf_agg {
 	 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 	public function get_pview($view) {
 		/** \todo caching */
-		$r = $this->wf->execute_hook("session_permissions_view");
+		$r = $this->wf->execute_hook("session_permissions_view",array(NULL));
+		
 		foreach($r as $h) {
 			if($h[$view])
 				return($h);

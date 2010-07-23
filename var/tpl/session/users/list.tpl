@@ -200,6 +200,70 @@
 			<td><input type="text" id="form_add_user_name" name="name" value="" /></td>
 		</tr>
 		<tr>
+			<td><label for="form_add_user_firstname">Prénom&nbsp;:</label></td>
+			<td><input type="text" id="form_add_user_firstname" name="firstname" value="" /></td>
+		</tr>	
+		<tr>
+			<td><label for="form_add_user_phone">Phone&nbsp;:</label></td>
+			<td><input type="text" id="form_add_user_phone" name="phone" value="" /></td>
+		</tr>
+		<tr>
+			<td><label for="form_add_user_company">Entreprise&nbsp;:</label></td>
+			<td><input type="text" id="form_add_user_company" name="company" value="" /></td>
+		</tr>
+		<tr>
+			<td><label for="form_add_user_company_decription">Description entreprise&nbsp;:</label></td>
+			<td><input type="text" id="form_add_user_company_decription" name="company_decription" value="{$company_decription|entities}" /></td>
+		</tr>
+		<tr>
+			<td><label for="form_add_user_company_position">Position dans l'entreprise&nbsp;:</label></td>
+			<td><input type="text" id="form_add_user_company_position" name="company_position" value="{$company_position|entities}" /></td>
+		</tr>
+		<tr>
+		<td><label>Adresse de livraison</label></td>
+		</tr>	
+		<tr>
+			<td><label for="form_add_user_delivery_address_street">Champs d'adresse&nbsp;:</label></td>
+			<td><input type="text" id="form_add_user_delivery_address_street" name="delivery_address_street" value="" /></td>
+		</tr>
+		<tr>
+			<td><label for="form_add_user_delivery_address_postcode">Code postal&nbsp;:</label></td>
+			<td><input type="text" id="form_add_user_delivery_address_postcode" name="delivery_address_postcode" value="" /></td>
+		</tr>
+		<tr>
+			<td><label for="form_add_user_delivery_address_town">Ville&nbsp;:</label></td>
+			<td><input type="text" id="form_add_user_delivery_address_town" name="delivery_address_town" value="" /></td>
+		</tr>
+		<tr>
+			<td><label for="form_add_user_delivery_address_country">Pays&nbsp;:</label></td>
+			<td><input type="text" id="form_add_user_delivery_address_country" name="delivery_address_country" value="" /></td>
+		</tr>
+		<tr>
+		<td><label>Adresse de facturation</label></td>
+		<td><input type="checkbox" id="form_add_same_address" name="same_address">Même adresse</input></td>
+		</tr>
+		<tr>
+		<td><label for="form_add_user_invoice_address_street">Champs d'adresse&nbsp;:</label></td>
+			<td><input type="text" id="form_add_user_invoice_address_street" name="invoice_address_street" value="" /></td>
+		</tr>
+		<tr>
+			<td><label for="form_add_user_invoice_address_postcode">Code postal&nbsp;:</label></td>
+			<td><input type="text" id="form_add_user_invoice_address_postcode" name="invoice_address_postcode" value="" /></td>
+		</tr>
+		<tr>
+			<td><label for="form_add_user_invoice_address_town">Ville&nbsp;:</label></td>
+			<td><input type="text" id="form_add_user_invoice_address_town" name="invoice_address_town" value="" /></td>
+		</tr>
+		<tr>
+			<td><label for="form_add_user_invoice_address_country">Pays&nbsp;:</label></td>
+			<td><input type="text" id="form_add_user_invoice_address_country" name="invoice_address_country" value="" /></td>
+		</tr>
+		<tr>
+			<td><label for="form_add_user_free_site">Sites gratuits&nbsp;:</label></td>
+			<td><input type="text" id="form_add_user_free_site" name="free_site" value="" /></td>
+		</tr>
+		
+		<tr>
 			<td><label for="form_add_user_perms">Permissions&nbsp;:</label></td>
 			<td><select name="perm">
 				<option value="1" selected="selected">Administrateur</option>

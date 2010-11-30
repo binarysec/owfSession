@@ -2,6 +2,7 @@
 
 define("WF_USER_GOD",     "session:god");
 define("WF_USER_ADMIN",   "session:admin");
+define("WF_USER_MANAGER",  "session:manager");
 define("WF_USER_SIMPLE",  "session:simple");
 define("WF_USER_SERVICE", "session:service");
 define("WF_USER_ANON",    "session:anon");
@@ -45,7 +46,7 @@ class wfm_session extends wf_module {
 				"show_acl",
 				"Logout",
 				WF_ROUTE_HIDE,
-				array("session:admin")
+				array("session:simple")
 			),
 			"/session/permissions/user" => array(
 				WF_ROUTE_ACTION,
@@ -53,7 +54,7 @@ class wfm_session extends wf_module {
 				"add_user",
 				"Logout",
 				WF_ROUTE_HIDE,
-				array("session:admin")
+				array("session:simple")
 			),
 			"/session/permissions/delete" => array(
 				WF_ROUTE_ACTION,
@@ -61,7 +62,7 @@ class wfm_session extends wf_module {
 				"delete_user",
 				"Logout",
 				WF_ROUTE_HIDE,
-				array("session:admin")
+				array("session:simple")
 			),
 			"/session/permissions/matrix" => array(
 				WF_ROUTE_ACTION,
@@ -69,7 +70,7 @@ class wfm_session extends wf_module {
 				"edit_user",
 				"Logout",
 				WF_ROUTE_HIDE,
-				array("session:admin")
+				array("session:simple")
 			),
 			
 			/* user/group/perm */

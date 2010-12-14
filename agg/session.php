@@ -102,13 +102,14 @@ class session extends wf_agg {
 
 		/* load permission interface */
 		$this->perm = new session_db_perm($wf);
-		define("SESSION_USER_GOD",     $this->perm->register("session:god"));
-		define("SESSION_USER_ADMIN",   $this->perm->register("session:admin"));
-		define("SESSION_USER_MANAGER",  $this->perm->register("session:manager"));
-		define("SESSION_USER_SIMPLE",  $this->perm->register("session:simple"));
-		define("SESSION_USER_ANON",    $this->perm->register("session:anon"));
-		define("SESSION_USER_RANON",   $this->perm->register("session:ranon"));
-		define("SESSION_USER_WS",      $this->perm->register("session:ws"));
+		define("SESSION_USER_GOD",     		$this->perm->register("session:god"));
+		define("SESSION_USER_ADMIN",   		$this->perm->register("session:admin"));
+		define("SESSION_USER_MANAGER", 		$this->perm->register("session:manager"));
+		define("SESSION_USER_DISTRIB", 		$this->perm->register("session:distrib"));
+		define("SESSION_USER_SIMPLE",  		$this->perm->register("session:simple"));
+		define("SESSION_USER_ANON",    		$this->perm->register("session:anon"));
+		define("SESSION_USER_RANON",   		$this->perm->register("session:ranon"));
+		define("SESSION_USER_WS",      		$this->perm->register("session:ws"));
 
 		/* load user interface */
 		$this->user = new session_db_user($wf);
@@ -168,6 +169,8 @@ class session extends wf_agg {
 	 */ 
 	public function check_permission($need) {
 		/* bypass */
+		
+		
 		if(
 			$this->session_my_perms["session:god"] ||
 			$this->session_my_perms["session:admin"]
@@ -176,6 +179,8 @@ class session extends wf_agg {
 		}
 		
 		if($this->session_my_perms["session:manager"]){
+			if($need[0]=="session:distrib")
+				return TRUE;
 			if(is_array($need)) {
 				foreach($need as $k => $v) {
 					if($v == "session:simple")
@@ -183,6 +188,13 @@ class session extends wf_agg {
 				}
 			}
 		}
+		/* Ditributeur */
+		if($this->session_my_perms["session:distrib"]){
+
+			if($need[0]=="session:simple")
+				return TRUE;
+		}
+		
 		/* check permission */
 		$ret = array();
 	

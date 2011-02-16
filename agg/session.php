@@ -242,10 +242,9 @@ class session extends wf_agg {
 			$res = $this->user->get("session_id", $session);
 // 			if(count($res) != 0)
 // 				$this->cache->store("auth_$session", $res);
-// 		}
 
 		/* no existing session, open anonymous session */
-		if(count($res) == 0) {
+		if(count($res) == 0 || !$session) {
 			if($this->wf->ini_arr["session"]["allow_anonymous"]) {
 				$this->session_me = array(
 					"id"              => -1,
@@ -259,13 +258,18 @@ class session extends wf_agg {
 				return(SESSION_TIMEOUT);
 			}
 		}
-
 		/* point to the data */
 		$this->session_me = $res[0];
 
 		/* load user permissions */
 		$this->session_my_perms = $this->perm->user_get($res[0]["id"]);
- 
+		
+		/* vérfication de l'existance de la session */
+		if(!is_array($this->session_me)) {
+		
+			return(SESSION_USER_UNKNOWN);
+		}
+	
 		/* vérfication du timeout */
 		if(time() - $this->session_me["session_time"] > $this->session_timeout) {
 			return(SESSION_TIMEOUT);

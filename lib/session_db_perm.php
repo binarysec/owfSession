@@ -22,6 +22,19 @@ class session_db_perm extends session_driver_perm {
 
 		$struct = array(
 			"id" => WF_PRI,
+			"ptr_id" => WF_INT,
+			"create_t" => WF_INT,
+			"name" => WF_VARCHAR,
+			"value" => WF_DATA
+		);
+		$this->wf->db->register_zone(
+			"session_perm_value", 
+			"Session permissions values", 
+			$struct
+		);
+
+		$struct = array(
+			"id" => WF_PRI,
 			"create_t" => WF_INT,
 			"ptr_type" => WF_INT,
 			"ptr_id" => WF_INT,
@@ -34,7 +47,7 @@ class session_db_perm extends session_driver_perm {
 			"Session permissions", 
 			$struct
 		);
-		
+	
 		$this->core_cache = $this->wf->core_cacher();
 		$this->gcache = $this->core_cache->create_group("session_db_perm_gcache");
 
@@ -167,11 +180,17 @@ class session_db_perm extends session_driver_perm {
 		$ret = array();
 		foreach($res as $t) {
 			$gt = $this->get_type("id", $t["obj_type"]);
+			$gv = $this->get_value("ptr_id", (int)$gt[0]["id"]);
+
+			/* build values */
+			$values = array();
+			foreach($gv as $i => $value)
+				$values[$value["name"]] = $value["name"];
 			$i = array(
 				"obj_type" => (int)$t["obj_type"],
 				"obj_id" => (int)$t["obj_id"],
 				"name" => $gt[0]["name"],
-				"value" => unserialize($t["data"])
+				"value" => $values
 			);
 			if(!is_array($ret[$i["name"]]))
 				$ret[$i["name"]] = array();
@@ -180,7 +199,7 @@ class session_db_perm extends session_driver_perm {
 
 		/* store cache */
 		$this->gcache->store($cl, $ret);
-		
+	
 		return($ret);
 	}
 	
@@ -265,6 +284,58 @@ class session_db_perm extends session_driver_perm {
 		$this->gcache->store($cl, $res);
 		
 		return($res);
+	}
+
+	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+	 *
+	 * 
+	 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+	public function get_value($conds, $extra=NULL) {
+		if(is_array($conds))
+			$where = $conds;
+		else
+			$where = array($conds => $extra);
+		
+		/* create cache line */
+		$cl = "get_value";
+		foreach($where as $k => $v)
+			$cl .= "_$k:$v";
+		
+		/* get cache */
+		if(($cache = $this->gcache->get($cl)))
+			return($cache);
+		
+		/* try query */
+		$q = new core_db_select("session_perm_value");
+		$q->where($where);
+		$this->wf->db->query($q);
+		$res = $q->get_result();
+		
+		/* store cache */
+		$this->gcache->store($cl, $res);
+		
+		return($res);
+		
+	}
+
+	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+	 *
+	 * 
+	 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+	public function set_value($pid, $name, $value) {
+
+	
+	}
+
+
+	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+	 *
+	 * 
+	 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+	public function unset_value($pname, $name) {
+
+	
+		
 	}
 	
 }

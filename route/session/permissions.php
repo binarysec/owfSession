@@ -130,6 +130,7 @@ class wfr_session_session_permissions extends wf_route_request {
 
 		/* read matrix */
 		foreach($perm as $pk => $pv) {
+
 			$where = array(
 				"ptr_id" => (int)$pk,
 				"obj_type" => $this->pview_perm["id"],
@@ -137,14 +138,18 @@ class wfr_session_session_permissions extends wf_route_request {
 			);
 			
 			/* prepare update */
+			$data_up = array();
 			foreach($this->object->resolv as $k => $v) {
 				if($pv[$k] == "on")
-					$kv = "on";
+					$data_up[$k] = "on";
 				else
-					$kv = "off";
-
-				$this->a_session->set_value($k, $kv);
+					$data_up[$k] = "off";
 			}
+			$update = array(
+				"data" => serialize($data_up)
+			);
+			
+			$this->a_session->perm->user_mod($update, $where);
 		}
 	
 		$this->wf->core_request()->set_header(
@@ -168,7 +173,6 @@ class wfr_session_session_permissions extends wf_route_request {
 		$this->oid = $this->wf->get_var("oid");
 		
 		$pview = $this->a_session->get_pview($this->pview_name);
-
 		if(!$pview)
 			exit(0);
 

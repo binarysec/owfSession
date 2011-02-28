@@ -81,53 +81,11 @@ class wfr_session_session_admin_user extends wf_route_request {
 			else if($_POST['perm'] == 3)
 				$perm = "session:ws";
 
-			/* Addresse de livraison */
-			$delivery_address_id=$this->a_session->user->add_address($_POST['delivery_address_street'],
-													$_POST['delivery_address_postcode'],
-													$_POST['delivery_address_town'],
-													$_POST['delivery_address_country']);
-			if($_POST['same_address']=="on"){
-				$invoice_address_id=$delivery_address_id;
-			}else{
-				/* Addresse de facturation */
-				$invoice_address_id=$this->a_session->user->add_address($_POST['invoice_address_street'],
-													$_POST['invoice_address_postcode'],
-													$_POST['invoice_address_town'],
-													$_POST['invoice_address_country']);
-			}				
-			/* Company */
-			$db_company=$this->a_session->user->get_company("name",$db_user[0]["company_name"]);
-			if(is_array($db_company[0])){
-				if($db_company[0]["delivery_address_id"]!=$delivery_address_id && $db_company[0]["invoice_address_id"]!=$db_company[0]["delivery_address_id"]){
-					$this->a_session->user->remove_address($db_company[0]["delivery_address_id"]);
-				}
-				if($db_company[0]["invoice_address_id"]!=$invoice_address_id && $db_company[0]["delivery_address_id"]!=$db_company[0]["invoice_address_id"]){
-					$this->a_session->user->remove_address($db_company[0]["invoice_address_id"]);
-				}
-				
-				$company_id=$this->a_session->user->modify_company(array(
-									"name"=>$_POST['company'],
-									"description"=>base64_encode($_POST['company_description']),
-									"delivery_address_id"=>$delivery_address_id,
-									"invoice_address_id"=>$invoice_address_id),
-									$db_company[0]["id"]);
-			}else{
-				$company_id=$this->a_session->user->add_company($_POST['company'],
-									$_POST['company_description'],
-									$delivery_address_id,
-									$invoice_address_id);
-			}
-	
 			$this->a_session->user->add(
 				$_POST['email'],
 				$_POST['password'],
 				$_POST['name'],
-				$_POST['firstname'],
-				$_POST['phone'],
-				$perm,
-				$company_id,
-				$_POST['company_position'],
-				array("free_site"=> $_POST['free_site'])
+				$perm
 			);
 		}
 
@@ -147,35 +105,12 @@ class wfr_session_session_admin_user extends wf_route_request {
 		$id = (int)$this->wf->get_var("uid");
 		$user = $this->a_session->user->get("id", $id);
 		$perms = $this->a_session->perm->user_get($id);
-	
-		$company=$this->a_session->user->get_company("id",$user[0]["company_id"]);
-		$delivery_address=$this->a_session->user->get_address("id",$company[0]["delivery_address_id"]);
-		$invoice_address=$this->a_session->user->get_address("id",$company[0]["invoice_address_id"]);
-		
+
 		$tpl = new core_tpl($this->wf);
 		
 		$tpl->set("id", $user[0]["id"]);
 		$tpl->set("email", $user[0]["email"]);
 		$tpl->set("name", $user[0]["name"]);
-		$tpl->set("firstname", $user[0]["firstname"]);
-		$tpl->set("phone", $user[0]["phone"]);
-		$tpl->set("company", $company[0]["name"]);
-		$tpl->set("company_description", base64_decode($company[0]["description"]));
-		$tpl->set("company_position", $user[0]["company_position"]);
-		
-		$tpl->set("delivery_address_street", $delivery_address[0]["street"]);
-		$tpl->set("delivery_address_postcode", $delivery_address[0]["postcode"]);
-		$tpl->set("delivery_address_town", $delivery_address[0]["town"]);
-		$tpl->set("delivery_address_country", $delivery_address[0]["country"]);
-		
-		$tpl->set("invoice_address_street", $invoice_address[0]["street"]);
-		$tpl->set("invoice_address_postcode", $invoice_address[0]["postcode"]);
-		$tpl->set("invoice_address_town", $invoice_address[0]["town"]);
-		$tpl->set("invoice_address_country", $invoice_address[0]["country"]);
-		
-		$user_data=unserialize($user[0]["user_data"]);
-		$tpl->set("free_site",$user_data["free_site"] );
-		
 		$tpl->set("perms", $perms);
 
 		echo $tpl->fetch('session/users/show_edit');
@@ -276,56 +211,9 @@ class wfr_session_session_admin_user extends wf_route_request {
 			/* update password */
 			if(strlen($_POST['password']) > 2)
 				$update["password"]  = $_POST['password'];
-				
-			/* Addresse de livraison */
-			$delivery_address_id=$this->a_session->user->add_address($_POST['delivery_address_street'],
-												$_POST['delivery_address_postcode'],
-												$_POST['delivery_address_town'],
-												$_POST['delivery_address_country']);
 	
-			if($_POST['same_address']=="on"){
-				$invoice_address_id=$delivery_address_id;
-			}else{
-				/* Addresse de facturation */
-				$invoice_address_id=$this->a_session->user->add_address($_POST['invoice_address_street'],
-													$_POST['invoice_address_postcode'],
-													$_POST['invoice_address_town'],
-													$_POST['invoice_address_country']);
-			}
-				
-			$db_user=$this->a_session->user->get("id",$user["id"]);
-			$db_company=$this->a_session->user->get_company("id",$db_user[0]["company_id"]);
-			/* Company */
-			if(is_array($db_company[0])){
-				if($db_company[0]["delivery_address_id"]!=$delivery_address_id && $db_company[0]["invoice_address_id"]!=$db_company[0]["delivery_address_id"]){
-					$this->a_session->user->remove_address($db_company[0]["delivery_address_id"]);
-				}
-				if($db_company[0]["invoice_address_id"]!=$invoice_address_id && $db_company[0]["delivery_address_id"]!=$db_company[0]["invoice_address_id"]){
-					$this->a_session->user->remove_address($db_company[0]["invoice_address_id"]);
-				}
-				
-				$company_id=$this->a_session->user->modify_company(array(
-									"name"=>$_POST['company'],
-									"description"=>base64_encode($_POST['company_description']),
-									"delivery_address_id"=>$delivery_address_id,
-									"invoice_address_id"=>$invoice_address_id),
-									$db_company[0]["id"]);
-			}else{
-				$company_id=$this->a_session->user->add_company($_POST['company'],
-									$_POST['company_description'],
-									$delivery_address_id,
-									$invoice_address_id);
-			}
 			$update["name"] = $_POST['name'];
-			$update["firstname"] = $_POST['firstname'];
-			$update["phone"] = $_POST['phone'];
 	
-			$update["company_id"] = $company_id;
-			$update["company_position"] = $_POST['company_position'];
-			
-			$update["firstname"] = $_POST['firstname'];
-			$update["user_data"] = serialize(array("free_site"=> $_POST['free_site']));
-			
 			$this->a_session->user->modify(
 				$update,
 				$user["id"]

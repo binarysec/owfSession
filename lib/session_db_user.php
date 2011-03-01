@@ -58,7 +58,7 @@ class session_db_user extends session_driver_user {
 
 		/* vérification si l'utilisateur existe */
 		$r = $this->get("email", $email);
-		if(is_array($r[0]))
+		if(isset($r[0]) && is_array($r[0]))
 			return(FALSE);
 
 		/* input */

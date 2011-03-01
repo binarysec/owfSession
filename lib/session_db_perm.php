@@ -190,7 +190,7 @@ class session_db_perm extends session_driver_perm {
 	 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 	public function register($name) {
 		$res = $this->get_type("name", $name);
-		if(!is_array($res[0])) {
+		if(!isset($res[0]) || !is_array($res[0])) {
 			$insert = array(
 				"create_t" => time(),
 				"name" => $name

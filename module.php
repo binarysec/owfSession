@@ -73,20 +73,20 @@ class wfm_session extends wf_module {
 			),
 			
 			/* user/group/perm */
-			"/admin/session" => array(
+			"/admin/system/session" => array(
 				WF_ROUTE_REDIRECT,
-				"/admin/session/user",
-				$this->ts("Sessions"),
+				"/admin/system/session/user",
+				$this->ts("Gestion des utilisateurs"),
 				WF_ROUTE_SHOW,
 				array("session:admin")
 			),
 
-			"/admin/session/user" => array(
+			"/admin/system/session/user" => array(
 				WF_ROUTE_ACTION,
 				"session/admin_user",
 				"admin_user",
 				$this->ts("Gestion des utilisateurs"),
-				WF_ROUTE_SHOW,
+				WF_ROUTE_HIDE,
 				array("session:admin:user")
 			),
 			"/admin/session/user/add" => array(

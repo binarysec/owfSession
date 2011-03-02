@@ -91,7 +91,7 @@ class wfr_session_session_admin_user extends wf_route_request {
 
 		$this->wf->core_request()->set_header(
 			'Location',
-			$this->wf->linker('/admin/session/users/list')
+			$this->wf->linker('/admin/system/session/users/list')
 		);
 		$this->wf->core_request()->send_headers();
 		exit(0);
@@ -224,7 +224,7 @@ class wfr_session_session_admin_user extends wf_route_request {
 
 		$this->wf->core_request()->set_header(
 			'Location',
-			$this->wf->linker('/admin/session/user')
+			$this->wf->linker('/admin/system/session/user')
 		);
 		$this->wf->core_request()->send_headers();
 		exit(0);
@@ -241,7 +241,7 @@ class wfr_session_session_admin_user extends wf_route_request {
 
 		$this->wf->core_request()->set_header(
 			'Location',
-			$this->wf->linker('/admin/session/user/list')
+			$this->wf->linker('/admin/system/session/user/list')
 		);
 		$this->wf->core_request()->send_headers();
 		exit(0);

@@ -65,7 +65,7 @@ class session extends wf_agg {
 		);
 		
 		/* session variable */
-		if($this->wf->ini_arr["session"]["variable"])
+		if(isset($this->wf->ini_arr["session"]["variable"]))
 			$this->session_var = &$this->wf->ini_arr["session"]["variable"];
 		else {
 			$this->session_var = $this->core_pref->register(
@@ -108,8 +108,8 @@ class session extends wf_agg {
 	public function check_permission($need) {
 		/* bypass */
 		if(
-			$this->session_my_perms["session:god"] ||
-			$this->session_my_perms["session:admin"]
+			isset($this->session_my_perms["session:god"]) ||
+			isset($this->session_my_perms["session:admin"])
 			) {
 			return(TRUE);
 		}

@@ -63,7 +63,7 @@ class wfr_session_session_logon extends wf_route_request {
 
 	public function logout() {
 		$this->wf->session()->logout();
-		if($this->wf->ini_arr["session"]["default_url"])
+		if(isset($this->wf->ini_arr["session"]["default_url"]))
 			$link = $this->wf->linker($this->wf->ini_arr["session"]["default_url"]);
 		else	
 			$link = $this->wf->linker('/');

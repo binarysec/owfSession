@@ -113,7 +113,7 @@ class session_db_user extends session_driver_user {
 		if(!$data)
 			return(TRUE);
 
-		if($data["password"])
+		if(isset($data["password"]))
 			$data["password"] = $this->wf->hash($data["password"]);
 	
 		$q = new core_db_update("session_user");

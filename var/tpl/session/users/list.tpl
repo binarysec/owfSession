@@ -30,7 +30,9 @@
 	
 		var handleFailure = function(o) {
 			if(o.responseText !== undefined){
-				div.innerHTML = "Server error";
+{/literal}
+				div.innerHTML = "{@ 'Server error'}";
+{literal}
 			}
 		}
 		
@@ -76,8 +78,8 @@
 				visible : false,
 				constraintoviewport : true,
 				buttons : [
-					{text:"Valider", handler:handleSubmit, isDefault:true},
-					{text:"Annuler", handler:handleCancel}
+					{text:"OK", handler:handleSubmit, isDefault:true},
+					{text:"Cancel", handler:handleCancel}
 				],
 				effect: { 
 					effect: YAHOO.widget.ContainerEffect.FADE,
@@ -144,8 +146,8 @@
 				visible : false,
 				constraintoviewport : true,
 				buttons : [
-					{text:"Supprimer", handler:handleSubmit, isDefault:true},
-					{text:"Annuler", handler:handleCancel}
+					{text:"{@ 'Supprimer'}", handler:handleSubmit, isDefault:true},
+					{text:"{@ 'Annuler'}", handler:handleCancel}
 				],
 				effect: { 
 					effect: YAHOO.widget.ContainerEffect.FADE,
@@ -167,7 +169,7 @@
 </script>
 {/literal}
 
-<h1><img src="{link '/data/session/title_user.png'}"/>Gestion de la base de données utilisateur</h1>
+<h1><img src="{link '/data/session/title_user.png'}"/>{@ 'Gestion de la base de données utilisateur'}</h1>
 
 <div class="admin_content">
 
@@ -179,32 +181,32 @@
 
 <!-- User add form -->
 <div id="add_user">
-<div class="hd">Ajouter un nouvel utilisateur</div>
+<div class="hd">{@ 'Ajouter un nouvel utilisateur'}</div>
 <div class="bd">
 <form id="form_add_user" class="form_dialog" method="POST" action="{link '/admin/session/user/add'}">
 	<table>
 		<tr>
-			<td><label for="form_add_user_email">Email <span class="required">(*)</span>&nbsp;:</label></td>
+			<td><label for="form_add_user_email">{@ 'Email <span class="required">(*)</span>'}&nbsp;:</label></td>
 			<td><input type="text" id="form_add_user_email" name="email" value="" /></td>
 		</tr>
 		<tr>
-			<td><label for="form_add_user_password">Mot de passe <span class="required">(*)</span>&nbsp;:</label></td>
+			<td><label for="form_add_user_password">{@ 'Mot de passe <span class="required">(*)</span>'}&nbsp;:</label></td>
 			<td><input type="password" id="form_add_user_password" name="password" value="" /></td>
 		</tr>
 		<tr>
-			<td><label for="form_add_user_password">Mot de passe (confirmation) <span class="required">(*)</span>&nbsp;:</label></td>
+			<td><label for="form_add_user_password">{@ 'Mot de passe (confirmation) <span class="required">(*)</span>'}&nbsp;:</label></td>
 			<td><input type="password" id="form_add_user_password_confirm" name="password_confirm" value="" /></td>
 		</tr>
 		<tr>
-			<td><label for="form_add_user_name">Nom&nbsp;:</label></td>
+			<td><label for="form_add_user_name">{@ 'Nom'}&nbsp;:</label></td>
 			<td><input type="text" id="form_add_user_name" name="name" value="" /></td>
 		</tr>
 		<tr>
-			<td><label for="form_add_user_perms">Permissions&nbsp;:</label></td>
+			<td><label for="form_add_user_perms">{@ 'Permissions'}&nbsp;:</label></td>
 			<td><select name="perm">
-				<option value="1" selected="selected">Administrateur</option>
-				<option value="2">Utilisateur simple</option>
-				<option value="3">Web services</option>
+				<option value="1" selected="selected">{@ 'Administrateur'}</option>
+				<option value="2">{@ 'Utilisateur simple'}</option>
+				<option value="3">{@ 'Web services'}</option>
 			</select></td>
 		</tr>
 	</table>
@@ -215,7 +217,7 @@
 
 <!-- User edit form -->
 <div id="edit_user">
-	<div class="hd">Edition d'un utilisateur</div>
+	<div class="hd">{@ "Edition d'un utilisateur"}</div>
 	<div class="bd">
 		<form id="form_edit_user" class="form_dialog" method="POST" action="{link '/admin/session/user/edit'}">
 			<div id="user_edition">
@@ -226,12 +228,11 @@
 
 <!-- User delete form -->
 <div id="delete_user">
-	<div class="hd">Suppression d'un utilisateur</div>
+	<div class="hd">{@ "Suppression d'un utilisateur"}</div>
 	<div class="bd">
 		<form id="form_delete_user" class="form_dialog" method="POST" action="{link '/admin/session/user/delete'}">
 			<input type="hidden" id="form_delete_user_id" name="id" value="" />
-			Voulez-vous vraiment supprimer l'utilisateur
-			<strong><span id="form_delete_user_email">???</span></strong> ?
+			{@ "Voulez-vous vraiment supprimer l'utilisateur ?"}
 		</form>
 	</div>
 </div>

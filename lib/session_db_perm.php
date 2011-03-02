@@ -173,7 +173,7 @@ class session_db_perm extends session_driver_perm {
 				"name" => $gt[0]["name"],
 				"value" => unserialize($t["data"])
 			);
-			if(!is_array($ret[$i["name"]]))
+			if(!isset($ret[$i["name"]]) || !is_array($ret[$i["name"]]))
 				$ret[$i["name"]] = array();
 			$ret[$i["name"]][] = $i;
 		}

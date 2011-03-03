@@ -1,6 +1,14 @@
 <input type="hidden" id="form_edit_user_id" name="id" value="{$id}" />
 <table>
 	<tr>
+		<td>Username</td>
+		<td>{$username|entities}</td>
+	</tr>
+	<tr>
+		<td><label for="form_edit_user_name">Nom&nbsp;:</label></td>
+		<td><input type="text" id="form_edit_user_name" name="name" value="{$name|entities}" /></td>
+	</tr>
+	<tr>
 		<td><label for="form_edit_user_email">Email <span class="required">(*)</span>&nbsp;:</label></td>
 		<td><input type="text" id="form_edit_user_email" name="email" value="{$email|entities}" /></td>
 	</tr>
@@ -13,8 +21,8 @@
 		<td><input type="password" id="form_edit_user_password_confirm" name="password_confirm" value="" /></td>
 	</tr>
 	<tr>
-		<td><label for="form_edit_user_name">Nom&nbsp;:</label></td>
-		<td><input type="text" id="form_edit_user_name" name="name" value="{$name|entities}" /></td>
+		<td><label for="form_edit_user_phone">Tél&nbsp;:</label></td>
+		<td><input type="text" id="form_edit_user_phone" name="phone" value="{$phone|entities}" /></td>
 	</tr>
 	<tr>
 		<td><label for="form_edit_user_perms">Permissions :</label></td>

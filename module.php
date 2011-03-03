@@ -121,7 +121,23 @@ class wfm_session extends wf_module {
 				WF_ROUTE_HIDE,
 				array("session:admin:user:delete")
 			),
-
+			// My profil
+			"/admin/myprofile" => array(
+				WF_ROUTE_ACTION,
+				"/session/profil",
+				"show",
+				"Mon profil",
+				WF_ROUTE_SHOW,
+				array("session:admin")
+			),
+			"/admin/myprofile/edit" => array(
+				WF_ROUTE_ACTION,
+				"/session/profil",
+				"edit",
+				"Mon profil",
+				WF_ROUTE_SHOW,
+				array("session:admin")
+			),
 // 			"/session/login" => array(
 // 				WF_ROUTE_ACTION,
 // 				"session",

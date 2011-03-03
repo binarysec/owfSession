@@ -216,7 +216,7 @@ class session extends wf_agg {
 	
 		/* vérification si l'utilisateur existe */
 		$res = $this->user->get(array(
-			"email" => $user,
+			"username" => $user,
 			"password" => $this->wf->hash($pass)
 		));
 

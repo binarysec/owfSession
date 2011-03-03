@@ -41,7 +41,7 @@ class session_db_user extends session_driver_user {
 		$this->core_cache = $this->wf->core_cacher();
 		$this->gcache = $this->core_cache->create_group("session_db_user_gcache");
 
-		
+		/*
 		$this->add(
 			"OWF",
 			"wf@binarysec.com", 
@@ -50,7 +50,7 @@ class session_db_user extends session_driver_user {
 			"user",
 			"session:admin",
 			"0262458307"
-		);
+		);*/
 
 		
 	}
@@ -201,6 +201,47 @@ class session_db_user extends session_driver_user {
 			
 		return($res);
 	}
-
+	
+	
+	public function generate_ref($name,$table_name,$key_field=NULL) {
+		if(!$key_field)$key_field="ref";
+		
+		$id_start = 3;
+		while(1) {
+			/* nombre aléatoire */
+			$r = $this->wf->get_rand(10);
+			for($a=0; $a<strlen($r); $a++) 
+				$rand .= ord($r[$a]);
+			
+			while(1) {
+				$p1 = strtoupper($name[rand(0, strlen($name)-1)]);
+				$p2 = strtoupper($name[rand(0, strlen($name)-1)]);
+				
+				$key = $p1.$p2.
+					substr($rand, 0, $id_start);
+				
+				if(preg_match("/^([A-Z0-9]+)$/", $key) == TRUE)
+					break;
+			}
+			
+			/* check si la ref existe */
+			$q = new core_db_select($table_name);
+			$where = array(
+				$key_field => $key
+			);
+	
+			$q->where($where);
+			$this->wf->db->query($q);
+			$res = $q->get_result();
+			
+			/* si on a pas de result alors c'est bon */
+			if(count($res) == 0)
+				break;
+			
+			/* augmente la taille */
+			$id_start++;
+		}
+		return($key);
+	}
 
 }

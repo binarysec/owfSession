@@ -10,12 +10,43 @@
 
 {literal}
 <script type="text/javascript">
-
-	/* ajax request */
-	function set_form_add_user() {
-		document.getElementById('form_add_user').reset();
+	
+	function set_form_add_user(id) {
+		var div = document.getElementById('user_add');
+		
+		YAHOO.dialog_add_user.myDialog.show();
+		
+		div.innerHTML = 'Loading user data #' + id;
+		var handleSuccess = function(o) {
+			if(o.responseText !== undefined){
+				div.innerHTML = o.responseText;
+			}
+		}
+	
+		var handleFailure = function(o) {
+			if(o.responseText !== undefined){
+{/literal}
+				div.innerHTML = "{@ 'Server error'}";
+{literal}
+			}
+		}
+		
+		var callback = {
+			success:handleSuccess,
+			failure:handleFailure,
+			argument: { foo:"foo", bar:"bar" }
+		};
+	
+		{/literal}
+		var request = YAHOO.util.Connect.asyncRequest(
+			'GET', 
+			'{link '/admin/session/user/showadd'}', 
+			callback
+		);
+		{literal}
 	}
-
+	
+	
 	function set_form_edit_user(id) {
 		var div = document.getElementById('user_edition');
 		
@@ -181,38 +212,13 @@
 
 <!-- User add form -->
 <div id="add_user">
-<div class="hd">{@ 'Ajouter un nouvel utilisateur'}</div>
-<div class="bd">
-<form id="form_add_user" class="form_dialog" method="POST" action="{link '/admin/session/user/add'}">
-	<table>
-		<tr>
-			<td><label for="form_add_user_email">{@ 'Email <span class="required">(*)</span>'}&nbsp;:</label></td>
-			<td><input type="text" id="form_add_user_email" name="email" value="" /></td>
-		</tr>
-		<tr>
-			<td><label for="form_add_user_password">{@ 'Mot de passe <span class="required">(*)</span>'}&nbsp;:</label></td>
-			<td><input type="password" id="form_add_user_password" name="password" value="" /></td>
-		</tr>
-		<tr>
-			<td><label for="form_add_user_password">{@ 'Mot de passe (confirmation) <span class="required">(*)</span>'}&nbsp;:</label></td>
-			<td><input type="password" id="form_add_user_password_confirm" name="password_confirm" value="" /></td>
-		</tr>
-		<tr>
-			<td><label for="form_add_user_name">{@ 'Nom'}&nbsp;:</label></td>
-			<td><input type="text" id="form_add_user_name" name="name" value="" /></td>
-		</tr>
-		<tr>
-			<td><label for="form_add_user_perms">{@ 'Permissions'}&nbsp;:</label></td>
-			<td><select name="perm">
-				<option value="1" selected="selected">{@ 'Administrateur'}</option>
-				<option value="2">{@ 'Utilisateur simple'}</option>
-				<option value="3">{@ 'Web services'}</option>
-			</select></td>
-		</tr>
-	</table>
-</form>
-
-</div>
+	<div class="hd">{@ 'Ajouter un nouvel utilisateur'}</div>
+	<div class="bd">
+		<form id="form_add_user" class="form_dialog" method="POST" action="{link '/admin/session/user/add'}">
+			<div id="user_add">
+			</div>
+		</form>
+	</div>
 </div>
 
 <!-- User edit form -->

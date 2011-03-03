@@ -97,6 +97,14 @@ class wfm_session extends wf_module {
 				WF_ROUTE_HIDE,
 				array("session:admin:user:add")
 			),
+			"/admin/session/user/showadd" => array(
+				WF_ROUTE_ACTION,
+				"session/admin_user",
+				"show_add",
+				"Ajoute un utilisateur",
+				WF_ROUTE_HIDE,
+				array("session:admin:user:edit")
+			),
 			"/admin/session/user/edit" => array(
 				WF_ROUTE_ACTION,
 				"session/admin_user",

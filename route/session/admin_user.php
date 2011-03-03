@@ -21,6 +21,17 @@ class wfr_session_session_admin_user extends wf_route_request {
 		$this->a_admin_html->set_title("Administration / Sessions / Utilisateurs");
 		$this->a_admin_html->rendering($this->render_list());
 	}
+	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+	 *
+	 * Rail function used to add a user
+	 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+	public function show_add() {
+		$username=$this->a_session->user->generate_ref("username","session_user","username");
+		$tpl = new core_tpl($this->wf);
+		$tpl->set("username", $username);
+		echo $tpl->fetch('session/users/show_add');
+		exit(0);
+	}
 	
 	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 	 *
@@ -29,6 +40,18 @@ class wfr_session_session_admin_user extends wf_route_request {
 	public function add() {
 		$ok = true;
 
+		/* no email */
+		if(!$_POST['username']) {
+// 			$this->a_admin_html->add_error(
+// 				'L\'adresse email de l\'utilisateur n\'a pas
+// 				&eacute;t&eacute; sp&eacute;cifi&eacute;e.'
+// 			);
+			$ok = false;
+		}else{
+			$ret=$this->a_session->user->get("username",$_POST["username"]);
+			if(is_array($ret[0]))
+				$ok=false;
+		}
 		/* no email */
 		if(!$_POST['email']) {
 // 			$this->a_admin_html->add_error(
@@ -71,7 +94,6 @@ class wfr_session_session_admin_user extends wf_route_request {
 // 			);
 			$ok = false;
 		}
-
 		
 		if($ok) {
 			if($_POST['perm'] == 1)
@@ -82,10 +104,13 @@ class wfr_session_session_admin_user extends wf_route_request {
 				$perm = "session:ws";
 
 			$this->a_session->user->add(
+				$_POST['username'],
 				$_POST['email'],
 				$_POST['password'],
 				$_POST['name'],
-				$perm
+				$_POST['firstname'],
+				$perm,
+				$_POST['phone']
 			);
 		}
 
@@ -111,6 +136,7 @@ class wfr_session_session_admin_user extends wf_route_request {
 		$tpl->set("id", $user[0]["id"]);
 		$tpl->set("email", $user[0]["email"]);
 		$tpl->set("username", $user[0]["username"]);
+		$tpl->set("firstname", $user[0]["firstname"]);
 		$tpl->set("name", $user[0]["name"]);
 		$tpl->set("phone", $user[0]["phone"]);
 		$tpl->set("perms", $perms);
@@ -118,6 +144,7 @@ class wfr_session_session_admin_user extends wf_route_request {
 		echo $tpl->fetch('session/users/show_edit');
 		exit(0);
 	}
+	
 	
 	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 	 *
@@ -168,8 +195,6 @@ class wfr_session_session_admin_user extends wf_route_request {
 			}
 			$update["email"] = $_POST['email'];
 		}
-
-
 		/* passwords mismatch */
 		if($_POST['password'] != $_POST['password_confirm']) {
 // 			$this->a_admin_html->add_error(
@@ -215,7 +240,9 @@ class wfr_session_session_admin_user extends wf_route_request {
 				$update["password"]  = $_POST['password'];
 	
 			$update["name"] = $_POST['name'];
-	
+			$update["firstname"] = $_POST['firstname'];
+			$update["phone"] = $_POST['phone'];
+			
 			$this->a_session->user->modify(
 				$update,
 				$user["id"]

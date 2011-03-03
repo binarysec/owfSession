@@ -51,10 +51,10 @@ class session_pview {
 			$this->view_name;
 			
 		if($oid)
-			$buf .= "&oid=".$oid;
+			$buf .= "&amp;oid=".$oid;
 		
 		$buf .= '">'.
-			$name;
+			$name.
 			'</a>';
 			
 		return($buf);

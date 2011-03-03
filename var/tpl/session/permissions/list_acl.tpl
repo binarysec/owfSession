@@ -40,7 +40,7 @@
 </script>
 {/literal}
 
-<h1><img src="{link '/data/session/title_perm.png'}"/>{$title}</h1>
+<h1><img src="{link '/data/session/title_perm.png'}" alt="{@ 'Permissions'}"/>{$title}</h1>
 
 <div class="admin_content">
 
@@ -74,7 +74,7 @@
 	</td>
 	
 	<td>
-		<form id="session_pview_user" method="POST" action="{link '/session/permissions/user'}">
+		<form id="session_pview_user" method="post" action="{link '/session/permissions/user'}">
 		<input type="hidden" name="pview" value="{$pview}"/>
 		<input type="hidden" name="oid" value="{$oid}"/>
 		<input type="text" name="user"/>
@@ -83,9 +83,9 @@
 	
 	</tr>
 
-</table><br>
+</table><br/>
 
-<form id="session_pview_matrix" method="POST" action="{link '/session/permissions/matrix'}">
+<form id="session_pview_matrix" method="post" action="{link '/session/permissions/matrix'}">
 <input type="hidden" name="pview" value="{$pview}"/>
 <input type="hidden" name="oid" value="{$oid}"/>
 {$dataset}

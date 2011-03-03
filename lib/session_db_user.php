@@ -14,9 +14,12 @@ class session_db_user extends session_driver_user {
 		
 		$struct = array(
 			"id" => WF_PRI,
-			"email" => WF_VARCHAR,
+			"username" => WF_VARCHAR,
 			"password" => WF_VARCHAR,
 			"name" => WF_VARCHAR,
+			"firstname"=>WF_VARCHAR,
+			"email" => WF_VARCHAR,
+			"phone"=>WF_VARCHAR,
 			"create_time" => WF_INT,
 			"session_id" => WF_VARCHAR,
 			"session_time_auth" => WF_INT,
@@ -38,12 +41,17 @@ class session_db_user extends session_driver_user {
 		$this->core_cache = $this->wf->core_cacher();
 		$this->gcache = $this->core_cache->create_group("session_db_user_gcache");
 
+		
 		$this->add(
+			"OWF",
 			"wf@binarysec.com", 
 			"lala", 
 			"Open Web Framework", 
-			"session:admin"
+			"user",
+			"session:admin",
+			"0262458307"
 		);
+
 		
 	}
 	
@@ -51,13 +59,23 @@ class session_db_user extends session_driver_user {
 	 *
 	 * 
 	 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-	public function add($email, $password, $name, $type) {
+	public function add(	$username,
+							$email,
+							$password, 
+							$name, 
+							$firstname,
+							$type,
+							$phone=NULL) {
 		/* sanatization */
-		if(!$email || !$password)
+		if(!$email || !$password || !$username)
 			return(FALSE);
 
 		/* vérification si l'utilisateur existe */
 		$r = $this->get("email", $email);
+		if(isset($r[0]) && is_array($r[0]))
+			return(FALSE);
+		
+		$r = $this->get("username", $username);
 		if(isset($r[0]) && is_array($r[0]))
 			return(FALSE);
 
@@ -65,9 +83,13 @@ class session_db_user extends session_driver_user {
 		$insert = array(
 			"email" => $email,
 			"name" => $name,
+			"username" => $username,
+			"firstname" => $firstname,
 			"password" => $this->wf->hash($password),
 			"create_time" => time()
 		);
+		if($phone)
+			$insert["phone"]=$phone;
 
 		/* sinon on ajoute l'utilisateur */
 		$q = new core_db_insert("session_user", $insert);
@@ -75,7 +97,7 @@ class session_db_user extends session_driver_user {
 		$uid = $this->wf->db->get_last_insert_id('session_user_id_seq');
 
 		/* reprend les informations */
-		$user = $this->get("email", $email);
+		$user = $this->get("username", $username);
 		
 		/* add initials permissions */
 		$this->session->perm->user_add(

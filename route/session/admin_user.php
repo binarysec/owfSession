@@ -110,7 +110,9 @@ class wfr_session_session_admin_user extends wf_route_request {
 		
 		$tpl->set("id", $user[0]["id"]);
 		$tpl->set("email", $user[0]["email"]);
+		$tpl->set("username", $user[0]["username"]);
 		$tpl->set("name", $user[0]["name"]);
+		$tpl->set("phone", $user[0]["phone"]);
 		$tpl->set("perms", $perms);
 
 		echo $tpl->fetch('session/users/show_edit');
@@ -266,6 +268,10 @@ class wfr_session_session_admin_user extends wf_route_request {
 				'name'      => 'E-mail',
 				'orderable' => true,
 			),
+			'username' => array(
+				'name'      => 'Username',
+				'orderable' => true,
+			),
 			'remote_address' => array(
 				'name'      => 'Adresse IP',
 				'orderable' => true,
@@ -372,8 +378,9 @@ class wfr_session_session_admin_user extends wf_route_request {
 		
 		return(array(
 			"type_icon" => $type_icon,
-			'email' => "<strong>".htmlspecialchars($row['email'])."</strong>",
+			'email' => htmlspecialchars($row['email']),
 			'name' => htmlspecialchars($row['name']),
+			'Username'=>"<strong>".$datum['username']."</strong>",
 			'ip' => $ip,
 			'login_icon' => $login_icon,
 			'login' => $login_date,

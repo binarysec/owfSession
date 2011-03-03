@@ -315,9 +315,9 @@ class wfr_session_session_permissions extends wf_route_request {
 		/* build action */
 		$delete_url = $this->wf->linker('/session/permissions/delete').
 			"?pview=".$this->pview_name.
-			"&uid=".$datum["ptr_id"];
+			"&amp;uid=".$datum["ptr_id"];
 		if($this->oid)
-			$delete_url .= "&oid=".$this->oid;
+			$delete_url .= "&amp;oid=".$this->oid;
 			
 		$actions = '<a href="'.
 			$delete_url.
@@ -348,7 +348,7 @@ class wfr_session_session_permissions extends wf_route_request {
 				$ret[$k] .= '<input '.
 					'type="checkbox" '.
 					'name="'.$name.'" '.
-					'checked/>';
+					'checked="checked"/>';
 				
 			}
 			else {

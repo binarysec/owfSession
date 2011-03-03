@@ -405,8 +405,8 @@ class wfr_session_session_admin_user extends wf_route_request {
 		
 		return(array(
 			"type_icon" => $type_icon,
+			'name' => htmlspecialchars($row['name'])." ".htmlspecialchars($datum['firstname']),
 			'email' => htmlspecialchars($row['email']),
-			'name' => htmlspecialchars($row['name']),
 			'Username'=>"<strong>".$datum['username']."</strong>",
 			'ip' => $ip,
 			'login_icon' => $login_icon,

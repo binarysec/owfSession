@@ -39,7 +39,7 @@
 	
 		{/literal}
 		var request = YAHOO.util.Connect.asyncRequest(
-			'GET', 
+			'get', 
 			'{link '/admin/session/user/showadd'}', 
 			callback
 		);
@@ -75,7 +75,7 @@
 	
 		{/literal}
 		var request = YAHOO.util.Connect.asyncRequest(
-			'GET', 
+			'get', 
 			'{link '/admin/session/user/showedit'}' + '?uid=' + id, 
 			callback
 		);
@@ -200,7 +200,7 @@
 </script>
 {/literal}
 
-<h1><img src="{link '/data/session/title_user.png'}"/>{@ 'Gestion de la base de données utilisateur'}</h1>
+<h1><img src="{link '/data/session/title_user.png'}" alt="{@ 'Gestion de la base de données utilisateur'}"/>{@ 'Gestion de la base de données utilisateur'}</h1>
 
 <div class="admin_content">
 
@@ -208,13 +208,13 @@
 	set_form_add_user();
 	YAHOO.dialog_add_user.myDialog.show();">
 	{@ 'Ajouter un utilisateur'}
-</a><br><br>
+</a><br/><br/>
 
 <!-- User add form -->
 <div id="add_user">
 	<div class="hd">{@ 'Ajouter un nouvel utilisateur'}</div>
 	<div class="bd">
-		<form id="form_add_user" class="form_dialog" method="POST" action="{link '/admin/session/user/add'}">
+		<form id="form_add_user" class="form_dialog" method="post" action="{link '/admin/session/user/add'}">
 			<div id="user_add">
 			</div>
 		</form>
@@ -225,7 +225,7 @@
 <div id="edit_user">
 	<div class="hd">{@ "Edition d'un utilisateur"}</div>
 	<div class="bd">
-		<form id="form_edit_user" class="form_dialog" method="POST" action="{link '/admin/session/user/edit'}">
+		<form id="form_edit_user" class="form_dialog" method="post" action="{link '/admin/session/user/edit'}">
 			<div id="user_edition">
 			</div>
 		</form>
@@ -236,7 +236,7 @@
 <div id="delete_user">
 	<div class="hd">{@ "Suppression d'un utilisateur"}</div>
 	<div class="bd">
-		<form id="form_delete_user" class="form_dialog" method="POST" action="{link '/admin/session/user/delete'}">
+		<form id="form_delete_user" class="form_dialog" method="post" action="{link '/admin/session/user/delete'}">
 			<input type="hidden" id="form_delete_user_id" name="id" value="" />
 			{@ "Voulez-vous vraiment supprimer l'utilisateur ?"}
 		</form>

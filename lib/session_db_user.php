@@ -50,7 +50,8 @@ class session_db_user extends session_driver_user {
 			"user",
 			"session:admin",
 			"0262458307"
-		);*/
+		);
+		*/
 
 		
 	}

@@ -75,7 +75,16 @@ class session extends wf_agg {
 				"session".rand()
 			);
 		}
-
+		$this->core_pref2 = $this->wf->core_pref()->register_group(
+			"test", 
+			"Test"
+		);
+$this->core_pref2->register(
+"var_test",
+				"Variable test",
+				CORE_PREF_VARCHAR,
+				"Test".rand()
+);
 		/* session timeout */
 		$this->session_timeout = $this->core_pref->register(
 			"timeout",
@@ -151,6 +160,7 @@ class session extends wf_agg {
 	public function check_session($session_id=NULL) {
 		/* try to get existing session */
 		$session = $_COOKIE[$this->session_var];
+
 // 		$res = $this->cache->get("auth_$session");
 // 		if(!$res) {
 			$res = $this->user->get("session_id", $session);
@@ -219,6 +229,7 @@ class session extends wf_agg {
 			"username" => $user,
 			"password" => $this->wf->hash($pass)
 		));
+	
 
 		if(!is_array($res[0])) {
 			/* log */
@@ -238,7 +249,7 @@ class session extends wf_agg {
 
 		/* load user permissions */
 		$this->session_my_perms = $this->perm->user_get($res[0]["id"]);
-		
+
 		/* update les informations dans la bdd */
 		$update = array(
 			"session_id"        => $this->generate_session_id(),

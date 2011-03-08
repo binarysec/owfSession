@@ -1,20 +1,20 @@
-<input type="hidden" id="form_edit_user_id" name="id" value="{$id}" />
+<input type="hidden" id="form_edit_user_id" name="id" value="%{$id}%" />
 <table>
 	<tr>
 		<td><label for="form_edit_user_name">Username<span class="required">(*)</span>&nbsp;:</label></td>
-		<td><input type="text" id="form_edit_user_username" name="username" value="{$username|entities}" /></td>
+		<td><input type="text" id="form_edit_user_username" name="username" value="%{$username|entities}%" /></td>
 	</tr>
 	<tr>
 		<td><label for="form_edit_user_name">Nom&nbsp;:</label></td>
-		<td><input type="text" id="form_edit_user_name" name="name" value="{$name|entities}" /></td>
+		<td><input type="text" id="form_edit_user_name" name="name" value="%{$name|entities}%" /></td>
 	</tr>
 	<tr>
 		<td><label for="form_edit_user_firstname">Prénom&nbsp;:</label></td>
-		<td><input type="text" id="form_edit_user_firstname" name="firstname" value="{$firstname|entities}" /></td>
+		<td><input type="text" id="form_edit_user_firstname" name="firstname" value="%{$firstname|entities}%" /></td>
 	</tr>
 	<tr>
 		<td><label for="form_edit_user_email">Email <span class="required">(*)</span>&nbsp;:</label></td>
-		<td><input type="text" id="form_edit_user_email" name="email" value="{$email|entities}" /></td>
+		<td><input type="text" id="form_edit_user_email" name="email" value="%{$email|entities}%" /></td>
 	</tr>
 	<tr>
 		<td><label for="form_edit_user_password">Mot de passe&nbsp;:</label></td>
@@ -26,7 +26,7 @@
 	</tr>
 	<tr>
 		<td><label for="form_edit_user_phone">Tél&nbsp;:</label></td>
-		<td><input type="text" id="form_edit_user_phone" name="phone" value="{$phone|entities}" /></td>
+		<td><input type="text" id="form_edit_user_phone" name="phone" value="%{$phone|entities}%" /></td>
 	</tr>
 	<tr>
 		<td><label for="form_edit_user_perms">Permissions :</label></td>

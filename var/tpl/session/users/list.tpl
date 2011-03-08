@@ -1,14 +1,13 @@
-{css '/data/yui/build/button/assets/skins/sam/button.css'}
-{css '/data/yui/build/container/assets/skins/sam/container.css'}
+%{css '/data/yui/build/button/assets/skins/sam/button.css'}%
+%{css '/data/yui/build/container/assets/skins/sam/container.css'}%
 
-{js '/data/yui/build/yahoo-dom-event/yahoo-dom-event.js'}
-{js '/data/yui/build/connection/connection-min.js'}
-{js '/data/yui/build/element/element-min.js'}
-{js '/data/yui/build/button/button-min.js'}
-{js '/data/yui/build/dragdrop/dragdrop-min.js'}
-{js '/data/yui/build/container/container-min.js'}
+%{js '/data/yui/build/yahoo-dom-event/yahoo-dom-event.js'}%
+%{js '/data/yui/build/connection/connection-min.js'}%
+%{js '/data/yui/build/element/element-min.js'}%
+%{js '/data/yui/build/button/button-min.js'}%
+%{js '/data/yui/build/dragdrop/dragdrop-min.js'}%
+%{js '/data/yui/build/container/container-min.js'}%
 
-{literal}
 <script type="text/javascript">
 	
 	function set_form_add_user(id) {
@@ -25,9 +24,7 @@
 	
 		var handleFailure = function(o) {
 			if(o.responseText !== undefined){
-{/literal}
-				div.innerHTML = "{@ 'Server error'}";
-{literal}
+				div.innerHTML = "%{@ 'Server error'}%";
 			}
 		}
 		
@@ -37,13 +34,11 @@
 			argument: { foo:"foo", bar:"bar" }
 		};
 	
-		{/literal}
 		var request = YAHOO.util.Connect.asyncRequest(
 			'get', 
-			'{link '/admin/session/user/showadd'}', 
+			'%{link '/admin/session/user/showadd'}%', 
 			callback
 		);
-		{literal}
 	}
 	
 	
@@ -60,10 +55,8 @@
 		}
 	
 		var handleFailure = function(o) {
-			if(o.responseText !== undefined){
-{/literal}
-				div.innerHTML = "{@ 'Server error'}";
-{literal}
+			if(o.responseText !== undefined) {
+				div.innerHTML = "%{@ 'Server error'}%";
 			}
 		}
 		
@@ -73,13 +66,11 @@
 			argument: { foo:"foo", bar:"bar" }
 		};
 	
-		{/literal}
 		var request = YAHOO.util.Connect.asyncRequest(
 			'get', 
-			'{link '/admin/session/user/showedit'}' + '?uid=' + id, 
+			'%{link '/admin/session/user/showedit'}%' + '?uid=' + id, 
 			callback
 		);
-		{literal}
 	}
 
 	function set_form_delete_user(id, email) {
@@ -177,8 +168,8 @@
 				visible : false,
 				constraintoviewport : true,
 				buttons : [
-					{text:"{@ 'Supprimer'}", handler:handleSubmit, isDefault:true},
-					{text:"{@ 'Annuler'}", handler:handleCancel}
+					{text:"%{@ 'Supprimer'}%", handler:handleSubmit, isDefault:true},
+					{text:"%{@ 'Annuler'}%", handler:handleCancel}
 				],
 				effect: { 
 					effect: YAHOO.widget.ContainerEffect.FADE,
@@ -198,23 +189,22 @@
 	
 	
 </script>
-{/literal}
 
-<h1><img src="{link '/data/session/title_user.png'}" alt="{@ 'Gestion de la base de données utilisateur'}"/>{@ 'Gestion de la base de données utilisateur'}</h1>
+<h1><img src="%{link '/data/session/title_user.png'}%" alt="%{@ 'Gestion de la base de données utilisateur'}%"/>%{@ 'Gestion de la base de données utilisateur'}%</h1>
 
 <div class="admin_content">
 
 <a class="btn two" onclick="javascript:
 	set_form_add_user();
 	YAHOO.dialog_add_user.myDialog.show();">
-	{@ 'Ajouter un utilisateur'}
+	%{@ 'Ajouter un utilisateur'}%
 </a><br/><br/>
 
 <!-- User add form -->
 <div id="add_user">
-	<div class="hd">{@ 'Ajouter un nouvel utilisateur'}</div>
+	<div class="hd">%{@ 'Ajouter un nouvel utilisateur'}%</div>
 	<div class="bd">
-		<form id="form_add_user" class="form_dialog" method="post" action="{link '/admin/session/user/add'}">
+		<form id="form_add_user" class="form_dialog" method="post" action="%{link '/admin/session/user/add'}%">
 			<div id="user_add">
 			</div>
 		</form>
@@ -223,9 +213,9 @@
 
 <!-- User edit form -->
 <div id="edit_user">
-	<div class="hd">{@ "Edition d'un utilisateur"}</div>
+	<div class="hd">%{@ "Edition d'un utilisateur"}%</div>
 	<div class="bd">
-		<form id="form_edit_user" class="form_dialog" method="post" action="{link '/admin/session/user/edit'}">
+		<form id="form_edit_user" class="form_dialog" method="post" action="%{link '/admin/session/user/edit'}%">
 			<div id="user_edition">
 			</div>
 		</form>
@@ -234,15 +224,15 @@
 
 <!-- User delete form -->
 <div id="delete_user">
-	<div class="hd">{@ "Suppression d'un utilisateur"}</div>
+	<div class="hd">%{@ "Suppression d'un utilisateur"}%</div>
 	<div class="bd">
-		<form id="form_delete_user" class="form_dialog" method="post" action="{link '/admin/session/user/delete'}">
+		<form id="form_delete_user" class="form_dialog" method="post" action="%{link '/admin/session/user/delete'}%">
 			<input type="hidden" id="form_delete_user_id" name="id" value="" />
-			{@ "Voulez-vous vraiment supprimer l'utilisateur ?"}
+			%{@ "Voulez-vous vraiment supprimer l'utilisateur ?"}%
 		</form>
 	</div>
 </div>
 
-{$dataset}
+%{$dataset}%
 
 </div>

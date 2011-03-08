@@ -41,7 +41,7 @@ class session_db_user extends session_driver_user {
 		$this->core_cache = $this->wf->core_cacher();
 		$this->gcache = $this->core_cache->create_group("session_db_user_gcache");
 
-		/*
+		
 		$this->add(
 			"OWF",
 			"wf@binarysec.com", 
@@ -51,7 +51,7 @@ class session_db_user extends session_driver_user {
 			"session:admin",
 			"0262458307"
 		);
-		*/
+		
 
 		
 	}

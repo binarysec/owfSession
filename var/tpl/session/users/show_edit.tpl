@@ -1,20 +1,20 @@
-<input type="hidden" id="form_edit_user_id" name="id" value="{$id}" />
+<input type="hidden" id="form_edit_user_id" name="id" value="%{$id}%" />
 <table>
 	<tr>
 		<td>Username</td>
-		<td>{$username|entities}</td>
+		<td>%{$username|entities}%</td>
 	</tr>
 	<tr>
 		<td><label for="form_edit_user_name">Nom&nbsp;:</label></td>
-		<td><input type="text" id="form_edit_user_name" name="name" value="{$name|entities}" /></td>
+		<td><input type="text" id="form_edit_user_name" name="name" value="%{$name|entities}%" /></td>
 	</tr>
 	<tr>
 		<td><label for="form_edit_user_firstname">Prénom&nbsp;:</label></td>
-		<td><input type="text" id="form_edit_user_firstname" name="firstname" value="{$firstname|entities}" /></td>
+		<td><input type="text" id="form_edit_user_firstname" name="firstname" value="%{$firstname|entities}%" /></td>
 	</tr>
 	<tr>
 		<td><label for="form_edit_user_email">Email <span class="required">(*)</span>&nbsp;:</label></td>
-		<td><input type="text" id="form_edit_user_email" name="email" value="{$email|entities}" /></td>
+		<td><input type="text" id="form_edit_user_email" name="email" value="%{$email|entities}%" /></td>
 	</tr>
 	<tr>
 		<td><label for="form_edit_user_password">Mot de passe&nbsp;:</label></td>
@@ -26,29 +26,29 @@
 	</tr>
 	<tr>
 		<td><label for="form_edit_user_phone">Tél&nbsp;:</label></td>
-		<td><input type="text" id="form_edit_user_phone" name="phone" value="{$phone|entities}" /></td>
+		<td><input type="text" id="form_edit_user_phone" name="phone" value="%{$phone|entities}%" /></td>
 	</tr>
 	<tr>
 		<td><label for="form_edit_user_perms">Permissions :</label></td>
 		
-		{if is_array($perms["session:god"]) || is_array($perms["session:admin"])}
+		%{if is_array($perms["session:god"]) || is_array($perms["session:admin"])}%
 		<td><select name="perm">
 			<option value="1" selected="selected">Administrateur</option>
 			<option value="2">Utilisateur simple</option>
 			<option value="3">Web services</option>
 		</select></td>
-		{elseif is_array($perms["session:simple"])}
+		%{elseif is_array($perms["session:simple"])}%
 		<td><select name="perm">
 			<option value="1">Administrateur</option>
 			<option value="2" selected="selected">Utilisateur simple</option>
 			<option value="3">Web services</option>
 		</select></td>
-		{elseif is_array($perms["session:ws"])}
+		%{elseif is_array($perms["session:ws"])}%
 		<td><select name="perm">
 			<option value="1">Administrateur</option>
 			<option value="2">Utilisateur simple</option>
 			<option value="3" selected="selected">Web services</option>
 		</select></td>
-		{/if}
+		%{/if}%
 	</tr>
 </table>

@@ -1,6 +1,5 @@
-<!-- {css '/data/session/base.css'} -->
+<!-- %{css '/data/session/base.css'}% -->
 
-{literal}
 <script type="text/javascript">
 	function session_pview_reset_matrix() {
 		document.getElementById('session_pview_matrix').reset();
@@ -19,11 +18,10 @@
 		div.innerHTML = 'Loading user data #' + id;
 		
 		YAHOO.dialog_edit_user.myDialog.show();
-		{/literal}
+
 		YAHOO.async_req_user_edition.send(
-			'{link '/admin/session/user/showedit'}' + '?uid=' + id
+			'%{link '/admin/session/user/showedit'}%' + '?uid=' + id
 		);
-		{literal}
 	}
 
 	function set_form_delete_user(id, email) {
@@ -38,9 +36,8 @@
 	
 
 </script>
-{/literal}
 
-<h1><img src="{link '/data/session/title_perm.png'}" alt="{@ 'Permissions'}"/>{$title}</h1>
+<h1><img src="%{link '/data/session/title_perm.png'}%" alt="%{@ 'Permissions'}%"/>%{$title}%</h1>
 
 <div class="admin_content">
 
@@ -50,33 +47,33 @@
 		<button onclick="javascript:
 			set_form_add_user();
 			YAHOO.dialog_add_user.myDialog.show();">
-			<img src="{link '/data/icons/22x22/add.png'}" />
-			{@ 'Retour'}
+			<img src="%{link '/data/icons/22x22/add.png'}%" />
+			%{@ 'Retour'}%
 		</button>
 	</td>-->
 	
 	<td style="padding-right: 4px;">
 		<a class="btn" href="#" onclick="javascript:session_pview_reset_matrix();">
-			{@ 'Annuler les modifications'}
+			%{@ 'Annuler les modifications'}%
 		</a>
 	</td>
 	
 	<td style="padding-right: 4px;">
 		<a class="btn one" onclick="javascript:session_pview_send_matrix();">
-			{@ 'Sauvegarder les permissions'}
+			%{@ 'Sauvegarder les permissions'}%
 		</a>
 	</td>
 
 	<td style="padding-right: 4px;">
 		<a class="btn two" onclick="javascript:session_pview_send_user();">
-			{@ 'Ajouter l\'utilisateur'}
+			%{@ 'Ajouter l\'utilisateur'}%
 		</a>
 	</td>
 	
 	<td>
-		<form id="session_pview_user" method="post" action="{link '/session/permissions/user'}">
-		<input type="hidden" name="pview" value="{$pview}"/>
-		<input type="hidden" name="oid" value="{$oid}"/>
+		<form id="session_pview_user" method="post" action="%{link '/session/permissions/user'}%">
+		<input type="hidden" name="pview" value="%{$pview}%"/>
+		<input type="hidden" name="oid" value="%{$oid}%"/>
 		<input type="text" name="user"/>
 		</form>
 	</td>
@@ -85,10 +82,10 @@
 
 </table><br/>
 
-<form id="session_pview_matrix" method="post" action="{link '/session/permissions/matrix'}">
-<input type="hidden" name="pview" value="{$pview}"/>
-<input type="hidden" name="oid" value="{$oid}"/>
-{$dataset}
+<form id="session_pview_matrix" method="post" action="%{link '/session/permissions/matrix'}%">
+<input type="hidden" name="pview" value="%{$pview}%"/>
+<input type="hidden" name="oid" value="%{$oid}%"/>
+%{$dataset}%
 </form>
 
 </div>

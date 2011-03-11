@@ -27,9 +27,9 @@ class wfr_session_session_permissions extends wf_route_request {
 	 * Add a permission
 	 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */	
 	public function add_user() {
+	
 		$this->pview_name = $this->wf->get_var("pview");
 		$this->oid = $this->wf->get_var("oid");
-		
 		$pview = $this->a_session->get_pview($this->pview_name);
 		if(!$pview)
 			exit(0);
@@ -39,7 +39,7 @@ class wfr_session_session_permissions extends wf_route_request {
 
 		/* lookup user */
 		$u = $this->wf->get_var("user");
-		$user = $this->a_session->user->get("email", $u);
+		$user = $this->a_session->user->get("username", $u);
 		$user = $user[0];
 
 		$this->a_session->perm->user_add(
@@ -240,7 +240,7 @@ class wfr_session_session_permissions extends wf_route_request {
 		$cols = array(
 			'icons' => array(),
 			'mail' => array(
-				'name' => 'Compte',
+				'name' => 'Username',
 			),
 			'nom' => array(
 				'name' => 'Nom',
@@ -329,7 +329,7 @@ class wfr_session_session_permissions extends wf_route_request {
 	
 		$ret = array(
 			'icons' => $type_icon,
-			'mail' => $user["email"],
+			'mail' => $user["username"],
 			'nom' => $user["name"],
 			"create_t" => $create_time
 		);

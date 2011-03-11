@@ -14,8 +14,6 @@ class wfr_session__session_profil extends wf_route_request {
 		$this->a_session 	= $this->wf->session();
 		$this->admin 		= $this->wf->admin_html();
 		$this->lang			= $this->wf->core_lang()->get_context('session/profil');
-		$this->util 	= $this->wf->bsf_waf_saas_util();
-		$this->saas_message= $this->wf->bsf_waf_saas_message();
 	}
 
 	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -67,8 +65,10 @@ class wfr_session__session_profil extends wf_route_request {
 		$user=$this->a_session->get_user();
 		$tpl = new core_tpl($this->wf);
 		$tpl->set("user",$user);
-		$this->admin->set_title($this->lang->ts("Profil de")." ".
-					ucfirst($user["name"])." ".ucfirst($user["firstname"]));
+		$this->admin->set_title(
+			$this->lang->ts("Profil de")." ".
+			ucfirst($user["name"])." ".ucfirst($user["firstname"])
+		);
 		$this->admin->rendering(
 			$tpl->fetch("session/profil")
 		);

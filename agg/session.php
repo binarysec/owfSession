@@ -75,16 +75,6 @@ class session extends wf_agg {
 				"session".rand()
 			);
 		}
-		$this->core_pref2 = $this->wf->core_pref()->register_group(
-			"test", 
-			"Test"
-		);
-$this->core_pref2->register(
-"var_test",
-				"Variable test",
-				CORE_PREF_VARCHAR,
-				"Test".rand()
-);
 		/* session timeout */
 		$this->session_timeout = $this->core_pref->register(
 			"timeout",

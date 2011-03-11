@@ -39,7 +39,7 @@
 				<td><input id="phone_modif" name="phone_modif" value="%{$user["phone"]}%"/></td>
 			</tr>
 		</table>
-			<a class="btn two" onclick="document.getElementById('profil_modif').submit()">%{@ 'modifier'}%</a>
+			<a class="btn one" onclick="document.getElementById('profil_modif').submit()">%{@ 'Sauvegarder'}%</a>
 	</form>
 </div>
 <div style="clear:both;"/>

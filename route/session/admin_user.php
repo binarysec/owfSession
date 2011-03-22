@@ -384,24 +384,12 @@ class wfr_session_session_admin_user extends wf_route_request {
 			
 		}
 		
+		
+		$edit = '<span class="edit_user"><a href="" id="'.$datum['id'].'">Edit</a></span>';
+		$delete = '<span class="delete_user"><a href="" id="'.$datum['id'].'">Delete</a></span>';
+		
 		/* actions */
-		$actions = '<a class="btn one" href="#" onclick="'.
-			"set_form_edit_user('".
-			$datum['id'].
-			"')\">Edit</a> ".
-
-// 			'<a href="'.
-// 			$this->wf->linker("/admin/system/profiles/show/".$datum['id']).
-// 			"\">Profile</a>".
-// 			
-// 			" | ".
-			
-			'<a class="btn" href="#" onclick="'.
-			"set_form_delete_user('".
-			$datum['id']."', '".
-			$datum['email'].
-			"')\">Delete</a>"
-		;
+		$actions = $edit.$delete;
 		
 		return(array(
 			"type_icon" => $type_icon,

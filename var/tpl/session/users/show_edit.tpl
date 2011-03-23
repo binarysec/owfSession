@@ -1,3 +1,19 @@
+<script>
+	$(function() {
+		$( "#tabs" ).tabs();
+	});
+</script>
+
+
+
+
+<div id="tabs">
+	<ul>
+		<li><a href="#tabs-1">%{@ 'Information'}%</a></li>
+		<li><a href="#tabs-2">%{@ 'Permissions'}%</a></li>
+	</ul>
+	<div id="tabs-1">
+	
 <input type="hidden" id="form_edit_user_id" name="id" value="%{$id}%" />
 <table>
 	<tr>
@@ -52,3 +68,31 @@
 		%{/if}%
 	</tr>
 </table>
+
+	</div>
+	<div id="tabs-2">
+<table width="100%">
+%{foreach $sp as $spkey => $spval}%
+
+	<tr>
+		<td>%{$spval[1]}% </td>
+		%{if $spval[0]}%
+		<td><input type="checkbox" name="%{$spkey}%" value="true" checked></td>
+		%{else}%
+		<td><input type="checkbox" name="%{$spkey}%" value="true"></td>
+		%{/if}%
+	</tr>
+
+
+%{/foreach}%
+</table>
+
+	</div>
+
+</div>
+
+
+
+
+
+

@@ -131,6 +131,19 @@ class wfr_session_session_admin_user extends wf_route_request {
 		$user = $this->a_session->user->get("id", $id);
 		$perms = $this->a_session->perm->user_get($id);
 
+		/* get session permissions */
+		$sp = array();
+		$ret = $this->wf->execute_hook("session_permissions");
+		foreach($ret as $sp_perms) {
+			foreach($sp_perms as $sp_key => $sp_name) {
+				$sp[$sp_key] = $sp_name;
+				if($perms[$sp_key])
+					$sp[$sp_key] = array(true, $sp_name);
+				else
+					$sp[$sp_key] = array(false, $sp_name);
+			}
+		}
+		
 		$tpl = new core_tpl($this->wf);
 		
 		$tpl->set("id", $user[0]["id"]);
@@ -140,6 +153,7 @@ class wfr_session_session_admin_user extends wf_route_request {
 		$tpl->set("name", $user[0]["name"]);
 		$tpl->set("phone", $user[0]["phone"]);
 		$tpl->set("perms", $perms);
+		$tpl->set("sp", $sp);
 
 		echo $tpl->fetch('session/users/show_edit');
 		exit(0);
@@ -233,21 +247,44 @@ class wfr_session_session_admin_user extends wf_route_request {
 					"obj_type" => $old_obj_type
 				));
 				$this->a_session->perm->user_add($user["id"], $perm);
-			}
-
-			/* update password */
-			if(strlen($_POST['password']) > 2)
-				$update["password"]  = $_POST['password'];
-	
-			$update["name"] = $_POST['name'];
-			$update["firstname"] = $_POST['firstname'];
-			$update["phone"] = $_POST['phone'];
 			
-			$this->a_session->user->modify(
-				$update,
-				$user["id"]
-			);
 
+				/* update password */
+				if(strlen($_POST['password']) > 2)
+					$update["password"]  = $_POST['password'];
+		
+				$update["name"] = $_POST['name'];
+				$update["firstname"] = $_POST['firstname'];
+				$update["phone"] = $_POST['phone'];
+				
+				$this->a_session->user->modify(
+					$update,
+					$user["id"]
+				);
+				
+				/* update session permissions */
+				$ret = $this->wf->execute_hook("session_permissions");
+				foreach($ret as $sp_perms) {
+					foreach($sp_perms as $sp_key => $sp_name) {
+						$val = $this->wf->get_var($sp_key);
+						if($val == "true") {
+							if(!$perms[$sp_key])
+								$this->a_session->perm->user_add(
+									$user["id"], 
+									$sp_key
+								);
+						}
+						else {
+							if($perms[$sp_key])
+								$this->a_session->perm->user_remove(array(
+									"ptr_id" => $user["id"],
+									"obj_type" => $perms[$sp_key][0]["obj_type"]
+								));
+						}
+						
+					}
+				}
+			}
 			
 		}
 
@@ -340,7 +377,7 @@ class wfr_session_session_admin_user extends wf_route_request {
 		if(!$this->a_session->is_online($datum["id"])) {
 			$login_icon = '<img src="'.
 				$this->wf->linker('/data/session/offline.png').
-				'" alt="[On line]" title="On line" />';
+				'" alt="[Off line]" title="Off line" />';
 			$ip = '-';
 		}
 		else {

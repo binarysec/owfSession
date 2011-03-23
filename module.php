@@ -13,11 +13,17 @@ class wfm_session extends wf_module {
 	}
 	
 	public function get_name() { return("session"); }
-	public function get_description()  { return("OWF Session module"); }
-	public function get_banner()  { return("OWF Session/1.0.0-HEAD"); }
-	public function get_version() { return("1.0.0-HEAD"); }
+	public function get_description()  { return("OWF Native Session module"); }
+	public function get_banner()  { return("OWF Session/1.2.0"); }
+	public function get_version() { return("1.2.0"); }
 	public function get_authors() { return("Michael VERGOZ"); }
 	public function get_depends() { return(NULL); }
+	
+	public function session_permissions() {
+		return(array(
+			"session:manage" => $this->ts("Allow to manage users")
+		));
+	}
 	
 	public function get_actions() {
 		return(array(
@@ -78,7 +84,7 @@ class wfm_session extends wf_module {
 				"/admin/system/session/user",
 				$this->ts("Gestion des utilisateurs"),
 				WF_ROUTE_SHOW,
-				array("session:admin")
+				array("session:manage")
 			),
 
 			"/admin/system/session/user" => array(
@@ -87,7 +93,7 @@ class wfm_session extends wf_module {
 				"admin_user",
 				$this->ts("Gestion des utilisateurs"),
 				WF_ROUTE_HIDE,
-				array("session:admin:user")
+				array("session:manage")
 			),
 			"/admin/session/user/add" => array(
 				WF_ROUTE_ACTION,
@@ -95,7 +101,7 @@ class wfm_session extends wf_module {
 				"add",
 				"Ajoute un utilisateur",
 				WF_ROUTE_HIDE,
-				array("session:admin:user:add")
+				array("session:manage")
 			),
 			"/admin/session/user/showadd" => array(
 				WF_ROUTE_ACTION,
@@ -103,7 +109,7 @@ class wfm_session extends wf_module {
 				"show_add",
 				"Ajoute un utilisateur",
 				WF_ROUTE_HIDE,
-				array("session:admin:user:edit")
+				array("session:manage")
 			),
 			"/admin/session/user/edit" => array(
 				WF_ROUTE_ACTION,
@@ -111,7 +117,7 @@ class wfm_session extends wf_module {
 				"edit",
 				"Ajoute un utilisateur",
 				WF_ROUTE_HIDE,
-				array("session:admin:user:edit")
+				array("session:manage")
 			),
 			"/admin/session/user/showedit" => array(
 				WF_ROUTE_ACTION,
@@ -119,7 +125,7 @@ class wfm_session extends wf_module {
 				"show_edit",
 				"Ajoute un utilisateur",
 				WF_ROUTE_HIDE,
-				array("session:admin:user:edit")
+				array("session:manage")
 			),
 			"/admin/session/user/delete" => array(
 				WF_ROUTE_ACTION,
@@ -127,7 +133,7 @@ class wfm_session extends wf_module {
 				"delete",
 				"Ajoute un utilisateur",
 				WF_ROUTE_HIDE,
-				array("session:admin:user:delete")
+				array("session:manage")
 			),
 			// My profil
 			"/admin/myprofile" => array(

@@ -105,25 +105,28 @@ class session extends wf_agg {
 	 * Check permissions
 	 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 	public function check_permission($need) {
-		/* bypass */
-		if(
-			isset($this->session_my_perms["session:god"]) ||
-			isset($this->session_my_perms["session:admin"])
-			) {
-			return(TRUE);
-		}
-		
+		if(isset($this->session_my_perms["session:god"]))
+			return(true);
+
 		/* check permission */
 		$ret = array();
 
 		if(is_array($need)) {
 			foreach($need as $k => $v) {
-				if($v != "session:anon" && !$this->session_my_perms[$v])
-					return(FALSE);
+				if(
+					$v != "session:anon" && 
+					!$this->session_my_perms[$v]
+					) {
+					if($v == "session:god")
+						return(false);
+					else if(isset($this->session_my_perms["session:admin"]))
+						return(true);
+					return(false);
+				}
 			}
 		}
 		
-		return(TRUE);
+		return(true);
 	}
 	
 	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *

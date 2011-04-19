@@ -1,15 +1,13 @@
-%{css '/data/yui/build/button/assets/skins/sam/button.css'}%
-%{css '/data/yui/build/container/assets/skins/sam/container.css'}%
-
-%{js '/data/yui/build/yahoo-dom-event/yahoo-dom-event.js'}%
-%{js '/data/yui/build/connection/connection-min.js'}%
-%{js '/data/yui/build/element/element-min.js'}%
-%{js '/data/yui/build/button/button-min.js'}%
-%{js '/data/yui/build/dragdrop/dragdrop-min.js'}%
-%{js '/data/yui/build/container/container-min.js'}%
-
 %{literal}%
 <script type="text/javascript">
+	$(function() {
+		// Add button 
+		$("button, input:submit, a", ".button_j").button({ 
+			icons: {
+				primary:'ui-icon-gear'
+			}
+		});
+	});
 </script>
 %{/literal}%
 
@@ -39,7 +37,7 @@
 				<td><input id="phone_modif" name="phone_modif" value="%{$user["phone"]}%"/></td>
 			</tr>
 		</table>
-			<a class="btn one" onclick="document.getElementById('profil_modif').submit()">%{@ 'Sauvegarder'}%</a>
+			<span class="button_j"><a class="btn one" onclick="document.getElementById('profil_modif').submit()">%{@ 'Sauvegarder'}%</a></span>
 	</form>
 </div>
 <div style="clear:both;"/>

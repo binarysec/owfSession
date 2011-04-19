@@ -1,6 +1,15 @@
 <!-- %{css '/data/session/base.css'}% -->
 
 <script type="text/javascript">
+	$(function() {
+		// Add button 
+		$("button, input:submit, a", ".button_j").button({ 
+			icons: {
+				primary:'ui-icon-gear'
+			}
+		});
+	});
+	
 	function session_pview_reset_matrix() {
 		document.getElementById('session_pview_matrix').reset();
 	}
@@ -51,23 +60,23 @@
 			%{@ 'Retour'}%
 		</button>
 	</td>-->
-	
+
 	<td style="padding-right: 4px;">
-		<a class="btn" href="#" onclick="javascript:session_pview_reset_matrix();">
+		<span class="button_j"><a href="#" onclick="javascript:session_pview_reset_matrix();">
 			%{@ 'Annuler les modifications'}%
-		</a>
+		</a></span>
 	</td>
 	
 	<td style="padding-right: 4px;">
-		<a class="btn one" onclick="javascript:session_pview_send_matrix();">
+		<span class="button_j"><a class="button_j" onclick="javascript:session_pview_send_matrix();">
 			%{@ 'Sauvegarder les permissions'}%
-		</a>
+		</a></span>
 	</td>
 
 	<td style="padding-right: 4px;">
-		<a class="btn two" onclick="javascript:session_pview_send_user();">
+		<span class="button_j"><a class="button_j" onclick="javascript:session_pview_send_user();">
 			%{@ 'Ajouter l\'utilisateur'}%
-		</a>
+		</a></span>
 	</td>
 	
 	<td>

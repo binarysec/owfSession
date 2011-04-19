@@ -142,15 +142,15 @@ class wfm_session extends wf_module {
 				"show",
 				"Mon profil",
 				WF_ROUTE_SHOW,
-				array("session:admin")
+				array("session:simple")
 			),
 			"/admin/myprofile/edit" => array(
 				WF_ROUTE_ACTION,
 				"/session/profil",
 				"edit",
 				"Mon profil",
-				WF_ROUTE_SHOW,
-				array("session:admin")
+				WF_ROUTE_HIDE,
+				array("session:simple")
 			),
 // 			"/session/login" => array(
 // 				WF_ROUTE_ACTION,

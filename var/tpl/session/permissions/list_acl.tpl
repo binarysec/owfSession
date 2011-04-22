@@ -3,9 +3,21 @@
 <script type="text/javascript">
 	$(function() {
 		// Add button 
-		$("button, input:submit, a", ".button_j").button({ 
+		$("button, input:submit, a", ".button_a").button({ 
 			icons: {
-				primary:'ui-icon-gear'
+				primary:'ui-icon-plus'
+			}
+		});
+		//Save button 
+		$("button, input:submit, a", ".button_s").button({ 
+			icons: {
+				primary:'ui-icon-disk'
+			}
+		});
+		// Cancel button 
+		$("button, input:submit, a", ".button_c").button({ 
+			icons: {
+				primary:'ui-icon-close'
 			}
 		});
 	});
@@ -62,19 +74,19 @@
 	</td>-->
 
 	<td style="padding-right: 4px;">
-		<span class="button_j"><a href="#" onclick="javascript:session_pview_reset_matrix();">
+		<span class="button_c"><a href="#" onclick="javascript:session_pview_reset_matrix();">
 			%{@ 'Annuler les modifications'}%
 		</a></span>
 	</td>
 	
 	<td style="padding-right: 4px;">
-		<span class="button_j"><a class="button_j" onclick="javascript:session_pview_send_matrix();">
+		<span class="button_s"><a class="button_j" onclick="javascript:session_pview_send_matrix();">
 			%{@ 'Sauvegarder les permissions'}%
 		</a></span>
 	</td>
 
 	<td style="padding-right: 4px;">
-		<span class="button_j"><a class="button_j" onclick="javascript:session_pview_send_user();">
+		<span class="button_a"><a class="button_j" onclick="javascript:session_pview_send_user();">
 			%{@ 'Ajouter l\'utilisateur'}%
 		</a></span>
 	</td>

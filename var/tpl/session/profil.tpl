@@ -4,7 +4,7 @@
 		// Add button 
 		$("button, input:submit, a", ".button_j").button({ 
 			icons: {
-				primary:'ui-icon-gear'
+				primary:'ui-icon-disk'
 			}
 		});
 	});

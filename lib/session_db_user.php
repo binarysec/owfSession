@@ -151,16 +151,20 @@ class session_db_user extends session_driver_user {
 	 *
 	 * 
 	 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-	public function get($conds, $extra=NULL) {
+	public function get($conds = NULL, $extra = NULL) {
+		
 		if(is_array($conds))
 			$where = $conds;
 		else
-			$where = array($conds => $extra);
+			if(isset($conds))
+				$where = array($conds => $extra);
 	
 		/* create cache line */
 		$cl = "session_get";
-		foreach($where as $k => $v)
-			$cl .= "_$k:$v";
+		if(is_array($where)){
+			foreach($where as $k => $v)
+				$cl .= "_$k:$v";
+		}
 		
 // 		echo $cl;
 // 		/* select cache */
@@ -192,7 +196,8 @@ class session_db_user extends session_driver_user {
 		
 		/* try query */
 		$q = new core_db_select("session_user");
-		$q->where($where);
+		if(is_array($where))
+			$q->where($where);
 		$this->wf->db->query($q);
 		$res = $q->get_result();
 

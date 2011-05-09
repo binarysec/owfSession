@@ -1,4 +1,3 @@
-%{literal}%
 <script type="text/javascript">
 	$(function() {
 		// Add button 
@@ -9,7 +8,6 @@
 		});
 	});
 </script>
-%{/literal}%
 
 <h1><img src="%{link '/data/session/title_user.png'}%" alt="%{@ 'Mon profil'}%"/>%{@ 'Mon profil'}%</h1>
 <div class="admin_content">

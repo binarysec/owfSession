@@ -14,6 +14,7 @@ class wfr_session_session_admin_user extends wf_route_request {
 		$this->wf = $wf;
 		$this->a_session = $this->wf->session();
 		$this->a_admin_html = $this->wf->admin_html();
+		$this->a_mail = $this->wf->session_mail();
 	}
 
 
@@ -26,7 +27,7 @@ class wfr_session_session_admin_user extends wf_route_request {
 	 * Rail function used to add a user
 	 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 	public function show_add() {
-		$username=$this->a_session->user->generate_ref("username","session_user","username");
+		$username = $this->a_session->user->generate_ref("username","session_user","username");
 		$tpl = new core_tpl($this->wf);
 		$tpl->set("username", $username);
 		echo $tpl->fetch('session/users/show_add');
@@ -48,9 +49,9 @@ class wfr_session_session_admin_user extends wf_route_request {
 // 			);
 			$ok = false;
 		}else{
-			$ret=$this->a_session->user->get("username",$_POST["username"]);
+			$ret = $this->a_session->user->get("username",$_POST["username"]);
 			if(is_array($ret[0]))
-				$ok=false;
+				$ok = false;
 		}
 		/* no email */
 		if(!$_POST['email']) {
@@ -70,31 +71,35 @@ class wfr_session_session_admin_user extends wf_route_request {
 			}
 		}
 
-		/* no password */
-		if(!$_POST['password']) {
-// 			$this->a_admin_html->add_error(
-// 				'Le mot de passe de l\'utilisateur n\'a pas
-// 				&eacute;t&eacute; sp&eacute;cifi&eacute;.'
-// 			);
-			$ok = false;
+		if($_POST["generated_password"] == "on"){
+			$password = $this->a_session->user->generate_password();
+		}else {
+			/* no password */
+			if(!$_POST['password']) {
+	// 			$this->a_admin_html->add_error(
+	// 				'Le mot de passe de l\'utilisateur n\'a pas
+	// 				&eacute;t&eacute; sp&eacute;cifi&eacute;.'
+	// 			);
+				$ok = false;
+			}
+			/* no password confirmation */
+			if($_POST['password'] && !$_POST['password_confirm']) {
+	// 			$this->a_admin_html->add_error(
+	// 				'Le mot de passe de l\'utilisateur n\'a pas
+	// 				&eacute;t&eacute; confirm&eacute;.'
+	// 			);
+				$ok = false;
+			}
+			/* passwords mismatch */
+			if($_POST['password'] && $_POST['password_confirm']
+			&& $_POST['password'] != $_POST['password_confirm']) {
+	// 			$this->a_admin_html->add_error(
+	// 				'Les deux mots de passe fournis ne correspondent pas.'
+	// 			);
+				$ok = false;
+			}
+			$password = $_POST['password'];
 		}
-		/* no password confirmation */
-		if($_POST['password'] && !$_POST['password_confirm']) {
-// 			$this->a_admin_html->add_error(
-// 				'Le mot de passe de l\'utilisateur n\'a pas
-// 				&eacute;t&eacute; confirm&eacute;.'
-// 			);
-			$ok = false;
-		}
-		/* passwords mismatch */
-		if($_POST['password'] && $_POST['password_confirm']
-		&& $_POST['password'] != $_POST['password_confirm']) {
-// 			$this->a_admin_html->add_error(
-// 				'Les deux mots de passe fournis ne correspondent pas.'
-// 			);
-			$ok = false;
-		}
-		
 		if($ok) {
 			if($_POST['perm'] == 1)
 				$perm = "session:admin";
@@ -103,16 +108,17 @@ class wfr_session_session_admin_user extends wf_route_request {
 			else if($_POST['perm'] == 3)
 				$perm = "session:ws";
 
-			$this->a_session->user->add(
+			$uid = $this->a_session->user->add(
 				$_POST['username'],
 				$_POST['email'],
-				$_POST['password'],
+				$password,
 				$_POST['name'],
 				$_POST['firstname'],
 				$perm,
 				$_POST['phone']
 			);
 		}
+		$this->a_mail->mail_inscription($uid,$password);
 
 		$this->wf->core_request()->set_header(
 			'Location',
@@ -261,6 +267,8 @@ class wfr_session_session_admin_user extends wf_route_request {
 					$update,
 					$user["id"]
 				);
+				if(isset($update["password"]))
+					$this->a_mail->mail_change_password($user["id"],$_POST['password']);
 				
 				/* update session permissions */
 				$ret = $this->wf->execute_hook("session_permissions");
@@ -424,7 +432,6 @@ class wfr_session_session_admin_user extends wf_route_request {
 		
 		$edit = '<span class="edit_user"><a href="" id="'.$datum['id'].'">Edit</a></span>';
 		$delete = '<span class="delete_user"><a href="" id="'.$datum['id'].'">Delete</a></span>';
-		
 		/* actions */
 		$actions = $edit.$delete;
 		

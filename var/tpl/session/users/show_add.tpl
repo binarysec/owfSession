@@ -17,10 +17,14 @@
 		<td><input type="text" id="form_edit_user_email" name="email" value="%{$email|entities}%" /></td>
 	</tr>
 	<tr>
+		<td><label for="form_edit_user_password">Mot de passe automatique&nbsp;:</label></td>
+		<td><input type="checkbox" id="generated_password" name="generated_password" checked="checked" onChange="javascript:auto_mdp();"/></td>
+	</tr>
+	<tr id="mdp_div" style="display:none;">
 		<td><label for="form_edit_user_password">Mot de passe&nbsp;:</label></td>
 		<td><input type="password" id="form_edit_user_password" name="password" value="" /></td>
 	</tr>
-	<tr>
+	<tr id="mdp_conf_div" style="display:none;">
 		<td><label for="form_edit_user_password">Mot de passe (confirmation)&nbsp;:</label></td>
 		<td><input type="password" id="form_edit_user_password_confirm" name="password_confirm" value="" /></td>
 	</tr>

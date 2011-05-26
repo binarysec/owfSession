@@ -41,32 +41,37 @@ class session_db_user extends session_driver_user {
 		$this->core_cache = $this->wf->core_cacher();
 		$this->gcache = $this->core_cache->create_group("session_db_user_gcache");
 
-		
-		$this->add(
-			"OWF",
-			"wf@binarysec.com", 
-			"lala", 
-			"Open Web Framework", 
-			"user",
-			"session:admin",
-			"0262458307"
-		);
-		
-
-		
+		$r = $this->get();
+		if(!isset($r[0]) || !is_array($r[0])) {
+			$pass = $this->generate_password();
+			$this->add(
+				"OWF",
+				"wf@binarysec.com", 
+				$pass,
+				"Open Web Framework", 
+				"user",
+				"session:god",
+				"0262458307"
+			);
+			$this->wf->log(
+				"Adding Default user - Login : OWF - Password : $pass"
+			);
+		}
 	}
 	
 	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 	 *
 	 * 
 	 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-	public function add(	$username,
-							$email,
-							$password, 
-							$name, 
-							$firstname,
-							$type,
-							$phone=NULL) {
+	public function add(	
+			$username,
+			$email,
+			$password, 
+			$name, 
+			$firstname,
+			$type,
+			$phone=NULL
+		) {
 		/* sanatization */
 		if(!$email || !$password || !$username)
 			return(FALSE);
@@ -90,7 +95,7 @@ class session_db_user extends session_driver_user {
 			"create_time" => time()
 		);
 		if($phone)
-			$insert["phone"]=$phone;
+			$insert["phone"] = $phone;
 
 		/* sinon on ajoute l'utilisateur */
 		$q = new core_db_insert("session_user", $insert);
@@ -248,6 +253,23 @@ class session_db_user extends session_driver_user {
 			$id_start++;
 		}
 		return($key);
+	}
+	
+	public function generate_password() {
+		$size = rand(8, 11);
+		$return = NULL;
+		for($a = 0; $a <= $size; $a++) {
+			$bet = rand(0x21, 0x7d);
+			if(
+				($bet >= 0x30 && $bet <= 0x39) ||
+				($bet >= 0x41 && $bet <= 0x5a) ||
+				($bet >= 0x61 && $bet <= 0x7a)
+				)
+				$return .= chr($bet);
+			else 
+				$a--;
+		}
+		return($return);
 	}
 
 }

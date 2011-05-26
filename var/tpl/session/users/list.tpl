@@ -89,8 +89,21 @@ $(function() {
 	
 	$("#delete_user_dialog").hide();
 	
+	
+	
 });
-
+function auto_mdp() {
+	check = document.getElementById("generated_password");
+	mdp = document.getElementById("mdp_div");
+	mdp_conf = document.getElementById("mdp_conf_div");
+	if(check.checked) {
+		mdp.style.display = "none";
+		mdp_conf.style.display = "none";
+	}else {
+		mdp.style.display = "";
+		mdp_conf.style.display = "";
+	}
+}
 
 </script>
 

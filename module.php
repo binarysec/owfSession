@@ -140,7 +140,7 @@ class wfm_session extends wf_module {
 				WF_ROUTE_ACTION,
 				"/session/profil",
 				"show",
-				"Mon profil",
+				$this->ts("Mon profil"),
 				WF_ROUTE_SHOW,
 				array("session:simple")
 			),

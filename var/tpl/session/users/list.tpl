@@ -112,7 +112,7 @@ function auto_mdp() {
 <!-- User add form -->
 <span id="add_user">
 <a href="">%{@ 'Ajouter un nouvel utilisateur'}%</a>
-</span><br><br>
+</span><br/><br/>
 <div id="add_user_dialog" title="%{@ 'Ajouter un nouvel utilisateur'}%">
 <form id="add_user_form" class="form_dialog" method="post" action="%{link '/admin/session/user/add'}%">
 </form>
@@ -136,4 +136,4 @@ function auto_mdp() {
 
 %{$dataset}%
 
-</div>
+

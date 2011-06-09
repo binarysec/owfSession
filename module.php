@@ -209,4 +209,20 @@ class wfm_session extends wf_module {
 // 			),
 		));
 	}
+	
+	public function search_module() {
+		$return = array();
+		
+		$info = array(
+			"name" => $this->ts("session_user"),
+			"agg" => "session",
+			"met_db" => "search_user_db",
+			"met_link" => "search_user_link",
+		);
+		$return[] = $info;
+		
+		return($return);
+	}
+
+	
 }

@@ -362,16 +362,12 @@ class session extends wf_agg {
 	 * Create link for user session table
 	 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 	public function search_user_link($data) {
-	
-		
-		
 		/* put information */
 		$ret = 
-			"Compte : <strong>".$data["username"]."</strong><br/>".
+			"Account : <strong>".$data["username"]."</strong><br/>".
 			"Name : ".$data["firstname"]." ".$data["name"]."<br/>".
 			"Mail : ".$data["email"]
 		;
-		
 		return($ret);
 	}
 	

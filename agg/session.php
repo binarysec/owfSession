@@ -129,6 +129,19 @@ class session extends wf_agg {
 		return(true);
 	}
 	
+	
+	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+	 *
+	 * Am i admin ?
+	 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+	public function iam_admin() {
+		if(isset($this->session_my_perms["session:god"]))
+			return(true);
+		if(isset($this->session_my_perms["session:admin"]))
+			return(true);
+		return(false);
+	}
+	
 	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 	 *
 	 * User online?
@@ -321,6 +334,46 @@ class session extends wf_agg {
 		return(NULL);
 	}
 	
+	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+	 *
+	 * Search user from database  
+	 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+	public function search_user_db($query, $search, $comp="~=") {
+	
+		/* check permissions, only admin can looks at user db */
+		if(!$this->iam_admin()) 
+			return(false);
+			
+		$query->alias("session_user", "session_user");
+		
+		$query->do_comp("session_user.firstname", $comp, $search);
+		$query->do_or();
+		$query->do_comp("session_user.name", $comp, $search);
+		$query->do_or();
+		$query->do_comp("session_user.username", $comp, $search);
+		$query->do_or();
+		$query->do_comp("session_user.email", $comp, $search);
+		
+		return(true);
+	}
+	
+	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+	 *
+	 * Create link for user session table
+	 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+	public function search_user_link($data) {
+	
+		
+		
+		/* put information */
+		$ret = 
+			"Compte : <strong>".$data["username"]."</strong><br/>".
+			"Name : ".$data["firstname"]." ".$data["name"]."<br/>".
+			"Mail : ".$data["email"]
+		;
+		
+		return($ret);
+	}
 	
 	
 	

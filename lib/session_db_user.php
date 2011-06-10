@@ -218,6 +218,7 @@ class session_db_user extends session_driver_user {
 		if(!$key_field)$key_field="ref";
 		
 		$id_start = 3;
+		$rand = "";
 		while(1) {
 			/* nombre aléatoire */
 			$r = $this->wf->get_rand(10);

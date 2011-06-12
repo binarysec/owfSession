@@ -109,8 +109,6 @@ class session extends wf_agg {
 			return(true);
 
 		/* check permission */
-		$ret = array();
-
 		if(is_array($need)) {
 			foreach($need as $k => $v) {
 				if(
@@ -123,6 +121,18 @@ class session extends wf_agg {
 						return(true);
 					return(false);
 				}
+			}
+		}
+		else {
+			if(
+				$need != "session:anon" && 
+				!$this->session_my_perms[$need]
+				) {
+				if($need == "session:god")
+					return(false);
+				else if(isset($this->session_my_perms["session:admin"]))
+					return(true);
+				return(false);
 			}
 		}
 		
@@ -371,7 +381,20 @@ class session extends wf_agg {
 		return($ret);
 	}
 	
+	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+	 *
+	 * Backend function to retrieve information about the current user
+	 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+	public function json_info() {
+		$sm = $this->session_me;
 	
+		unset($sm["password"]);
+		unset($sm["session_id"]);
 	
+		return(array(
+			"info" => $sm,
+			"perm" => $this->session_my_perms,
+		));
+	}
 
 }

@@ -224,5 +224,18 @@ class wfm_session extends wf_module {
 		return($return);
 	}
 
+	public function json_module() {
+		$return = array();
+		
+		$info = array(
+			"agg" => "session",
+			"method" => "json_info",
+			"perm" => array("session:simple")
+		);
+		$return[] = $info;
+		
+		return($return);
+	}
+	
 	
 }

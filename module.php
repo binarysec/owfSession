@@ -136,15 +136,22 @@ class wfm_session extends wf_module {
 				array("session:manage")
 			),
 			// My profil
-			"/admin/myprofile" => array(
-				WF_ROUTE_ACTION,
-				"/session/profil",
-				"show",
+			"/admin/system/myprofil" => array(
+				WF_ROUTE_REDIRECT,
+				"/admin/session/myprofile",
 				$this->ts("Mon profil"),
 				WF_ROUTE_SHOW,
 				array("session:simple")
 			),
-			"/admin/myprofile/edit" => array(
+			"/admin/session/myprofile" => array(
+				WF_ROUTE_ACTION,
+				"/session/profil",
+				"show",
+				$this->ts("Mon profil"),
+				WF_ROUTE_HIDE,
+				array("session:simple")
+			),
+			"/admin/session/myprofile/edit" => array(
 				WF_ROUTE_ACTION,
 				"/session/profil",
 				"edit",

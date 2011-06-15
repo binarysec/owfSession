@@ -316,6 +316,12 @@ class session extends wf_agg {
 			"session_id"        => '',
 			"session_time"      => NULL
 		);
+		setcookie(
+			$this->session_var,
+			$session,
+			time(),
+			"/"
+		);
 		$this->user->modify($update, (int)$this->session_me["id"]);
 		return(TRUE);
 	}

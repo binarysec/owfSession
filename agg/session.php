@@ -397,6 +397,10 @@ class session extends wf_agg {
 		unset($sm["password"]);
 		unset($sm["session_id"]);
 	
+		$online = time() - $sm['session_time'];
+		if($online > $this->session_timeout) 
+			return(false);
+		
 		return(array(
 			"info" => $sm,
 			"perm" => $this->session_my_perms,

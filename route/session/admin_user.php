@@ -359,7 +359,7 @@ class wfr_session_session_admin_user extends wf_route_request {
 		
 		$dset->set_cols($cols);
 		$dset->set_filters($filters);
-		
+		$dset->set_order(array("name" => WF_ASC));
 		$dset->set_row_callback(array($this, 'callback_row'));
 
 		/* template utilisateur */

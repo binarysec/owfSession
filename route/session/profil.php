@@ -61,9 +61,10 @@ class wfr_session__session_profil extends wf_route_request {
 				$modif_user,
 				$user["id"]);
 		}
+
 		$this->wf->core_request()->set_header(
 			'Location',
-			$this->wf->linker('/admin/myprofile')
+			$this->wf->linker('/admin/session/myprofile')
 		);
 		$this->wf->core_request()->send_headers();
 		exit(0);
@@ -79,10 +80,10 @@ class wfr_session__session_profil extends wf_route_request {
 		$user = $this->a_session->get_user();
 		$tpl = new core_tpl($this->wf);
 
-		$user["name"] = ucfirst(htmlentities($user["name"]));
-		$user["firstname"] = ucfirst(htmlentities($user["firstname"]));
-		$user["phone"] = htmlentities($user["phone"]);
-		$user["email"] = htmlentities($user["email"]);
+		$user["name"] = ucfirst(htmlspecialchars($user["name"]));
+		$user["firstname"] = ucfirst(htmlspecialchars($user["firstname"]));
+		$user["phone"] = htmlspecialchars($user["phone"]);
+		$user["email"] = htmlspecialchars($user["email"]);
 
 		$tpl->set("user",$user);
 		$this->admin->set_title(

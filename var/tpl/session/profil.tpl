@@ -11,7 +11,7 @@
 
 <h1><img src="%{link '/data/session/title_user.png'}%" alt="%{@ 'Mon profil'}%"/>%{@ 'Mon profil'}%</h1>
 <div class="admin_content">
-	<form id="profil_modif" method="post" action="%{link '/admin/myprofile/edit'}%">
+	<form id="profil_modif" method="post" action="%{link '/admin/session/myprofile/edit'}%">
 		<input type="hidden" id="uid" name="uid" value="%{$user['id']}%"/>
 		<table class="dataset_data_table">
 			<tr%{alt ' class="alt"'}%>

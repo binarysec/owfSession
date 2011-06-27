@@ -173,8 +173,10 @@ class wfr_session_session_permissions extends wf_route_request {
 		$this->oid = $this->wf->get_var("oid");
 		
 		$pview = $this->a_session->get_pview($this->pview_name);
-		if(!$pview)
+		if(!$pview) {
+			echo "Permission not found";
 			exit(0);
+		}
 
 		/* get key */
 		$this->pview_perm_name = $pview[$this->pview_name];
@@ -185,8 +187,10 @@ class wfr_session_session_permissions extends wf_route_request {
 			$this->pview_perm_name
 		);
 		$this->pview_perm = $this->pview_perm[0];
-		if(!$this->pview_perm)
+		if(!$this->pview_perm) {
+			echo "Permission not found";
 			exit(0);
+		}
 		
 		/* load obj */
 		$on = &$this->pview_name;
@@ -282,11 +286,10 @@ class wfr_session_session_permissions extends wf_route_request {
 		$user = $user[0];
 		$perm = $this->a_session->perm->user_get($datum["ptr_id"]);
 		
-		
 		/* date de création */
-		$createtime = $datum['create_time'] ? 
-			$datum['create_time'] : 
-			$datum['t.create_time'];
+		$createtime = $datum['create_t'] ? 
+			$datum['create_t'] : 
+			$datum['t.create_t'];
 			
 		$create_time = date(DATE_RFC822, $createtime);
 		

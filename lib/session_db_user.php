@@ -149,6 +149,9 @@ class session_db_user extends session_driver_user {
 		$q->where($where);
 		$q->insert($data);
 		$this->wf->db->query($q);
+		
+		$this->gcache->delete("session_get_id:$uid");
+		
 		return(TRUE);
 	}
 	

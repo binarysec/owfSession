@@ -82,6 +82,9 @@ class session extends wf_agg {
 			CORE_PREF_NUM,
 			3600
 		);
+		$this->lang = $this->wf->core_lang()->get_context(
+			"session/profil"
+		);
 	}
 
 	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -105,6 +108,7 @@ class session extends wf_agg {
 	 * Check permissions
 	 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 	public function check_permission($need) {
+		
 		if(isset($this->session_my_perms["session:god"]))
 			return(true);
 
@@ -128,9 +132,12 @@ class session extends wf_agg {
 				$need != "session:anon" && 
 				!$this->session_my_perms[$need]
 				) {
+					
 				if($need == "session:god")
 					return(false);
 				else if(isset($this->session_my_perms["session:admin"]))
+					return(true);
+				else if(!$need)
 					return(true);
 				return(false);
 			}
@@ -380,9 +387,9 @@ class session extends wf_agg {
 	public function search_user_link($data) {
 		/* put information */
 		$ret = 
-			"Account : <strong>".$data["username"]."</strong><br/>".
-			"Name : ".$data["firstname"]." ".$data["name"]."<br/>".
-			"Mail : ".$data["email"]
+			$this->lang->ts("Compte")." : <strong>".$data["username"]."</strong><br/>".
+			$this->lang->ts("Nom")." : ".$data["firstname"]." ".$data["name"]."<br/>".
+			$this->lang->ts("Email")." : ".$data["email"]
 		;
 		return($ret);
 	}

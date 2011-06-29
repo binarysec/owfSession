@@ -77,18 +77,21 @@ class wfr_session__session_profil extends wf_route_request {
 	 * Master print function
 	 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */	
 	public function show() {
-		$user = $this->a_session->get_user();
+		$user_t = $this->a_session->get_user();
+		$user = $this->a_session->user->get(array("id" => $user_t["id"]));
+		$user = $user[0];
 		$tpl = new core_tpl($this->wf);
-
-		$user["name"] = ucfirst(htmlspecialchars($user["name"]));
-		$user["firstname"] = ucfirst(htmlspecialchars($user["firstname"]));
-		$user["phone"] = htmlspecialchars($user["phone"]);
-		$user["email"] = htmlspecialchars($user["email"]);
+		
+		$lselect = $this->wf->core_lang()->get(); 
+		$user["name"] = ucfirst(htmlentities($user["name"],ENT_COMPAT,$lselect["encoding"]));
+		$user["firstname"] = ucfirst(htmlentities($user["firstname"],ENT_COMPAT,$lselect["encoding"]));
+		$user["phone"] = htmlentities($user["phone"],ENT_COMPAT,$lselect["encoding"]); 
+		$user["email"] = htmlentities($user["email"],ENT_COMPAT,$lselect["encoding"]);
 
 		$tpl->set("user",$user);
 		$this->admin->set_title(
 			$this->lang->ts("Profil de")." ".
-			ucfirst($user["name"])." ".ucfirst($user["firstname"])
+			$user["name"]." ".$user["firstname"]
 		);
 		$this->admin->rendering(
 			$tpl->fetch("session/profil")

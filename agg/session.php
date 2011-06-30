@@ -161,6 +161,16 @@ class session extends wf_agg {
 	
 	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 	 *
+	 * Am i god ?
+	 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+	public function iam_god() {
+		if(isset($this->session_my_perms["session:god"]))
+			return(true);
+		return(false);
+	}
+	
+	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+	 *
 	 * User online?
 	 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 	public function is_online($uid=NULL) {

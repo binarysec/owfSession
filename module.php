@@ -244,7 +244,7 @@ class wfm_session extends wf_module {
 		$info = array(
 			"agg" => "session",
 			"method" => "json_info",
-			"perm" => array("session:simple")
+			"perm" => array("session:ranon")
 		);
 		$return[] = $info;
 		

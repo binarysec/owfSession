@@ -27,7 +27,7 @@ class wfr_session_session_logon extends wf_route_request {
 		$url = base64_decode($_POST["back_url"]);
 		
 		if(!$url)
-			$this->wf->display_login();
+			$url = $this->wf->linker("/");
 		
 		/* vérification de l'utilisateur */
 		$ret = $this->a_session->identify(

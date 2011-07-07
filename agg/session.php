@@ -112,10 +112,13 @@ class session extends wf_agg {
 		if(isset($this->session_my_perms["session:god"]))
 			return(true);
 
+		/** \todo must check if anon is authorized by the ini file */
+		
 		/* check permission */
 		if(is_array($need)) {
 			foreach($need as $k => $v) {
 				if(
+					$v != "session:ranon" && 
 					$v != "session:anon" && 
 					!$this->session_my_perms[$v]
 					) {
@@ -129,6 +132,7 @@ class session extends wf_agg {
 		}
 		else {
 			if(
+				$need != "session:ranon" && 
 				$need != "session:anon" && 
 				!$this->session_my_perms[$need]
 				) {
@@ -219,15 +223,22 @@ class session extends wf_agg {
 
 		/* point to the data */
 		$this->session_me = $res[0];
-
-		/* load user permissions */
-		$this->session_my_perms = $this->perm->user_get($res[0]["id"]);
  
 		/* vérfication du timeout */
 		if(time() - $this->session_me["session_time"] > $this->session_timeout) {
+			$this->session_me = array(
+				"id"              => -1,
+				"remote_address"  => ip2long($_SERVER["REMOTE_ADDR"]),
+// 				"remote_hostname" => gethostbyaddr($_SERVER["REMOTE_ADDR"]),
+				"session_time"    => time()
+			);
+				
 			return(SESSION_TIMEOUT);
 		}
 
+		/* load user permissions */
+		$this->session_my_perms = $this->perm->user_get($res[0]["id"]);
+		
 		/* modification de l'adresse en base + time update */
 		$update = array(
 			"remote_address"  => ip2long($_SERVER["REMOTE_ADDR"]),
@@ -414,10 +425,6 @@ class session extends wf_agg {
 		unset($sm["password"]);
 		unset($sm["session_id"]);
 	
-		$online = time() - $sm['session_time'];
-		if($online > $this->session_timeout) 
-			return(false);
-		
 		return(array(
 			"info" => $sm,
 			"perm" => $this->session_my_perms,

@@ -1,11 +1,5 @@
 <?php
 
-define("WF_USER_GOD",     "session:god");
-define("WF_USER_ADMIN",   "session:admin");
-define("WF_USER_SIMPLE",  "session:simple");
-define("WF_USER_SERVICE", "session:service");
-define("WF_USER_ANON",    "session:anon");
-define("WF_USER_RANON",   "session:ranon");
 
 class wfm_session extends wf_module {
 	public function __construct($wf) {

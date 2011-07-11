@@ -160,16 +160,18 @@ class session_db_user extends session_driver_user {
 	 * 
 	 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 	public function get($conds = NULL, $extra = NULL) {
+		$where = null;
 		
 		if(is_array($conds))
 			$where = $conds;
-		else
+		else {
 			if(isset($conds))
 				$where = array($conds => $extra);
-	
+		}
+		
 		/* create cache line */
 		$cl = "session_get";
-		if(is_array($where)){
+		if(is_array($where)) {
 			foreach($where as $k => $v)
 				$cl .= "_$k:$v";
 		}

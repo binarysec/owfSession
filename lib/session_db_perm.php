@@ -35,9 +35,23 @@ class session_db_perm extends session_driver_perm {
 			$struct
 		);
 		
+		$idx = new core_db_index("session_perm_type");
+		$idx->register("idx1", array("name"));
+		$this->wf->db->query($idx);
+		
+		$idx = new core_db_index("session_perm");
+		$idx->register("idx1", array("ptr_id", "obj_type", "obj_id"));
+		$idx->register("idx2", array("ptr_id", "obj_type"));
+		$idx->register("idx3", array("ptr_id", "obj_id"));
+		$idx->register("idx4", array("obj_id", "obj_type"));
+		$idx->register("idx5", array("ptr_id"));
+		$idx->register("idx6", array("obj_id"));
+		$idx->register("idx7", array("obj_type"));
+		
+		$this->wf->db->query($idx);
+	
 		$this->core_cache = $this->wf->core_cacher();
 		$this->gcache = $this->core_cache->create_group("session_db_perm_gcache");
-
 	}
 
 	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *

@@ -36,6 +36,16 @@ class session_db_user extends session_driver_user {
 			$struct
 		);
 		
+		$idx = new core_db_index("session_user");
+		$idx->register("sessionchecker", "session_id");
+		$idx->register("sessionauth", array("username", "password"));
+		$idx->register("sessionsearch_f", "firstname");
+		$idx->register("sessionsearch_n", "name");
+		$idx->register("sessionsearch_u", "username");
+		$idx->register("sessionsearch_e", "email");
+		$this->wf->db->query($idx);
+		
+		
 		$this->session = $this->wf->session();
 
 		$this->core_cache = $this->wf->core_cacher();

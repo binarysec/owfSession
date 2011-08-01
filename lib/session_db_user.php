@@ -25,9 +25,9 @@ class session_db_user extends session_driver_user {
 			"session_time_auth" => WF_INT,
 			"session_time" => WF_INT,
 			"session_data" => WF_DATA,
-			"remote_address" => WF_INT,
+			"remote_address" => WF_BIGINT,
 			"remote_hostname" => WF_VARCHAR,
-			"forwarded_remote_address" => WF_INT,
+			"forwarded_remote_address" => WF_BIGINT,
 			"forwarded_remote_hostname" => WF_VARCHAR
 		);
 		$this->wf->db->register_zone(
@@ -35,6 +35,16 @@ class session_db_user extends session_driver_user {
 			"Core session table", 
 			$struct
 		);
+		
+		$idx = new core_db_index("session_user");
+		$idx->register("sessionchecker", "session_id");
+		$idx->register("sessionauth", array("username", "password"));
+		$idx->register("sessionsearch_f", "firstname");
+		$idx->register("sessionsearch_n", "name");
+		$idx->register("sessionsearch_u", "username");
+		$idx->register("sessionsearch_e", "email");
+		$this->wf->db->query($idx);
+		
 		
 		$this->session = $this->wf->session();
 

@@ -3,7 +3,8 @@
 class session_mail extends wf_agg {
 	public $wf = NULL; 
 	public $a_core_smtp; 
-
+	public $session;
+	
 	public $sender = 'Administrateur Binarysec <support@binarysec.com>';
 	private $content;
 	private $current_lang;
@@ -37,108 +38,53 @@ class session_mail extends wf_agg {
 	
 	public function mail_inscription($user_id,$real_password) {
 		$userc = $this->session->user->get(array("id"=>$user_id));
-		if(!is_array($userc[0])){
+		if(!is_array($userc[0]))
 			return FALSE;
-		}
-		/* prend et transforme les données */
-		$doc = file_get_contents(
-			$this->wf->locate_file("var/session/mails/inscription.".$this->current_lang.".mail")
-		);
-		$sub = file_get_contents(
-			$this->wf->locate_file("var/session/mails/inscription.".$this->current_lang.".subject")
-		);
-		
-		/* construction des patterns */
-		$pattern = array(
-			"/%NAME%/",
-			"/%LOGIN%/",
-			"/%PASSWORD%/",
-			"/%DATE%/"		
-		);
-		
-		$replace = array(
-			ucfirst($userc[0]["name"]),
-			$userc[0]["username"],
-			$real_password,
-			date("Y-m-d H:i:s")
-		);
-		
-		$doc = preg_replace(
-			$pattern,
-			$replace,
-			$doc
-		);
-		$sub = preg_replace(
-			$pattern,
-			$replace,
-			$sub
-		);
-				
+
 		$to = $userc[0]["email"];
-		
-		$this->content .= 'To:'.$to."\n";
-		$this->content .= 'Subject:'.$this->utf8_to_latin9($sub)."\n";
-		$this->content .= $this->utf8_to_latin9($doc);
+
+		/* create the change password tpl */
+		$tpl = new core_tpl($this->wf);
+		$tpl->set("from", $this->session->session_sender);
+		$tpl->set("to", $to);
+		$tpl->set("name", ucfirst($userc[0]["name"]));
+		$tpl->set("login", $userc[0]["username"]);
+		$tpl->set("password", $new_password);
+		$tpl->set("date", ucfirst(date("Y-m-d H:i:s")));
+		$tpl->set("date_mail", ucfirst(date("D, j M Y H:i:s")));
+		$mail = $tpl->fetch("session/mail/welcome");
 		
 		$this->a_core_smtp->sendmail(
-			$this->sender,
+			$this->session->session_sender,
 			$to,
-			$this->content
-		);		
+			$mail
+		);
 		return TRUE;
 
 	}
-	public function mail_change_password($user_id,$new_password) {
+	public function mail_change_password($user_id, $new_password) {
 		$userc = $this->session->user->get(array("id"=>$user_id));
-		if(!is_array($userc[0])){
+		if(!is_array($userc[0]))
 			return FALSE;
-		}
-	
-		/* prend et transforme les données */
-		$doc = file_get_contents(
-			$this->wf->locate_file("var/session/mails/change_pwd.".$this->current_lang.".mail")
-		);
-		$sub = file_get_contents(
-			$this->wf->locate_file("var/session/mails/change_pwd.".$this->current_lang.".subject")
-		);
-		
-		/* construction des patterns */
-		$pattern = array(
-			"/%NAME%/",
-			"/%LOGIN%/",
-			"/%PASSWORD%/",
-			"/%DATE%/"	
-		);
-		
-		$replace = array(
-			ucfirst($userc[0]["name"]),
-			$userc[0]["username"],
-			$new_password,
-			date("Y-m-d H:i:s")
-		);
-		
-		$doc = preg_replace(
-			$pattern,
-			$replace,
-			$doc
-		);
-		$sub = preg_replace(
-			$pattern,
-			$replace,
-			$sub
-		);
-		
+
 		$to = $userc[0]["email"];
-	
-		$this->content .= 'To:'.$to."\n";
-		$this->content .= 'Subject:'.$this->utf8_to_latin9($sub)."\n";
-		$this->content .= $this->utf8_to_latin9($doc);
+
+		/* create the change password tpl */
+		$tpl = new core_tpl($this->wf);
+		$tpl->set("from", $this->session->session_sender);
+		$tpl->set("to", $to);
+		$tpl->set("name", ucfirst($userc[0]["name"]));
+		$tpl->set("login", $userc[0]["username"]);
+		$tpl->set("password", $new_password);
+		$tpl->set("date", ucfirst(date("Y-m-d H:i:s")));
+		$tpl->set("date_mail", ucfirst(date("D, j M Y H:i:s")));
+		$mail = $tpl->fetch("session/mail/passwd");
 		
 		$this->a_core_smtp->sendmail(
-			$this->sender,
+			$this->session->session_sender,
 			$to,
-			$this->content
-		);		
+			$mail
+		);
 		return TRUE;
 	}	
 }

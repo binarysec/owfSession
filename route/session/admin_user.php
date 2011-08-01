@@ -101,7 +101,9 @@ class wfr_session_session_admin_user extends wf_route_request {
 			$password = $_POST['password'];
 		}
 		if($ok) {
-			if($_POST['perm'] == 1)
+			if($_POST['perm'] == 0)
+				$perm = "session:god";
+			else if($_POST['perm'] == 1)
 				$perm = "session:admin";
 			else if($_POST['perm'] == 2)
 				$perm = "session:simple";
@@ -226,7 +228,9 @@ class wfr_session_session_admin_user extends wf_route_request {
 
 		if($ok) {
 			/* permssion check */
-			if($_POST['perm'] == 1)
+			if($_POST['perm'] == 0)
+				$perm = "session:god";
+			else if($_POST['perm'] == 1)
 				$perm = "session:admin";
 			else if($_POST['perm'] == 2)
 				$perm = "session:simple";

@@ -48,8 +48,10 @@ class session_mail extends wf_agg {
 		$tpl->set("from", $this->session->session_sender);
 		$tpl->set("to", $to);
 		$tpl->set("name", ucfirst($userc[0]["name"]));
+		$tpl->set("firstname", ucfirst($userc[0]["firstname"]));
 		$tpl->set("login", $userc[0]["username"]);
 		$tpl->set("password", $new_password);
+		$tpl->set("remote_addr", $_SERVER['REMOTE_ADDR']);
 		$tpl->set("date", ucfirst(date("Y-m-d H:i:s")));
 		$tpl->set("date_mail", ucfirst(date("D, j M Y H:i:s")));
 		$mail = $tpl->fetch("session/mail/welcome");
@@ -66,7 +68,7 @@ class session_mail extends wf_agg {
 		$userc = $this->session->user->get(array("id"=>$user_id));
 		if(!is_array($userc[0]))
 			return FALSE;
-
+			
 		$to = $userc[0]["email"];
 
 		/* create the change password tpl */
@@ -74,8 +76,10 @@ class session_mail extends wf_agg {
 		$tpl->set("from", $this->session->session_sender);
 		$tpl->set("to", $to);
 		$tpl->set("name", ucfirst($userc[0]["name"]));
+		$tpl->set("firstname", ucfirst($userc[0]["firstname"]));
 		$tpl->set("login", $userc[0]["username"]);
 		$tpl->set("password", $new_password);
+		$tpl->set("remote_addr", $_SERVER['REMOTE_ADDR']);
 		$tpl->set("date", ucfirst(date("Y-m-d H:i:s")));
 		$tpl->set("date_mail", ucfirst(date("D, j M Y H:i:s")));
 		$mail = $tpl->fetch("session/mail/passwd");

@@ -40,7 +40,7 @@ class session extends wf_agg {
 	private $session_data;
 	public $session_timeout;
 	public $session_var;
-	
+	public $session_sender;
 	
 	public function loader($wf) {
 		$this->wf = $wf;
@@ -81,6 +81,12 @@ class session extends wf_agg {
 			"Session timeout",
 			CORE_PREF_NUM,
 			3600
+		);
+		$this->session_sender = $this->core_pref->register(
+			"sender",
+			"Session information mail from",
+			CORE_PREF_VARCHAR,
+			"to be configurer"
 		);
 		$this->lang = $this->wf->core_lang()->get_context(
 			"session/profil"

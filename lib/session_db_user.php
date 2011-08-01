@@ -25,9 +25,9 @@ class session_db_user extends session_driver_user {
 			"session_time_auth" => WF_INT,
 			"session_time" => WF_INT,
 			"session_data" => WF_DATA,
-			"remote_address" => WF_INT,
+			"remote_address" => WF_BIGINT,
 			"remote_hostname" => WF_VARCHAR,
-			"forwarded_remote_address" => WF_INT,
+			"forwarded_remote_address" => WF_BIGINT,
 			"forwarded_remote_hostname" => WF_VARCHAR
 		);
 		$this->wf->db->register_zone(

@@ -4,6 +4,7 @@ class session_mail extends wf_agg {
 	public $wf = NULL; 
 	public $a_core_smtp; 
 	public $session;
+	public $core_lang; 
 	
 	public $sender = 'Administrateur Binarysec <support@binarysec.com>';
 	private $content;
@@ -11,7 +12,7 @@ class session_mail extends wf_agg {
 	
 	public function loader($wf) {
 		$this->wf = $wf;
-		
+		$this->core_lang = $this->wf->core_lang();
 		$this->lang = $this->wf->core_lang()->get_context(
 			"session/mail"
 		);
@@ -26,7 +27,7 @@ class session_mail extends wf_agg {
 		$this->content .= 'From: '.$this->sender."\n";
 		$this->content .= 'X-Priority: 1'."\n";
 		$this->content .= 'X-Mailer: PHP/'.phpversion()."\n";
-		
+	
 	}
 
 	public function utf8_to_latin9($utf8str) { 
@@ -37,18 +38,20 @@ class session_mail extends wf_agg {
 	}
 	
 	public function mail_inscription($user_id,$real_password) {
+	
 		$userc = $this->session->user->get(array("id"=>$user_id));
 		if(!is_array($userc[0]))
 			return FALSE;
 
 		$to = $userc[0]["email"];
-
+		$lselect = $this->core_lang->get();
+		
 		/* create the change password tpl */
 		$tpl = new core_tpl($this->wf);
 		$tpl->set("from", $this->session->session_sender);
 		$tpl->set("to", $to);
-		$tpl->set("name", ucfirst($userc[0]["name"]));
-		$tpl->set("firstname", ucfirst($userc[0]["firstname"]));
+		$tpl->set("name", htmlentities(ucfirst($userc[0]["name"]), ENT_COMPAT,$lselect["encoding"]));
+		$tpl->set("firstname", htmlentities(ucfirst($userc[0]["firstname"]), ENT_COMPAT,$lselect["encoding"]));
 		$tpl->set("login", $userc[0]["username"]);
 		$tpl->set("password", $real_password);
 		$tpl->set("remote_addr", $_SERVER['REMOTE_ADDR']);
@@ -61,6 +64,7 @@ class session_mail extends wf_agg {
 			$to,
 			$mail
 		);
+		
 		return TRUE;
 
 	}
@@ -70,13 +74,14 @@ class session_mail extends wf_agg {
 			return FALSE;
 			
 		$to = $userc[0]["email"];
+		$lselect = $this->core_lang->get();
 
 		/* create the change password tpl */
 		$tpl = new core_tpl($this->wf);
 		$tpl->set("from", $this->session->session_sender);
 		$tpl->set("to", $to);
-		$tpl->set("name", ucfirst($userc[0]["name"]));
-		$tpl->set("firstname", ucfirst($userc[0]["firstname"]));
+		$tpl->set("name",  htmlentities(ucfirst($userc[0]["name"]), ENT_COMPAT,$lselect["encoding"]));
+		$tpl->set("firstname", htmlentities(ucfirst($userc[0]["firstname"]), ENT_COMPAT,$lselect["encoding"]));
 		$tpl->set("login", $userc[0]["username"]);
 		$tpl->set("password", $new_password);
 		$tpl->set("remote_addr", $_SERVER['REMOTE_ADDR']);

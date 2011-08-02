@@ -50,7 +50,7 @@ class session_mail extends wf_agg {
 		$tpl->set("name", ucfirst($userc[0]["name"]));
 		$tpl->set("firstname", ucfirst($userc[0]["firstname"]));
 		$tpl->set("login", $userc[0]["username"]);
-		$tpl->set("password", $new_password);
+		$tpl->set("password", $real_password);
 		$tpl->set("remote_addr", $_SERVER['REMOTE_ADDR']);
 		$tpl->set("date", ucfirst(date("Y-m-d H:i:s")));
 		$tpl->set("date_mail", ucfirst(date("D, j M Y H:i:s")));

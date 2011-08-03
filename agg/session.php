@@ -273,13 +273,13 @@ class session extends wf_agg {
 	 * Auth
 	 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 	public function identify($user, $pass) {
-	
+		$this->wf->no_cache();
+		
 		/* vérification si l'utilisateur existe */
 		$res = $this->user->get(array(
 			"username" => $user,
 			"password" => $this->wf->hash($pass)
 		));
-	
 
 		if(!is_array($res[0])) {
 			/* log */
@@ -344,6 +344,7 @@ class session extends wf_agg {
 	 * Logout function
 	 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 	public function logout() {
+		$this->wf->no_cache();
 		$update = array(
 			"remote_address"    => ip2long($_SERVER["REMOTE_ADDR"]),
 // 			"remote_hostname"   => gethostbyaddr($_SERVER["REMOTE_ADDR"]),

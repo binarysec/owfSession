@@ -184,6 +184,7 @@ class session_db_perm extends session_driver_perm {
 			$i = array(
 				"obj_type" => (int)$t["obj_type"],
 				"obj_id" => (int)$t["obj_id"],
+				"ptr_id" => (int)$t["ptr_id"],
 				"name" => $gt[0]["name"],
 				"value" => unserialize($t["data"])
 			);

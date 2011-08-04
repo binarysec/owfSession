@@ -33,14 +33,20 @@ class session extends wf_agg {
 	public $perm;
 	
 	private $core_pref;
+	private $core_lang;
 	private $data_cache = array();
 	
 	public $session_me;
 	public $session_my_perms;
+	
 	private $session_data;
+	
 	public $session_timeout;
 	public $session_var;
 	public $session_sender;
+	
+	private $v_session_me;
+	private $v_session_my_perms;
 	
 	public function loader($wf) {
 		$this->wf = $wf;
@@ -57,6 +63,7 @@ class session extends wf_agg {
 		/* load user interface */
 		$this->user = new session_db_user($wf);
 		
+		$this->core_lang = $this->wf->core_lang();
 		
 		/* registre session preferences group */
 		$this->core_pref = $this->wf->core_pref()->register_group(
@@ -108,6 +115,32 @@ class session extends wf_agg {
 	public function get_perms() {
 		return($this->session_my_perms);
 	}
+	
+
+	public function store_virtual($uid) {
+		$res = $this->user->get("id", $uid);
+		if(count($res) <= 0)
+			return(false);
+		
+		/* store */
+		$this->v_session_me = $this->session_me;
+		$this->v_session_my_perms = $this->session_my_perms;
+		
+		/* change */
+		$this->session_me = $res[0];
+		$this->session_my_perms = $this->perm->user_get($res[0]["id"]);
+		
+		$this->core_lang->set($res[0]["lang"]);
+		
+		return(true);
+	}
+	
+	public function restore_virtual() {
+		/* store */
+		$this->session_me = $this->v_session_me;
+		$this->session_my_perms = $this->v_session_my_perms;
+	}
+	
 	
 	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 	 *
@@ -229,7 +262,7 @@ class session extends wf_agg {
 
 		/* point to the data */
 		$this->session_me = $res[0];
- 
+
 		/* vérfication du timeout */
 		if(time() - $this->session_me["session_time"] > $this->session_timeout) {
 			$this->session_me = array(
@@ -242,6 +275,9 @@ class session extends wf_agg {
 			return(SESSION_TIMEOUT);
 		}
 
+		/* getting lang */
+		$se = $this->core_lang->get();
+		
 		/* load user permissions */
 		$this->session_my_perms = $this->perm->user_get($res[0]["id"]);
 		
@@ -249,6 +285,7 @@ class session extends wf_agg {
 		$update = array(
 			"remote_address"  => ip2long($_SERVER["REMOTE_ADDR"]),
 // 			"remote_hostname" => gethostbyaddr($_SERVER["REMOTE_ADDR"]),
+			"lang"            => $se['code'],
 			"session_time"    => time()
 		);
 		$res = $this->user->modify($update, (int)$this->session_me["id"]);

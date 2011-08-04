@@ -20,6 +20,7 @@ class session_db_user extends session_driver_user {
 			"firstname"=>WF_VARCHAR,
 			"email" => WF_VARCHAR,
 			"phone"=>WF_VARCHAR,
+			"lang" => WF_VARCHAR,
 			"create_time" => WF_INT,
 			"session_id" => WF_VARCHAR,
 			"session_time_auth" => WF_INT,

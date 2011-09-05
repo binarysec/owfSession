@@ -1,6 +1,52 @@
 <script type="text/javascript">
 
 $(function() {
+	/* Initialize dialogs */
+	$("#add_user_dialog").dialog({
+		width: 400,
+		modal: true,
+		autoOpen: false,
+		resizable: false,
+		buttons: { 
+			OK: function() {
+				$("#add_user_form").submit();
+			},
+			Cancel: function() {
+				$("#add_user_dialog").dialog("close");
+			}
+		}
+	});
+	
+	$("#edit_user_dialog").dialog({
+		width: 400,
+		modal: true,
+		autoOpen: false,
+		resizable: false,
+		buttons: { 
+			OK: function() {
+				$("#edit_user_form").submit();
+			},
+			Cancel: function() {
+				$("#edit_user_dialog").dialog("close");
+			}
+		}
+	});
+	
+	$("#delete_user_dialog").dialog({
+		width: 400,
+		modal: true,
+		autoOpen: false,
+		resizable: false,
+		buttons: { 
+			OK: function() {
+				$("#delete_user_form").submit();
+			},
+			Cancel: function() {
+				$("#delete_user_dialog").dialog("close");
+			}
+		}
+	});
+	
 	// Add button 
 	$("button, input:submit, a", "#add_user").button({ 
 		icons: {
@@ -8,24 +54,14 @@ $(function() {
 		}
 	});
 	
-	$("a", "#add_user").click(function() { 
-		$("#add_user_dialog").dialog({
-			width: 400,
-			modal: true,
-			autoOpen: true,
-			resizable: false,
-			buttons: { 
-				OK: function() {
-					$("#add_user_form").submit();
-				},
-				Cancel: function() {
-					$("#add_user_dialog").dialog("close");
-				}
-			}
-		});
+	$("a", "#add_user").click(function() {
+		$("#add_user_form").html("<br><center>%{@ 'Chargement des données ...'}%</center>");
 		
 		$.get("%{link '/admin/session/user/showadd'}%", function(data) {
 			$("#add_user_form").html(data);
+			
+			$("#add_user_dialog").dialog("option", "position", 'center');
+			$("#add_user_dialog").dialog("open");
 		});
 		
 		return(false);
@@ -39,23 +75,13 @@ $(function() {
 	});
 	
 	$("a", ".edit_user").click(function() {
-		$("#edit_user_dialog").dialog({
-			width: 400,
-			modal: true,
-			autoOpen: true,
-			resizable: false,
-			buttons: { 
-				OK: function() {
-					$("#edit_user_form").submit();
-				},
-				Cancel: function() {
-					$("#edit_user_dialog").dialog("close");
-				}
-			}
-		});
+		$("#add_user_form").html("<br><center>%{@ 'Chargement des données ...'}%</center>");
 		
 		$.get("%{link '/admin/session/user/showedit'}%?uid=" + $(this).attr("id"), function(data) {
 			$("#edit_user_form").html(data);
+			
+			$("#edit_user_dialog").dialog("option", "position", 'center');
+			$("#edit_user_dialog").dialog("open");
 		});
 		
 		return(false);
@@ -69,27 +95,13 @@ $(function() {
 	});
 	
 	$("a", ".delete_user").click(function() {
-		$("#delete_user_dialog").dialog({
-			width: 400,
-			modal: true,
-			autoOpen: true,
-			resizable: false,
-			buttons: { 
-				OK: function() {
-					$("#delete_user_form").submit();
-				},
-				Cancel: function() {
-					$("#delete_user_dialog").dialog("close");
-				}
-			}
-		});
 		$("#delete_user_id").val($(this).attr("id"));
+		$("#delete_user_dialog").dialog("option", "position", 'center');
+		$("#delete_user_dialog").dialog("open");
 		return(false);
 	});
 	
 	$("#delete_user_dialog").hide();
-	
-	
 	
 });
 function auto_mdp() {
@@ -118,8 +130,6 @@ function auto_mdp() {
 </form>
 </div>
 
-
-
 <!-- User edit form -->
 <div id="edit_user_dialog" title="%{@ 'Edit user'}%">
 <form id="edit_user_form" class="form_dialog" method="post" action="%{link '/admin/session/user/edit'}%">
@@ -130,10 +140,11 @@ function auto_mdp() {
 <div id="delete_user_dialog" title="%{@ "Delete a user"}%">
 <form id="delete_user_form" class="form_dialog" method="post" action="%{link '/admin/session/user/delete'}%">
 	<input type="hidden" id="delete_user_id" name="id" value="" />
-	%{@ "Voulez-vous vraiment supprimer l'utilisateur ?"}%
+	<br/>
+	<center>
+		%{@ "Voulez-vous vraiment supprimer l'utilisateur ?"}%
+	</center>
 </form>
 </div>
 
 %{$dataset}%
-
-

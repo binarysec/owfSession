@@ -48,26 +48,26 @@
 		<td><label for="form_edit_user_perms">Permissions :</label></td>
 		
 		%{if is_array($perms["session:god"])}%
-		<td><select name="perm">
+		<td><select name="perm" style="width: 100%;">
 			<option value="0" selected="selected">Super administrateur</option>
 			<option value="1">Administrateur</option>
 			<option value="2">Utilisateur simple</option>
 			<option value="3">Web services</option>
 		</select></td>
 		%{elseif is_array($perms["session:admin"])}%
-		<td><select name="perm">
+		<td><select name="perm" style="width: 100%;">
 			<option value="1" selected="selected">Administrateur</option>
 			<option value="2">Utilisateur simple</option>
 			<option value="3">Web services</option>
 		</select></td>
 		%{elseif is_array($perms["session:simple"])}%
-		<td><select name="perm">
+		<td><select name="perm" style="width: 100%;">
 			<option value="1">Administrateur</option>
 			<option value="2" selected="selected">Utilisateur simple</option>
 			<option value="3">Web services</option>
 		</select></td>
 		%{elseif is_array($perms["session:ws"])}%
-		<td><select name="perm">
+		<td><select name="perm" style="width: 100%;">
 			<option value="1">Administrateur</option>
 			<option value="2">Utilisateur simple</option>
 			<option value="3" selected="selected">Web services</option>
@@ -90,16 +90,9 @@
 		%{/if}%
 	</tr>
 
-
 %{/foreach}%
 </table>
 
 	</div>
 
 </div>
-
-
-
-
-
-

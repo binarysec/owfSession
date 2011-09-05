@@ -35,7 +35,7 @@
 	<tr>
 		<td><label for="form_edit_user_perms">Permissions :</label></td>
 		<td>
-			<select name="perm">
+			<select name="perm" style="width: 100%;">
 				<option value="1" selected="selected">Administrateur</option>
 				<option value="2">Utilisateur simple</option>
 				<option value="3">Web services</option>

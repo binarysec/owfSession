@@ -13,7 +13,7 @@ class session_mail extends wf_agg {
 	public function loader($wf) {
 		$this->wf = $wf;
 		$this->core_lang = $this->wf->core_lang();
-		$this->lang = $this->wf->core_lang()->get_context(
+		$this->lang = $this->core_lang->get_context(
 			"session/mail"
 		);
 		$this->current_lang = $this->lang->lang;
@@ -44,6 +44,12 @@ class session_mail extends wf_agg {
 			return FALSE;
 
 		$to = $userc[0]["email"];
+		
+		if(isset($userc[0]["lang"])){
+			$current_lang = $this->core_lang->get_code();
+			$this->core_lang->set($userc[0]["lang"]);
+		}
+		
 		$lselect = $this->core_lang->get();
 		
 		/* create the change password tpl */
@@ -58,6 +64,10 @@ class session_mail extends wf_agg {
 		$tpl->set("date", ucfirst(date("Y-m-d H:i:s")));
 		$tpl->set("date_mail", ucfirst(date("D, j M Y H:i:s")));
 		$mail = $tpl->fetch("session/mail/welcome");
+		
+		if(isset($current_lang)){
+			$this->core_lang->set($current_lang);
+		}
 		
 		$this->a_core_smtp->sendmail(
 			$this->session->session_sender,
@@ -74,6 +84,11 @@ class session_mail extends wf_agg {
 			return FALSE;
 			
 		$to = $userc[0]["email"];
+		
+		if(isset($userc[0]["lang"])){
+			$current_lang = $this->core_lang->get_code();
+			$this->core_lang->set($userc[0]["lang"]);
+		}
 		$lselect = $this->core_lang->get();
 
 		/* create the change password tpl */
@@ -88,6 +103,10 @@ class session_mail extends wf_agg {
 		$tpl->set("date", ucfirst(date("Y-m-d H:i:s")));
 		$tpl->set("date_mail", ucfirst(date("D, j M Y H:i:s")));
 		$mail = $tpl->fetch("session/mail/passwd");
+		
+		if(isset($current_lang)){
+			$this->core_lang->set($current_lang);
+		}
 		
 		$this->a_core_smtp->sendmail(
 			$this->session->session_sender,

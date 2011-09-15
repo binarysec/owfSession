@@ -27,7 +27,6 @@ define("SESSION_TIMEOUT",      2);
 define("SESSION_USER_UNKNOWN", 3);
 define("SESSION_AUTH_FAILED",  4);
 
-
 class session extends wf_agg {
 	public $user;
 	public $perm;
@@ -235,7 +234,7 @@ class session extends wf_agg {
 	 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 	public function check_session($session_id=NULL) {
 		/* try to get existing session */
-		$session = $_COOKIE[$this->session_var];
+		$session = isset($_COOKIE[$this->session_var]) ? $_COOKIE[$this->session_var] : NULL;
 
 // 		$res = $this->cache->get("auth_$session");
 // 		if(!$res) {
@@ -390,7 +389,7 @@ class session extends wf_agg {
 		);
 		setcookie(
 			$this->session_var,
-			$session,
+			"",		// => There were $session variable here throwing a Notice cause this variable is not declared anywhere
 			time(),
 			"/"
 		);

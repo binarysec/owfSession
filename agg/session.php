@@ -147,7 +147,8 @@ class session extends wf_agg {
 	 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 	public function check_permission($need) {
 		
-		if(isset($this->session_my_perms["session:god"]))
+		/* if user is god or no permissions are required */
+		if(isset($this->session_my_perms["session:god"]) || is_null($need))
 			return(true);
 
 		/** \todo must check if anon is authorized by the ini file */
@@ -158,7 +159,7 @@ class session extends wf_agg {
 				if(
 					$v != "session:ranon" && 
 					$v != "session:anon" && 
-					!$this->session_my_perms[$v]
+					!isset($this->session_my_perms[$v])
 					) {
 					if($v == "session:god")
 						return(false);
@@ -172,14 +173,12 @@ class session extends wf_agg {
 			if(
 				$need != "session:ranon" && 
 				$need != "session:anon" && 
-				!$this->session_my_perms[$need]
+				!isset($this->session_my_perms[$need])
 				) {
 					
 				if($need == "session:god")
 					return(false);
 				else if(isset($this->session_my_perms["session:admin"]))
-					return(true);
-				else if(!$need)
 					return(true);
 				return(false);
 			}

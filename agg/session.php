@@ -144,8 +144,10 @@ class session extends wf_agg {
 	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 	 *
 	 * Check permissions
+	 * if $require_all_perms is on, every permission of the given array is required
+	 * otherwise, only one permission of the array is required
 	 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-	public function check_permission($need) {
+	public function check_permission($need, $require_all_perms = true) {
 		
 		/* if user is god or no permissions are required */
 		if(isset($this->session_my_perms["session:god"]) || is_null($need))
@@ -155,33 +157,35 @@ class session extends wf_agg {
 		
 		/* check permission */
 		if(is_array($need)) {
-			foreach($need as $k => $v) {
-				if(
+			
+			$allowed = $require_all_perms;
+			
+			foreach($need as $v) {
+				
+				/* is the current user forbidden on this perm ? */
+				$forbidden =
 					$v != "session:ranon" && 
 					$v != "session:anon" && 
-					!isset($this->session_my_perms[$v])
-					) {
-					if($v == "session:god")
-						return(false);
-					else if(isset($this->session_my_perms["session:admin"]))
-						return(true);
-					return(false);
-				}
+					!array_key_exists($v, $this->session_my_perms) &&
+					!array_key_exists("session:admin", $this->session_my_perms)
+				;
+				
+				if(	($forbidden && $require_all_perms) ||
+					(!$forbidden && !$require_all_perms)
+					)
+						$allowed = !$require_all_perms;
 			}
+			
+			return($allowed);
 		}
 		else {
-			if(
-				$need != "session:ranon" && 
-				$need != "session:anon" && 
-				!isset($this->session_my_perms[$need])
-				) {
-					
-				if($need == "session:god")
-					return(false);
-				else if(isset($this->session_my_perms["session:admin"]))
-					return(true);
-				return(false);
-			}
+			/* if required permissions are ranon, anon, or if user has permissions, or if user is admin */
+			return
+				$need == "session:ranon" ||
+				$need == "session:anon" ||
+				array_key_exists($need, $this->session_my_perms) ||
+				array_key_exists("session:admin", $this->session_my_perms)
+			;
 		}
 		
 		return(true);

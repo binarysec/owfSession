@@ -317,7 +317,7 @@ class session extends wf_agg {
 			"password" => $this->wf->hash($pass)
 		));
 
-		if(!is_array($res[0])) {
+		if(isset($res[0]) && !is_array($res[0])) {
 			/* log */
 			$this->wf->log(
 				"Login ATTEMPT from ".

@@ -38,4 +38,4 @@
 			<span class="button_j"><a class="btn one" onclick="document.getElementById('profil_modif').submit()">%{@ 'Sauvegarder'}%</a></span>
 	</form>
 </div>
-<div style="clear:both;"/>
+<div style="clear:both;"></div>

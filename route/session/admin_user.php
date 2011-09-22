@@ -124,8 +124,9 @@ class wfr_session_session_admin_user extends wf_route_request {
 				$perm,
 				$_POST['phone']
 			);
+			
+			$this->a_mail->mail_inscription($uid,$password);
 		}
-		$this->a_mail->mail_inscription($uid,$password);
 
 		$this->wf->core_request()->set_header(
 			'Location',
@@ -288,7 +289,7 @@ class wfr_session_session_admin_user extends wf_route_request {
 						foreach($sp_perms as $sp_key => $sp_name) {
 							$val = $this->wf->get_var($sp_key);
 							if($val == "true") {
-								if(!$perms[$sp_key])
+								if(!isset($perms[$sp_key]) || !$perms[$sp_key])
 									$this->a_session->perm->user_add(
 										$user["id"], 
 										$sp_key

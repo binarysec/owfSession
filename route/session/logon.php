@@ -21,10 +21,10 @@ class wfr_session_session_logon extends wf_route_request {
 	 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 	public function login() {
 		/* prend les inputs */
-		$user = $_POST["user"];
-		$pass = $_POST["pass"];
+		$user = $this->wf->get_var("user");
+		$pass = $this->wf->get_var("pass");
 
-		$url = base64_decode($_POST["back_url"]);
+		$url = base64_decode($this->wf->get_var("back_url"));
 		
 		if(!$url)
 			$url = $this->wf->linker("/");
@@ -42,7 +42,6 @@ class wfr_session_session_logon extends wf_route_request {
 		}
 		/* bon login */
 		else {
-
 			if(strlen($url) <= 1) {
 				if($this->wf->ini_arr["session"]["default_url"])
 					$link = $this->wf->linker($this->wf->ini_arr["session"]["default_url"]);

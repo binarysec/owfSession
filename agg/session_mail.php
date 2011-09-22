@@ -40,7 +40,7 @@ class session_mail extends wf_agg {
 	public function mail_inscription($user_id,$real_password) {
 	
 		$userc = $this->session->user->get(array("id"=>$user_id));
-		if(!is_array($userc[0]))
+		if(!isset($userc[0]))
 			return FALSE;
 
 		$to = $userc[0]["email"];

@@ -166,8 +166,8 @@ class session extends wf_agg {
 				$forbidden =
 					$v != "session:ranon" && 
 					$v != "session:anon" && 
-					!array_key_exists($v, $this->session_my_perms) &&
-					!array_key_exists("session:admin", $this->session_my_perms)
+					!isset($this->session_my_perms[$v]) &&
+					!isset($this->session_my_perms["session:admin"])
 				;
 				
 				if(	($forbidden && $require_all_perms) ||
@@ -183,8 +183,8 @@ class session extends wf_agg {
 			return
 				$need == "session:ranon" ||
 				$need == "session:anon" ||
-				array_key_exists($need, $this->session_my_perms) ||
-				array_key_exists("session:admin", $this->session_my_perms)
+				isset($this->session_my_perms[$need]) ||
+				isset($this->session_my_perms["session:admin"])
 			;
 		}
 		
@@ -473,5 +473,15 @@ class session extends wf_agg {
 			"perm" => $this->session_my_perms,
 		));
 	}
-
+	
+	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+	 *
+	 * Return total number of OWF users
+	 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+	public function user_count() {
+		$q = new core_db_select("session_user", array("COUNT(*)"), array());
+		$this->wf->db->query($q);
+		$res = $q->get_result();
+		return isset($res[0]["COUNT(*)"]) ? (int) $res[0]["COUNT(*)"] : 0;
+	}
 }

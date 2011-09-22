@@ -449,14 +449,14 @@ class wfr_session_session_admin_user extends wf_route_request {
 		$actions = $edit.$delete;
 		
 		return(array(
-			"type_icon" => $type_icon,
-			'name' => htmlspecialchars($row['name'])." ".htmlspecialchars($datum['firstname']),
-			'email' => htmlspecialchars($row['email']),
-			'Username'=>"<strong>".$datum['username']."</strong>",
-			'ip' => $ip,
-			'login_icon' => $login_icon,
-			'login' => $login_date,
-			'actions' => $actions
+			"type_icon" => "<center>".$type_icon."</center>",
+			'name' => "<center>".htmlspecialchars($row['name'])." ".htmlspecialchars($datum['firstname'])."</center>",
+			'email' => "<center>".htmlspecialchars($row['email'])."</center>",
+			'Username'=>"<center><strong>".$datum['username']."</strong></center>",
+			'ip' => "<center>".$ip."</center>",
+			'login_icon' => "<center>".$login_icon."</center>",
+			'login' => "<center>".$login_date."</center>",
+			'actions' => "<center>".$actions."</center>"
 		));
 	}
 	

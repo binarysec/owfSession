@@ -29,7 +29,12 @@ class wfr_session_session_admin_user extends wf_route_request {
 	public function show_add() {
 		$username = $this->a_session->user->generate_ref("username","session_user","username");
 		$tpl = new core_tpl($this->wf);
+		$tpl->set("id", -1);
+		$tpl->set("email", "");
 		$tpl->set("username", $username);
+		$tpl->set("name", "");
+		$tpl->set("firstname", "");
+		$tpl->set("phone", "");
 		echo $tpl->fetch('session/users/show_add');
 		exit(0);
 	}
@@ -50,7 +55,7 @@ class wfr_session_session_admin_user extends wf_route_request {
 			$ok = false;
 		}else{
 			$ret = $this->a_session->user->get("username",$_POST["username"]);
-			if(is_array($ret[0]))
+			if(isset($ret[0]) && is_array($ret[0]))
 				$ok = false;
 		}
 		/* no email */
@@ -71,7 +76,7 @@ class wfr_session_session_admin_user extends wf_route_request {
 			}
 		}
 
-		if($_POST["generated_password"] == "on"){
+		if(isset($_POST["generated_password"]) && $_POST["generated_password"] == "on"){
 			$password = $this->a_session->user->generate_password();
 		}else {
 			/* no password */
@@ -143,12 +148,14 @@ class wfr_session_session_admin_user extends wf_route_request {
 		$sp = array();
 		$ret = $this->wf->execute_hook("session_permissions");
 		foreach($ret as $sp_perms) {
-			foreach($sp_perms as $sp_key => $sp_name) {
-				$sp[$sp_key] = $sp_name;
-				if($perms[$sp_key])
-					$sp[$sp_key] = array(true, $sp_name);
-				else
-					$sp[$sp_key] = array(false, $sp_name);
+			if(is_array($sp_perms)) {
+				foreach($sp_perms as $sp_key => $sp_name) {
+					$sp[$sp_key] = $sp_name;
+					if(isset($perms[$sp_key]) && $perms[$sp_key])
+						$sp[$sp_key] = array(true, $sp_name);
+					else
+						$sp[$sp_key] = array(false, $sp_name);
+				}
 			}
 		}
 		
@@ -243,13 +250,13 @@ class wfr_session_session_admin_user extends wf_route_request {
 			if($perm) {
 				$perms = $this->a_session->perm->user_get($user["id"]);
 				
-				if($perms["session:god"])
+				if(isset($perms["session:god"]))
 					$old_obj_type = $perms["session:god"][0]["obj_type"];
-				else if($perms["session:admin"])
+				else if(isset($perms["session:admin"]))
 					$old_obj_type = $perms["session:admin"][0]["obj_type"];
-				else if($perms["session:simple"])
+				else if(isset($perms["session:simple"]))
 					$old_obj_type = $perms["session:simple"][0]["obj_type"];
-				else if($perms["session:ws"])
+				else if(isset($perms["session:ws"]))
 					$old_obj_type = $perms["session:ws"][0]["obj_type"];
 					
 				$this->a_session->perm->user_remove(array(
@@ -277,23 +284,24 @@ class wfr_session_session_admin_user extends wf_route_request {
 				/* update session permissions */
 				$ret = $this->wf->execute_hook("session_permissions");
 				foreach($ret as $sp_perms) {
-					foreach($sp_perms as $sp_key => $sp_name) {
-						$val = $this->wf->get_var($sp_key);
-						if($val == "true") {
-							if(!$perms[$sp_key])
-								$this->a_session->perm->user_add(
-									$user["id"], 
-									$sp_key
-								);
+					if(is_array($sp_perms)) {
+						foreach($sp_perms as $sp_key => $sp_name) {
+							$val = $this->wf->get_var($sp_key);
+							if($val == "true") {
+								if(!$perms[$sp_key])
+									$this->a_session->perm->user_add(
+										$user["id"], 
+										$sp_key
+									);
+							}
+							else {
+								if(isset($perms[$sp_key]))
+									$this->a_session->perm->user_remove(array(
+										"ptr_id" => $user["id"],
+										"obj_type" => $perms[$sp_key][0]["obj_type"]
+									));
+							}
 						}
-						else {
-							if($perms[$sp_key])
-								$this->a_session->perm->user_remove(array(
-									"ptr_id" => $user["id"],
-									"obj_type" => $perms[$sp_key][0]["obj_type"]
-								));
-						}
-						
 					}
 				}
 			}
@@ -403,22 +411,22 @@ class wfr_session_session_admin_user extends wf_route_request {
 		}
 		
 		/* type icon */
-		if($perm["session:admin"]) {
+		if(isset($perm["session:admin"])) {
 			$type_icon = '<img src="'.
 				$this->wf->linker('/data/session/t_admin.png').
 				'" alt="[Administrateur]" title="Administrateur" />';
 		}
-		else if($perm["session:simple"]) {
+		else if(isset($perm["session:simple"])) {
 			$type_icon = '<img src="'.
 				$this->wf->linker('/data/session/t_simple.png').
 				'" alt="[Utilisateur simple]" title="Utilisateur simple" />';
 		}
-		else if($perm["session:ws"]) {
+		else if(isset($perm["session:ws"])) {
 			$type_icon = '<img src="'.
 				$this->wf->linker('/data/session/t_webservice.png').
 				'" alt="[Web service]" title="Web service" />';
 		}
-		else if($perm["session:god"]) {
+		else if(isset($perm["session:god"])) {
 			$type_icon = '<img src="'.
 				$this->wf->linker('/data/session/t_god.png').
 				'" alt="[God]" title="God" />';

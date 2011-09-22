@@ -4,9 +4,6 @@
 	});
 </script>
 
-
-
-
 <div id="tabs">
 	<ul>
 		<li><a href="#tabs-1">%{@ 'Information'}%</a></li>
@@ -47,26 +44,26 @@
 	<tr>
 		<td><label for="form_edit_user_perms">Permissions :</label></td>
 		
-		%{if is_array($perms["session:god"])}%
+		%{if isset($perms["session:god"])}%
 		<td><select name="perm" style="width: 100%;">
 			<option value="0" selected="selected">Super administrateur</option>
 			<option value="1">Administrateur</option>
 			<option value="2">Utilisateur simple</option>
 			<option value="3">Web services</option>
 		</select></td>
-		%{elseif is_array($perms["session:admin"])}%
+		%{elseif isset($perms["session:admin"])}%
 		<td><select name="perm" style="width: 100%;">
 			<option value="1" selected="selected">Administrateur</option>
 			<option value="2">Utilisateur simple</option>
 			<option value="3">Web services</option>
 		</select></td>
-		%{elseif is_array($perms["session:simple"])}%
+		%{elseif isset($perms["session:simple"])}%
 		<td><select name="perm" style="width: 100%;">
 			<option value="1">Administrateur</option>
 			<option value="2" selected="selected">Utilisateur simple</option>
 			<option value="3">Web services</option>
 		</select></td>
-		%{elseif is_array($perms["session:ws"])}%
+		%{elseif isset($perms["session:ws"])}%
 		<td><select name="perm" style="width: 100%;">
 			<option value="1">Administrateur</option>
 			<option value="2">Utilisateur simple</option>

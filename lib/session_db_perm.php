@@ -64,7 +64,7 @@ class session_db_perm extends session_driver_perm {
 			return(FALSE);
 		
 		/* resolv object type */
-		$objtype = strtolower($objtype);
+		//$objtype = strtolower($objtype);
 		$r = $this->get_type("name", $objtype);
 		if(count($r) == 0) {
 			/* type doesn't exists, create it */

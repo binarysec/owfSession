@@ -167,7 +167,8 @@ class session extends wf_agg {
 					$v != "session:ranon" && 
 					$v != "session:anon" && 
 					!isset($this->session_my_perms[$v]) &&
-					!isset($this->session_my_perms["session:admin"])
+					(!isset($this->session_my_perms[(string)"session:admin"]) ||
+					$v == "session:god")
 				;
 				
 				if(	($forbidden && $require_all_perms) ||
@@ -179,12 +180,13 @@ class session extends wf_agg {
 			return($allowed);
 		}
 		else {
-			/* if required permissions are ranon, anon, or if user has permissions, or if user is admin */
+			/* if required permissions are ranon, anon, or if user has permissions, or if user is admin and required permission is not god */
 			return
 				$need == "session:ranon" ||
 				$need == "session:anon" ||
 				isset($this->session_my_perms[$need]) ||
-				isset($this->session_my_perms["session:admin"])
+					(isset($this->session_my_perms["session:admin"]) &&
+					$need != "session:god")
 			;
 		}
 		

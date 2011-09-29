@@ -30,7 +30,7 @@ class wfr_session__session_profil extends wf_route_request {
 		$modif_user = array();
 		
 		$ret = $this->a_session->get_user("email",$_POST["email_modif"]);
-		if(is_array($ret[0])) {
+		if(isset($ret[0])) {
 			if($ret[0]["id"] != $uid) {
 				echo $this->lang->ts("Email déjà pris");
 				exit(0);

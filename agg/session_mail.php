@@ -78,6 +78,45 @@ class session_mail extends wf_agg {
 		return TRUE;
 
 	}
+	
+	public function mail_password_link($user_id, $link) {
+		$userc = $this->session->user->get(array("id"=>$user_id));
+		if(!is_array($userc[0]))
+			return FALSE;
+			
+		$to = $userc[0]["email"];
+		
+		if(isset($userc[0]["lang"])){
+			$current_lang = $this->core_lang->get_code();
+			$this->core_lang->set($userc[0]["lang"]);
+		}
+		$lselect = $this->core_lang->get();
+
+		/* create the change password tpl */
+		$tpl = new core_tpl($this->wf);
+		$tpl->set("from", $this->session->session_sender);
+		$tpl->set("to", $to);
+		$tpl->set("name",  htmlentities(ucfirst($userc[0]["name"]), ENT_COMPAT,$lselect["encoding"]));
+		$tpl->set("firstname", htmlentities(ucfirst($userc[0]["firstname"]), ENT_COMPAT,$lselect["encoding"]));
+		$tpl->set("login", $userc[0]["username"]);
+		$tpl->set("password", $new_password);
+		$tpl->set("remote_addr", $_SERVER['REMOTE_ADDR']);
+		$tpl->set("date", ucfirst(date("Y-m-d H:i:s")));
+		$tpl->set("date_mail", ucfirst(date("D, j M Y H:i:s")));
+		$mail = $tpl->fetch("session/mail/reset_pwd_link");
+		
+		if(isset($current_lang)){
+			$this->core_lang->set($current_lang);
+		}
+		
+		$this->a_core_smtp->sendmail(
+			$this->session->session_sender,
+			$to,
+			$mail
+		);
+		return TRUE;
+	}
+	
 	public function mail_change_password($user_id, $new_password) {
 		$userc = $this->session->user->get(array("id"=>$user_id));
 		if(!is_array($userc[0]))

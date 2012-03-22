@@ -96,11 +96,8 @@ class session_mail extends wf_agg {
 		$tpl = new core_tpl($this->wf);
 		$tpl->set("from", $this->session->session_sender);
 		$tpl->set("to", $to);
-		$tpl->set("name",  htmlentities(ucfirst($userc[0]["name"]), ENT_COMPAT,$lselect["encoding"]));
 		$tpl->set("firstname", htmlentities(ucfirst($userc[0]["firstname"]), ENT_COMPAT,$lselect["encoding"]));
-		$tpl->set("login", $userc[0]["username"]);
-		$tpl->set("password", $new_password);
-		$tpl->set("remote_addr", $_SERVER['REMOTE_ADDR']);
+		$tpl->set("link", $link);
 		$tpl->set("date", ucfirst(date("Y-m-d H:i:s")));
 		$tpl->set("date_mail", ucfirst(date("D, j M Y H:i:s")));
 		$mail = $tpl->fetch("session/mail/reset_pwd_link");

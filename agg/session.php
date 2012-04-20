@@ -50,6 +50,8 @@ class session extends wf_agg {
 	public function loader($wf) {
 		$this->wf = $wf;
 		
+		$this->a_core_request = $this->wf->core_request();
+
 		/* load permission interface */
 		$this->perm = new session_db_perm($wf);
 		define("SESSION_USER_GOD",     $this->perm->register("session:god"));
@@ -296,13 +298,12 @@ class session extends wf_agg {
 		);
 
 		/* utilisation d'un cookie */
-		setcookie(
-			$this->session_var,
-			$session,
-			time()+$this->session_timeout,
-			"/"
+		$c = $this->session_var."=$session; expires=".date(DATE_COOKIE, time()+$this->session_timeout)."; path=/";
+		$this->a_core_request->set_header(
+			"Set-Cookie", 
+			$c
 		);
-		
+
 		return(SESSION_VALID);
 	}
 	

@@ -30,7 +30,7 @@ Notre équipe de techniciens reste à votre disposition 24h/24 et 7j/7.
 Merci de votre confiance.
 
 	*Support Client BinarySEC*
-Email: tech.dept@binarysec.com 	*BinarySEC SAS France*
+Email: %{$tech_mail}% 	*BinarySEC SAS France*
 http://www.binarysec.com/
 4, rue Franck Camille Cadet
 97427 Étang-Salé - Réunion
@@ -78,7 +78,7 @@ Content-Transfer-Encoding: 7bit
           <td valign="top"><small><small><b>Support Client BinarySEC</b>
                 <br>
                 Email: <a class="moz-txt-link-abbreviated"
-                  href="mailto:tech.dept@binarysec.com">tech.dept@binarysec.com</a>
+                  href="mailto:%{$tech_mail}%">%{$tech_mail}%</a>
               </small></small></td>
           <td valign="top"><small><small><b>BinarySEC SAS France</b><br>
                 <a class="moz-txt-link-freetext"

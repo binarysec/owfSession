@@ -9,6 +9,7 @@ class session_mail extends wf_agg {
 	public $sender = 'Administrateur Binarysec <support@binarysec.com>';
 	private $content;
 	private $current_lang;
+	private $pref_mail;
 	
 	public function loader($wf) {
 		$this->wf = $wf;
@@ -19,6 +20,7 @@ class session_mail extends wf_agg {
 		$this->current_lang = $this->lang->lang;
 		$this->a_core_smtp = $this->wf->core_smtp();
 		$this->session = $this->wf->session();
+		$this->pref_mail = $this->wf->core_pref()->register_group("BSF WAF Mail");
 		
 		/* Mail headers */
 		$this->content = 'Content-Type: text/plain; charset=iso-8859-15; format=flowed' ."\n";
@@ -63,6 +65,9 @@ class session_mail extends wf_agg {
 		$tpl->set("remote_addr", $_SERVER['REMOTE_ADDR']);
 		$tpl->set("date", ucfirst(date("Y-m-d H:i:s")));
 		$tpl->set("date_mail", ucfirst(date("D, j M Y H:i:s")));
+
+		$tpl->set("contact_mail", $this->pref_mail->get_value("contact_mail"));
+		$tpl->set("tech_mail", $this->pref_mail->get_value("tech_mail"));
 		$mail = $tpl->fetch("session/mail/welcome");
 		
 		if(isset($current_lang)){
@@ -100,6 +105,9 @@ class session_mail extends wf_agg {
 		$tpl->set("link", $link);
 		$tpl->set("date", ucfirst(date("Y-m-d H:i:s")));
 		$tpl->set("date_mail", ucfirst(date("D, j M Y H:i:s")));
+
+		$tpl->set("contact_mail", $this->pref_mail->get_value("contact_mail"));
+		$tpl->set("tech_mail", $this->pref_mail->get_value("tech_mail"));
 		$mail = $tpl->fetch("session/mail/reset_pwd_link");
 		
 		if(isset($current_lang)){
@@ -138,6 +146,9 @@ class session_mail extends wf_agg {
 		$tpl->set("remote_addr", $_SERVER['REMOTE_ADDR']);
 		$tpl->set("date", ucfirst(date("Y-m-d H:i:s")));
 		$tpl->set("date_mail", ucfirst(date("D, j M Y H:i:s")));
+
+		$tpl->set("contact_mail", $this->pref_mail->get_value("contact_mail"));
+		$tpl->set("tech_mail", $this->pref_mail->get_value("tech_mail"));
 		$mail = $tpl->fetch("session/mail/passwd");
 		
 		if(isset($current_lang)){

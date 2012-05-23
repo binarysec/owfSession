@@ -313,6 +313,7 @@ class session extends wf_agg {
 	 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 	public function identify($user, $pass) {
 		$this->wf->no_cache();
+		$remote_addr = isset($_SERVER["REMOTE_ADDR"]) ? $_SERVER["REMOTE_ADDR"] : null;
 		
 		/* vérification si l'utilisateur existe */
 		$res = $this->user->get(array(
@@ -324,7 +325,7 @@ class session extends wf_agg {
 			/* log */
 			$this->wf->log(
 				"Login ATTEMPT from ".
-				$_SERVER["REMOTE_ADDR"].
+				$remote_addr.
 				' ('.
 // 				gethostbyaddr($_SERVER["REMOTE_ADDR"]).
 				')'
@@ -344,7 +345,7 @@ class session extends wf_agg {
 			"session_id"        => $this->generate_session_id(),
 			"session_time_auth" => time(),
 			"session_time"      => time(),
-			"remote_address"    => ip2long($_SERVER["REMOTE_ADDR"]),
+			"remote_address"    => ip2long($remote_addr),
 // 			"remote_hostname"   => gethostbyaddr($_SERVER["REMOTE_ADDR"])
 		);
 		$this->user->modify($update, (int)$this->session_me["id"]);
@@ -368,7 +369,7 @@ class session extends wf_agg {
 			' ('.
 			$this->session_me["email"].
 			') from '.
-			$_SERVER["REMOTE_ADDR"].
+			$remote_addr.
 			' ('.
 			$this->session_me["remote_hostname"].
 			')'

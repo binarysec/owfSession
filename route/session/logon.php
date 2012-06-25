@@ -69,5 +69,23 @@ class wfr_session_session_logon extends wf_route_request {
 		header("Location: $link");
 		exit(0);
 	}
-
+	
+	public function validate() {
+		$code = $this->wf->get_var("c");
+		$u = new session_db_user($this->wf);
+		$user = $u->get("activated", $code);
+		$errors = array();
+		
+		if(!isset($user[0]))
+			$errors[] = "Aucun utilisateur avec ce code de validation";
+		
+		if(count($errors) < 1)
+			$u->modify(array("activated" => "true"), $user[0]["id"]);
+		
+		$link = isset($this->wf->ini_arr["session"]["default_url"]) ?
+			$this->wf->linker($this->wf->ini_arr["session"]["default_url"]) :
+			$link = $this->wf->linker('/');
+		
+		header("Location: ".$link);
+	}
 }

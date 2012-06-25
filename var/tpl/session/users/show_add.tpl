@@ -33,6 +33,10 @@
 		<td><input type="text" id="form_edit_user_phone" name="phone" value="%{$phone|entities}%" /></td>
 	</tr>
 	<tr>
+		<td><label for="form_edit_user_validated">Validé&nbsp;:</label></td>
+		<td><input type="checkbox" id="form_edit_user_validated" name="validated" /></td>
+	</tr>
+	<tr>
 		<td><label for="form_edit_user_perms">Permissions :</label></td>
 		<td>
 			<select name="perm" style="width: 100%;">

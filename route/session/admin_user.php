@@ -122,7 +122,8 @@ class wfr_session_session_admin_user extends wf_route_request {
 				$_POST['name'],
 				$_POST['firstname'],
 				$perm,
-				$_POST['phone']
+				$_POST['phone'],
+				$this->wf->get_var("validated") == "on"
 			);
 			
 			$this->a_mail->mail_inscription($uid,$password);

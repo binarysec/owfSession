@@ -29,7 +29,8 @@ class session_db_user extends session_driver_user {
 			"remote_address" => WF_BIGINT,
 			"remote_hostname" => WF_VARCHAR,
 			"forwarded_remote_address" => WF_BIGINT,
-			"forwarded_remote_hostname" => WF_VARCHAR
+			"forwarded_remote_hostname" => WF_VARCHAR,
+			"activated" => WF_VARCHAR
 		);
 		$this->wf->db->register_zone(
 			"session_user", 
@@ -81,7 +82,8 @@ class session_db_user extends session_driver_user {
 			$name, 
 			$firstname,
 			$type,
-			$phone=NULL
+			$phone=NULL,
+			$activated = false
 		) {
 		/* sanatization */
 		if(!$email || !$password || !$username)
@@ -103,7 +105,8 @@ class session_db_user extends session_driver_user {
 			"username" => $username,
 			"firstname" => $firstname,
 			"password" => $this->wf->hash($password),
-			"create_time" => time()
+			"create_time" => time(),
+			"activated" => $activated ? "true" : $this->generate_validation_code()
 		);
 		if($phone)
 			$insert["phone"] = $phone;
@@ -288,5 +291,20 @@ class session_db_user extends session_driver_user {
 		}
 		return($return);
 	}
-
+	
+	private function generate_validation_code($size = 50) {
+		$ret = "";
+		for($i = 0; $i < $size; $i++) {
+			$bet = rand(0x21, 0x7d);
+			if(
+				($bet >= 0x30 && $bet <= 0x39) ||
+				($bet >= 0x41 && $bet <= 0x5a) ||
+				($bet >= 0x61 && $bet <= 0x7a)
+				)
+				$ret .= chr($bet);
+			else 
+				$i--;
+		}
+		return $ret;
+	}
 }

@@ -37,6 +37,14 @@ class wfm_session extends wf_module {
 				WF_ROUTE_HIDE,
 				array("session:anon")
 			),
+			"/session/validate" => array(
+				WF_ROUTE_ACTION,
+				"session/logon",
+				"validate",
+				"",
+				WF_ROUTE_HIDE,
+				array("session:anon")
+			),
 			
 			/* permission editor */
 			"/session/permissions" => array(

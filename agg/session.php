@@ -320,6 +320,9 @@ class session extends wf_agg {
 		
 			return(FALSE);
 		}
+		
+		if(!is_null($res[0]["activated"]) && $res[0]["activated"] != "true")
+			return(FALSE);
 	
 		/* point to the data */
 		$this->session_me = $res[0];

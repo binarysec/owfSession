@@ -1,6 +1,6 @@
 <center>
 	<br/>
-	%{if($activated)}%
+	%{if($validated)}%
 		Votre compte vient d'être activé !
 		<br/>
 		<a href="%{link '/'}%">%{@ 'Racite du site'}%</a>

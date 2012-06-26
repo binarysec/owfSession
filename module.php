@@ -43,7 +43,7 @@ class wfm_session extends wf_module {
 				"validate",
 				"",
 				WF_ROUTE_HIDE,
-				array("session:anon")
+				array("session:ranon")
 			),
 			
 			/* permission editor */

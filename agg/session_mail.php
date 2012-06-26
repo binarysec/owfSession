@@ -58,6 +58,10 @@ class session_mail extends wf_agg {
 		$link .= $this->wf->core_pref()->register_group("core")->get_value("site_name");
 		$link .= $this->wf->linker("/session/validate")."?c=".$userc[0]["activated"];
 		
+		/* easywaf linker hack .. */
+		if(isset($this->wf->modules["easywaf"]))
+			$link = $this->wf->linker("/session/validate")."?c=".$userc[0]["activated"];
+		
 		/* create the change password tpl */
 		$tpl = new core_tpl($this->wf);
 		$tpl->set("from", $this->session->session_sender);

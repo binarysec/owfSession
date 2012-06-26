@@ -79,16 +79,16 @@ class wfr_session_session_logon extends wf_route_request {
 		if(!isset($user[0]))
 			$errors[] = "Aucun utilisateur avec ce code de validation";
 		
+		$tpl = new core_tpl($this->wf);
+		$validated = false;
+		
 		if(count($errors) < 1) {
 			$u->modify(array("activated" => "true"), $user[0]["id"]);
 			$this->wf->session_mail()->mail_validation($user[0]["id"]);
+			$validated = true;
 		}
 		
-		$this->wf->core_request()->set_header(
-			'Location',
-			$this->wf->linker('/')
-		);
-		$this->wf->core_request()->send_headers();
-		exit(0);
+		$tpl->set("validated", $validated);
+		$this->wf->admin_html()->rendering($tpl->fetch("/session/validated"));
 	}
 }

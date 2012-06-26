@@ -126,7 +126,10 @@ class wfr_session_session_admin_user extends wf_route_request {
 				$this->wf->get_var("validated") == "on"
 			);
 			
-			$this->a_mail->mail_inscription($uid,$password);
+			if($this->wf->get_var("validated") != "on")
+				$this->a_mail->mail_inscription($uid, $password);
+			else
+				$this->a_mail->mail_validation($uid, $password);
 		}
 
 		$this->wf->core_request()->set_header(

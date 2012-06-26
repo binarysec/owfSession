@@ -1,8 +1,6 @@
 Subject: Welcome to Open Web Framework
 To: %{$to}%
 
-Date: %{$date_mail}%
-
 From: OWF <%{$from}%>
 User-Agent: Mozilla/5.0 (X11; U; Linux x86_64; en-US; rv:1.9.2.18) Gecko/20110617 Thunderbird/3.1.11
 MIME-Version: 1.0
@@ -21,7 +19,9 @@ Web Framework.
 
 Voici les informations concernant votre compte :
 Identifiant : %{$login}%
+%{if(strlen($password) > 0)}%
 Mot de passe (attention quand vous copiez/collez) : %{$password}%
+%{/if}%
 
 Si vous rencontrez des difficultés sur la plate-forme, n'hésitez pas à 
 nous contacter.
@@ -60,8 +60,10 @@ Content-Transfer-Encoding: 7bit
       <br>
       Voici les informations concernant votre compte : </small> <small><br>
       Identifiant :&nbsp; </small><small>%{$login}%</small><br>
+%{if(strlen($password) > 0)}%
     <small>Mot de passe <small>(attention quand vous copiez/collez)</small>
       : </small><small>%{$password}%</small><br>
+%{/if}%
     <small><br>
       Si vous rencontrez des difficult&eacute;s sur la plate-forme, n'h&eacute;sitez
       pas &agrave; nous contacter. </small> <small><br>

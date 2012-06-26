@@ -66,7 +66,7 @@ class session extends wf_agg {
 		
 		$this->core_lang = $this->wf->core_lang();
 		
-		/* registre session preferences group */
+		/* register session preferences group */
 		$this->core_pref = $this->wf->core_pref()->register_group(
 			"session", 
 			"Session"
@@ -76,26 +76,13 @@ class session extends wf_agg {
 		if(isset($this->wf->ini_arr["session"]["variable"]))
 			$this->session_var = &$this->wf->ini_arr["session"]["variable"];
 		else {
-			$this->session_var = $this->core_pref->register(
-				"variable",
-				"Variable context",
-				CORE_PREF_VARCHAR,
-				"session".rand()
-			);
+			$this->session_var = $this->core_pref->get_value("variable");
 		}
 		/* session timeout */
-		$this->session_timeout = $this->core_pref->register(
-			"timeout",
-			"Session timeout",
-			CORE_PREF_NUM,
-			3600
-		);
-		$this->session_sender = $this->core_pref->register(
-			"sender",
-			"Session information mail from",
-			CORE_PREF_VARCHAR,
-			"to be configurer"
-		);
+		$this->session_timeout = $this->core_pref->get_value("timeout");
+		
+		$this->session_sender = $this->core_pref->get_value("sender");
+		
 		$this->lang = $this->wf->core_lang()->get_context(
 			"session/profil"
 		);

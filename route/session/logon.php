@@ -79,13 +79,16 @@ class wfr_session_session_logon extends wf_route_request {
 		if(!isset($user[0]))
 			$errors[] = "Aucun utilisateur avec ce code de validation";
 		
-		if(count($errors) < 1)
+		if(count($errors) < 1) {
 			$u->modify(array("activated" => "true"), $user[0]["id"]);
+			$this->wf->session_mail()->mail_validation($user[0]["id"]);
+		}
 		
-		$link = isset($this->wf->ini_arr["session"]["default_url"]) ?
-			$this->wf->linker($this->wf->ini_arr["session"]["default_url"]) :
-			$link = $this->wf->linker('/');
-		
-		header("Location: ".$link);
+		$this->wf->core_request()->set_header(
+			'Location',
+			$this->wf->linker('/')
+		);
+		$this->wf->core_request()->send_headers();
+		exit(0);
 	}
 }

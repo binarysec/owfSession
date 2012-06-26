@@ -253,5 +253,46 @@ class wfm_session extends wf_module {
 		return($return);
 	}
 	
-	
+	public function owf_post_init() {
+		
+		/* register session preferences group */
+		$pref_grp = $this->wf->core_pref()->register_group(
+			"session", 
+			"Session"
+		);
+		
+		/* register session preference vars */
+		
+		/* var context */
+		$pref_grp->register(
+			"variable",
+			"Variable context",
+			CORE_PREF_VARCHAR,
+			"session".rand()
+		);
+		
+		/* session timeout */
+		$pref_grp->register(
+			"timeout",
+			"Session timeout",
+			CORE_PREF_NUM,
+			3600
+		);
+		
+		/* mail sender information */
+		$pref_grp->register(
+			"sender",
+			"Session information mail from",
+			CORE_PREF_VARCHAR,
+			"contact@owf.re"
+		);
+		
+		/* email validation timeout */
+		$pref_grp->register(
+			"email_validation_timeout",
+			"Email validation timeout",
+			CORE_PREF_NUM,
+			604800 // a week
+		);
+	}
 }

@@ -54,6 +54,56 @@ class session_mail extends wf_agg {
 		
 		$lselect = $this->core_lang->get();
 		
+		$link = "http://";
+		$link .= $this->wf->core_pref()->register_group("core")->get_value("site_name");
+		$link .= $this->wf->linker("/session/validate")."?c=".$userc[0]["activated"];
+		
+		/* create the change password tpl */
+		$tpl = new core_tpl($this->wf);
+		$tpl->set("from", $this->session->session_sender);
+		$tpl->set("to", $to);
+		$tpl->set("name", htmlentities(ucfirst($userc[0]["name"]), ENT_COMPAT,$lselect["encoding"]));
+		$tpl->set("firstname", htmlentities(ucfirst($userc[0]["firstname"]), ENT_COMPAT,$lselect["encoding"]));
+		$tpl->set("login", $userc[0]["username"]);
+		$tpl->set("validate", $link);
+		$tpl->set("password", $real_password);
+
+		//$tpl->set("contact_mail", $this->pref_mail->get_value("contact_mail"));
+		//$tpl->set("tech_mail", $this->pref_mail->get_value("tech_mail"));
+		$mail = $tpl->fetch("session/mail/validate");
+		
+		if(isset($current_lang)){
+			$this->core_lang->set($current_lang);
+		}
+		
+		$c_mail = new core_mail(
+			$this->wf,
+			"OWF <".$this->session->session_sender.">",
+			$to,
+			$this->lang->ts("Validation de l'inscription"),
+			$mail
+		);
+		
+		$c_mail->render();
+		$c_mail->send();
+		
+		return TRUE;
+	}
+	
+	public function mail_validation($user_id, $real_password = "") {
+		$userc = $this->session->user->get(array("id"=>$user_id));
+		if(!isset($userc[0]))
+			return FALSE;
+
+		$to = $userc[0]["email"];
+		
+		if(isset($userc[0]["lang"])){
+			$current_lang = $this->core_lang->get_code();
+			$this->core_lang->set($userc[0]["lang"]);
+		}
+		
+		$lselect = $this->core_lang->get();
+		
 		/* create the change password tpl */
 		$tpl = new core_tpl($this->wf);
 		$tpl->set("from", $this->session->session_sender);
@@ -81,7 +131,6 @@ class session_mail extends wf_agg {
 		);
 		
 		return TRUE;
-
 	}
 	
 	public function mail_password_link($user_id, $link) {

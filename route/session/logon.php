@@ -89,6 +89,7 @@ class wfr_session_session_logon extends wf_route_request {
 		}
 		
 		$tpl->set("validated", $validated);
+		$this->a_admin_html->set_title("Validation du compte");
 		$this->wf->admin_html()->rendering($tpl->fetch("/session/validated"));
 	}
 }

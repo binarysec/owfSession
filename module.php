@@ -8,8 +8,8 @@ class wfm_session extends wf_module {
 	
 	public function get_name() { return("session"); }
 	public function get_description()  { return("OWF Native Session module"); }
-	public function get_banner()  { return("OWF Session/1.2.4"); }
-	public function get_version() { return("1.2.4"); }
+	public function get_banner()  { return("OWF Session/1.2.6"); }
+	public function get_version() { return("1.2.6"); }
 	public function get_authors() { return("Michael VERGOZ"); }
 	public function get_depends() { return(NULL); }
 	

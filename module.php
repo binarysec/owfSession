@@ -80,7 +80,25 @@ class wfm_session extends wf_module {
 				array("session:admin")
 			),
 			
-			/* user/group/perm */
+// 			"/admin/session/update" => array(
+// 				WF_ROUTE_REDIRECT,
+// 				"/admin/system/session/user",
+// 				$this->ts("Gestion des utilisateurs"),
+// 				WF_ROUTE_HIDE,
+// 				array("session:simple")
+// 			),
+			
+
+			/* Admin session integration */
+			"/admin/options/session" => array(
+				WF_ROUTE_ACTION,
+				"admin/options/session",
+				"show",
+				$this->ts("Session options"),
+				WF_ROUTE_HIDE,
+				array("session:simple")
+			),
+			
 			"/admin/system/session" => array(
 				WF_ROUTE_REDIRECT,
 				"/admin/system/session/user",
@@ -240,6 +258,37 @@ class wfm_session extends wf_module {
 		return($return);
 	}
 
+	public function admin_options() {
+		$return = array();
+		
+		$info = array(
+			"text" => $this->ts("Change password"),
+			"route" => "/admin/options/session/password",
+			"perm" => array("session:simple"),
+			"type" => "dialog"
+		);
+		$return[] = $info;
+		
+		$info = array(
+			"text" => $this->ts("Update personnals informations"),
+			"route" => "/admin/options/session/userinformation",
+			"perm" => array("session:simple"),
+			"type" => "dialog"
+		);
+		$return[] = $info;
+		
+		$info = array(
+			"text" => $this->ts("Delete user"),
+			"route" => "/admin/options/session/delete",
+			"perm" => array("session:simple"),
+			"type" => "dialog",
+			"icon" => "delete"
+		);
+		$return[] = $info;
+		
+		return($return);
+	}
+	
 	public function json_module() {
 		$return = array();
 		

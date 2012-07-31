@@ -13,6 +13,7 @@ class wfr_session_session_logon extends wf_route_request {
 		$this->wf = $wf;
 		$this->a_session = $this->wf->session();
 		$this->a_core_html = $this->wf->core_html();
+		$this->a_core_cipher = $this->wf->core_cipher();
 	}
 
 	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -24,11 +25,23 @@ class wfr_session_session_logon extends wf_route_request {
 		$user = $this->wf->get_var("user");
 		$pass = $this->wf->get_var("pass");
 
-		$url = base64_decode($this->wf->get_var("back_url"));
-		
-		if(!$url)
-			$url = $this->wf->linker("/");
-		
+		$url = $this->a_core_cipher->get_var("back_url");
+	
+		if(strlen($url) == 0) {
+			if(isset($this->wf->ini_arr["session"]["default_url"]))
+				$link = $this->wf->linker($this->wf->ini_arr["session"]["default_url"]);
+			else	
+				$link = $this->wf->linker('/admin');
+			$url = "/";
+		}
+		else
+			$link = $url;
+			
+		if(!isset($user) || !isset($pass)) {
+			header("Location: ".$link);
+			exit(0);
+		}
+			
 		/* vérification de l'utilisateur */
 		$ret = $this->a_session->identify(
 			$user,
@@ -42,20 +55,9 @@ class wfr_session_session_logon extends wf_route_request {
 		}
 		/* bon login */
 		else {
-			if(strlen($url) <= 1) {
-				if(isset($this->wf->ini_arr["session"]["default_url"]))
-					$link = $this->wf->linker($this->wf->ini_arr["session"]["default_url"]);
-				else	
-					$link = $this->wf->linker('/');
-				
-				header("X-Owf-Session: ".$ret["session_id"]);
-				header("X-Owf-Session-Var: ".$this->a_session->session_var);
-				header("Location: ".$link);
-				exit(0);
-			}
 			header("X-Owf-Session: ".$ret["session_id"]);
 			header("X-Owf-Session-Var: ".$this->a_session->session_var);
-			header("Location: ".$url);
+			$this->wf->redirector($link);
 			exit(0);
 		}
 	}

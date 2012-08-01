@@ -265,7 +265,7 @@ class wfm_session extends wf_module {
 			"text" => $this->ts("Change password"),
 			"route" => "/admin/options/session/password",
 			"perm" => array("session:simple"),
-			"type" => "dialog"
+			"type" => "dialog",
 		);
 		$return[] = $info;
 		
@@ -273,7 +273,17 @@ class wfm_session extends wf_module {
 			"text" => $this->ts("Update personnals informations"),
 			"route" => "/admin/options/session/userinformation",
 			"perm" => array("session:simple"),
-			"type" => "dialog"
+			"type" => "dialog",
+			"icon" => "info"
+		);
+		$return[] = $info;
+		
+		$info = array(
+			"text" => $this->ts("User capatibility"),
+			"route" => "/admin/options/session/userpermission",
+			"perm" => array("session:manage"),
+			"type" => "dialog",
+			"icon" => "star"
 		);
 		$return[] = $info;
 		

@@ -49,6 +49,35 @@ class wfr_session_admin_options_session extends wf_route_request {
 				$tpl_name = 'admin/options/userinformation';
 				break;
 				
+			case "userpermission":
+				if(!$this->a_session->iam_admin())
+					exit(0);
+					
+				$perms = $this->a_session->perm->user_get($this->uid);
+				
+				if($action == "mod")
+					$this->process_permissions($perms);
+					
+				/* get session permissions */
+				$sp = array();
+				$ret = $this->wf->execute_hook("session_permissions");
+				foreach($ret as $sp_perms) {
+					if(is_array($sp_perms)) {
+						foreach($sp_perms as $sp_key => $sp_name) {
+							$sp[$sp_key] = $sp_name;
+							if(isset($perms[$sp_key]) && $perms[$sp_key])
+								$sp[$sp_key] = array(true, $sp_name);
+							else
+								$sp[$sp_key] = array(false, $sp_name);
+						}
+					}
+				}
+				$tpl->set("sp", $sp);
+
+				$this->a_admin_html->set_title($this->lang->ts('User permission'));
+				$tpl_name = 'admin/options/userpermission';
+				break;
+				
 			default:
 				exit(0);
 		}
@@ -66,7 +95,7 @@ class wfr_session_admin_options_session extends wf_route_request {
 			"admin" => $this->a_session->iam_admin()
 		);
 	
-		$tpl->set_vars($in);
+		$tpl->merge_vars($in);
 		
 		$this->a_admin_html->div_set("data-role", "dialog");
 		$this->a_admin_html->rendering_options($tpl->fetch($tpl_name));
@@ -86,7 +115,7 @@ class wfr_session_admin_options_session extends wf_route_request {
 			return(false);
 		}
 		$update = array(
-			"password" => $this->wf->hash($new_password)
+			"password" => $new_password
 		);
 		$this->a_session->user->modify(
 			$update,
@@ -161,5 +190,44 @@ class wfr_session_admin_options_session extends wf_route_request {
 		exit(0);
 	}
 	
+	
+	private function process_permissions(&$perms) {
+		
+		
+		/* update session permissions */
+		$ret = $this->wf->execute_hook("session_permissions");
+		foreach($ret as $sp_perms) {
+			if(is_array($sp_perms)) {
+				foreach($sp_perms as $sp_key => $sp_name) {
+					$val = $this->wf->get_var($sp_key);
+					if($val == "on") {
+						if(isset($perms[$sp_key]))
+							$this->a_session->perm->user_remove(array(
+								"ptr_id" => $this->uid,
+								"obj_type" => $perms[$sp_key][0]["obj_type"]
+							));
+				
+						$this->a_session->perm->user_add(
+							$this->uid, 
+							$sp_key
+						);
+					}
+					else {
+						if(isset($perms[$sp_key]))
+							$this->a_session->perm->user_remove(array(
+								"ptr_id" => $this->uid,
+								"obj_type" => $perms[$sp_key][0]["obj_type"]
+							));
+					}
+				}
+			}
+		}
+		
+		$this->wf->redirector($this->a_core_cipher->get_var("back"));
+		exit(0);
+
+	}
+
+				
 }
 

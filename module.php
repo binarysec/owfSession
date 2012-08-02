@@ -46,48 +46,8 @@ class wfm_session extends wf_module {
 				array("session:ranon")
 			),
 			
-			/* permission editor */
-			"/session/permissions" => array(
-				WF_ROUTE_ACTION,
-				"session/permissions",
-				"show_acl",
-				"Logout",
-				WF_ROUTE_HIDE,
-				array("session:admin")
-			),
-			"/session/permissions/user" => array(
-				WF_ROUTE_ACTION,
-				"session/permissions",
-				"add_user",
-				"Logout",
-				WF_ROUTE_HIDE,
-				array("session:admin")
-			),
-			"/session/permissions/delete" => array(
-				WF_ROUTE_ACTION,
-				"session/permissions",
-				"delete_user",
-				"Logout",
-				WF_ROUTE_HIDE,
-				array("session:admin")
-			),
-			"/session/permissions/matrix" => array(
-				WF_ROUTE_ACTION,
-				"session/permissions",
-				"edit_user",
-				"Logout",
-				WF_ROUTE_HIDE,
-				array("session:admin")
-			),
-			
-// 			"/admin/session/update" => array(
-// 				WF_ROUTE_REDIRECT,
-// 				"/admin/system/session/user",
-// 				$this->ts("Gestion des utilisateurs"),
-// 				WF_ROUTE_HIDE,
-// 				array("session:simple")
-// 			),
-			
+
+
 
 			/* Admin session integration */
 			"/admin/options/session" => array(
@@ -100,12 +60,19 @@ class wfm_session extends wf_module {
 			),
 			
 			"/admin/system/session" => array(
-				WF_ROUTE_REDIRECT,
-				"/admin/system/session/user",
+				WF_ROUTE_ACTION,
+				"admin/system/session",
+				"show",
 				$this->ts("Gestion des utilisateurs"),
 				WF_ROUTE_SHOW,
 				array("session:manage")
 			),
+
+
+
+
+
+
 
 			"/admin/system/session/user" => array(
 				WF_ROUTE_ACTION,

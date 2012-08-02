@@ -94,7 +94,7 @@ class wfr_session_admin_options_session extends wf_route_request {
 			"perms" => $perms,
 			"admin" => $this->a_session->iam_admin()
 		);
-	
+
 		$tpl->merge_vars($in);
 		
 		$this->a_admin_html->div_set("data-role", "dialog");

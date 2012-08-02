@@ -5,6 +5,7 @@ class wfr_session_admin_system_session extends wf_route_request {
 	public function __construct($wf) {
 		$this->wf = $wf;
 		$this->a_admin_html = $this->wf->admin_html();
+		$this->a_core_cipher = $this->wf->core_cipher();
 		$this->a_session = $this->wf->session();
 	}
 	
@@ -138,7 +139,7 @@ class wfr_session_admin_system_session extends wf_route_request {
 // 			'actions' => "<center>".$actions."</center>"
 // 		));
 		
-		$opt_link = htmlentities($this->a_admin_html->options_link($datum['id']));
+		$opt_link = htmlentities($this->a_admin_html->options_link($datum['id'], 'b'));
 		$st = htmlspecialchars($datum['firstname']).' '.htmlspecialchars($datum['name']);
 		$username = htmlspecialchars($datum['username']);
 		$mail = htmlspecialchars($datum['email']);

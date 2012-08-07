@@ -27,7 +27,7 @@ class wfm_session extends wf_module {
 				"login",
 				"Login",
 				WF_ROUTE_HIDE,
-				array("session:anon")
+				array("session:ranon")
 			),
 			"/session/logout" => array(
 				WF_ROUTE_ACTION,
@@ -35,13 +35,22 @@ class wfm_session extends wf_module {
 				"logout",
 				"Logout",
 				WF_ROUTE_HIDE,
-				array("session:anon")
+				array("session:ranon")
 			),
 			"/session/validate" => array(
 				WF_ROUTE_ACTION,
 				"session/logon",
 				"validate",
 				"",
+				WF_ROUTE_HIDE,
+				array("session:ranon")
+			),
+			
+			"/session/create" => array(
+				WF_ROUTE_ACTION,
+				"session/create",
+				"show",
+				"Account creation",
 				WF_ROUTE_HIDE,
 				array("session:ranon")
 			),

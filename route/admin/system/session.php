@@ -114,30 +114,15 @@ class wfr_session_admin_system_session extends wf_route_request {
 		}
 		
 		/* adresse IP */
-		if($datum['session_time_auth']) {
+		if($datum['session_time_auth'])
 			$login_date = ' - Last login: '.date('d/m/Y H:i:s', $datum['session_time_auth']);
-		}
-		else {
+		else 
 			$login_date = '';
-			
-		}
-		
-		
+
 		$edit = '<span class="edit_user"><a href="" id="'.$datum['id'].'">Edit</a></span>';
 		$delete = '<span class="delete_user"><a href="" id="'.$datum['id'].'">Delete</a></span>';
 		/* actions */
 		$actions = $edit.$delete;
-		
-// 		return(array(
-// 			"type_icon" => "<center>".$type_icon."</center>",
-// 			'name' => "<center>".htmlspecialchars($row['name'])." ".htmlspecialchars($datum['firstname'])."</center>",
-// 			'email' => "<center>".htmlspecialchars($row['email'])."</center>",
-// 			'Username'=>"<center><strong>".$datum['username']."</strong></center>",
-// 			'ip' => "<center>".$ip."</center>",
-// 			'login_icon' => "<center>".$login_icon."</center>",
-// 			'login' => "<center>".$login_date."</center>",
-// 			'actions' => "<center>".$actions."</center>"
-// 		));
 		
 		$opt_link = htmlentities($this->a_admin_html->options_link($datum['id'], 'b'));
 		$st = htmlspecialchars($datum['firstname']).' '.htmlspecialchars($datum['name']);

@@ -6,7 +6,6 @@
 </style>
 
 <div class="content-secondary">
-
 	<div id="jqm-homeheader">
 		<h1 id="jqm-logo"><img src="%{link '/data/session/title_adduser.png'}%" alt="%{@ 'Create user'}%" /></h1>
 		<p>%{@ 'Create new user'}%</p>
@@ -25,6 +24,7 @@
 	%{if count($errors) > 0}%</ul>%{/if}%
 
 </div>
+
 <div class="content-primary">
 	<form action="?" method="post">
 		<input type="hidden" name="action" value="mod" />
@@ -48,12 +48,12 @@
 			
 			<li data-role="fieldcontain">
 				<label for="email">%{@ 'Your Mail address :'}%</label>
-				<input type="text" name="email" id="email" value="%{$email|html}%" placeholder="%{@ 'Mail address'}%" data-mini="true"/>
+				<input type="email" name="email" id="email" value="%{$email|html}%" placeholder="%{@ 'Mail address'}%" data-mini="true"/>
 			</li>
 			
 			<li data-role="fieldcontain">
 				<label for="email_confirm">%{@ 'Repeat your mail address :'}%</label>
-				<input type="text" name="email_confirm" id="email_confirm" value="%{$email_confirm|html}%"  placeholder="%{@ 'Mail address confirmation'}%" data-mini="true"/>
+				<input type="email" name="email_confirm" id="email_confirm" value="%{$email_confirm|html}%"  placeholder="%{@ 'Mail address confirmation'}%" data-mini="true"/>
 			</li>
 			
 			%{if $allow_pass_register}%
@@ -74,12 +74,3 @@
 		</ul>
 	</form>
 </div>
-
-
-
-
-
-
-
-
-

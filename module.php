@@ -1,7 +1,7 @@
 <?php
 
-
 class wfm_session extends wf_module {
+	
 	public function __construct($wf) {
 		$this->wf = $wf;
 	}
@@ -37,20 +37,29 @@ class wfm_session extends wf_module {
 				WF_ROUTE_HIDE,
 				array("session:ranon")
 			),
-			"/session/validate" => array(
-				WF_ROUTE_ACTION,
-				"session/logon",
-				"validate",
-				"",
-				WF_ROUTE_HIDE,
-				array("session:ranon")
-			),
 			
 			"/session/create" => array(
 				WF_ROUTE_ACTION,
 				"session/create",
 				"show",
 				"Account creation",
+				WF_ROUTE_HIDE,
+				array("session:ranon")
+			),
+			
+			"/session/valshow" => array(
+				WF_ROUTE_ACTION,
+				"session/validate",
+				"show",
+				"Validation information page",
+				WF_ROUTE_HIDE,
+				array("session:ranon")
+			),
+			"/session/validate" => array(
+				WF_ROUTE_ACTION,
+				"session/validate",
+				"validate",
+				"",
 				WF_ROUTE_HIDE,
 				array("session:ranon")
 			),
@@ -186,5 +195,29 @@ class wfm_session extends wf_module {
 			CORE_PREF_NUM,
 			604800 // a week
 		);
+		
+		/* register ini vars as core_pref with default values */
+		
+		$existing_options = array(
+			"allow_anonymous",
+			"allow_account_creation",
+			"allow_pass_recovering",
+			"allow_pass_register",
+			"allow_pass_change",
+			"allow_user_register",
+			"activation_required",
+		);
+		
+		foreach($this->wf->ini_arr['session'] as $k => $v) {
+			if(in_array($k, $existing_options)) {
+				$pref_grp->register(
+					$k,
+					$k,
+					CORE_PREF_BOOL,
+					$v
+				);
+				$pref_grp->set_value($k, $v);
+			}
+		}
 	}
 }

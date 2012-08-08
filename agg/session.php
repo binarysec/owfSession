@@ -214,9 +214,7 @@ class session extends wf_agg {
 		else
 			$res = $this->get_user();
 		$online = time() - $res['session_time'];
-		if($online > $this->session_timeout) 
-			return(FALSE);
-		return(TRUE);
+		return($online < $this->session_timeout);
 	}
 	
 	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *

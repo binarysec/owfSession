@@ -48,7 +48,6 @@ class session extends wf_agg {
 	private $v_session_my_perms;
 	
 	public function loader($wf) {
-		$this->wf = $wf;
 		
 		$this->a_core_request = $this->wf->core_request();
 
@@ -204,6 +203,14 @@ class session extends wf_agg {
 	
 	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 	 *
+	 * Am i user manager ?
+	 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+	public function iam_manager() {
+		return array_key_exists("session:manage", $this->session_my_perms);
+	}
+	
+	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+	 *
 	 * User online?
 	 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 	public function is_online($uid=NULL) {
@@ -214,9 +221,7 @@ class session extends wf_agg {
 		else
 			$res = $this->get_user();
 		$online = time() - $res['session_time'];
-		if($online > $this->session_timeout) 
-			return(FALSE);
-		return(TRUE);
+		return($online < $this->session_timeout);
 	}
 	
 	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -311,18 +316,20 @@ class session extends wf_agg {
 		if(!isset($res[0]) || !is_array($res[0])) {
 			/* log */
 			$this->wf->log(
-				"Login ATTEMPT from ".
-				$remote_addr.
-				' ('.
-// 				gethostbyaddr($_SERVER["REMOTE_ADDR"]).
-				')'
+				"Login FAILED from $remote_addr with login ($user), user or password incorrect"
 			);
 		
 			return(FALSE);
 		}
 		
-		if(!is_null($res[0]["activated"]) && $res[0]["activated"] != "true")
+		if(!is_null($res[0]["activated"]) && $res[0]["activated"] != "true") {
+			/* log */
+			$this->wf->log(
+				"Login ATTEMPT from $remote_addr with login ($user), account not activated yet"
+			);
+			
 			return(FALSE);
+		}
 	
 		/* point to the data */
 		$this->session_me = $res[0];
@@ -355,9 +362,10 @@ class session extends wf_agg {
 		/* log */
 		$this->wf->log(
 			"Login SUCCESS for user ".
+			$this->session_me["firstname"]." ".
 			$this->session_me["name"].
 			' ('.
-			$this->session_me["email"].
+			$this->session_me["username"].
 			') from '.
 			$remote_addr.
 			' ('.

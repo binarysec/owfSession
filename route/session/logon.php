@@ -38,7 +38,7 @@ class wfr_session_session_logon extends wf_route_request {
 			$link = $url;
 			
 		if(!isset($user) || !isset($pass)) {
-			header("Location: ".$link);
+			$this->wf->display_login();
 			exit(0);
 		}
 			
@@ -50,7 +50,7 @@ class wfr_session_session_logon extends wf_route_request {
 		/* mot de passe ou mail incorrect */
 		if($ret == FALSE) {
 			$this->wf->display_login(
-				"Wrong email or password"
+				"Identification failed"
 			);
 		}
 		/* bon login */
@@ -70,28 +70,5 @@ class wfr_session_session_logon extends wf_route_request {
 			$link = $this->wf->linker('/');
 		header("Location: $link");
 		exit(0);
-	}
-	
-	public function validate() {
-		$code = $this->wf->get_var("c");
-		$u = new session_db_user($this->wf);
-		$user = $u->get("activated", $code);
-		$errors = array();
-		
-		if(!isset($user[0]))
-			$errors[] = "Aucun utilisateur avec ce code de validation";
-		
-		$tpl = new core_tpl($this->wf);
-		$validated = false;
-		
-		if(count($errors) < 1) {
-			$u->modify(array("activated" => "true"), $user[0]["id"]);
-			$this->wf->session_mail()->mail_validation($user[0]["id"]);
-			$validated = true;
-		}
-		
-		$tpl->set("validated", $validated);
-		$this->a_admin_html->set_title("Validation du compte");
-		$this->wf->admin_html()->rendering($tpl->fetch("/session/validated"));
 	}
 }

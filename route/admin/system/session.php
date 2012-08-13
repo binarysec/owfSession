@@ -22,14 +22,22 @@ class wfr_session_admin_system_session extends wf_route_request {
 			'name' => array(
 				'name'      => 'Nom',
 				'orderable' => true,
+				'search' => true
+			),
+			'firstname' => array(
+				'name'      => 'Nom',
+				'orderable' => true,
+				'search' => true
 			),
 			'email' => array(
 				'name'      => 'E-mail',
 				'orderable' => true,
+				'search' => true
 			),
 			'username' => array(
 				'name'      => 'Username',
 				'orderable' => true,
+				'search' => true
 			),
 			'remote_address' => array(
 				'name'      => 'Adresse IP',

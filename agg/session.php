@@ -206,7 +206,7 @@ class session extends wf_agg {
 	 * Am i user manager ?
 	 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 	public function iam_manager() {
-		return array_key_exists("session:manage", $this->session_my_perms);
+		return $this->iam_admin() || array_key_exists("session:manage", $this->session_my_perms);
 	}
 	
 	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *

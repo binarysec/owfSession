@@ -103,13 +103,14 @@ class wfm_session extends wf_module {
 	public function admin_options() {
 		$return = array();
 		
-		$info = array(
-			"text" => $this->ts("Change password"),
-			"route" => "/admin/options/session/password",
-			"perm" => array("session:simple"),
-			"type" => "dialog",
-		);
-		$return[] = $info;
+		if($this->core_pref->get_value("allow_pass_change")) {
+			$return[] = array(
+				"text" => $this->ts("Change password"),
+				"route" => "/admin/options/session/password",
+				"perm" => array("session:simple"),
+				"type" => "dialog",
+			);
+		}
 		
 		$info = array(
 			"text" => $this->ts("Update personnals informations"),
@@ -121,7 +122,7 @@ class wfm_session extends wf_module {
 		$return[] = $info;
 		
 		$info = array(
-			"text" => $this->ts("User capatibility"),
+			"text" => $this->ts("User capability"),
 			"route" => "/admin/options/session/userpermission",
 			"perm" => array("session:manage"),
 			"type" => "dialog",
@@ -157,7 +158,7 @@ class wfm_session extends wf_module {
 	public function owf_post_init() {
 		
 		/* register session preferences group */
-		$pref_grp = $this->wf->core_pref()->register_group(
+		$this->core_pref = $pref_grp = $this->wf->core_pref()->register_group(
 			"session", 
 			"Session"
 		);

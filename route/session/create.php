@@ -31,10 +31,14 @@ class wfr_session_session_create extends wf_route_request {
 	 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 	public function show() {
 		
+		$this->registering = is_null($this->a_session->get_perms());
+		
 		/* check if public account creation is allowed */
-		if(!$this->core_pref->get_value("allow_account_creation")) {
-			$this->wf->display_error(403, "Forbidden");
-			exit(0);
+		if(	(!$this->registering && !$this->a_session->iam_manager()) ||
+			!$this->core_pref->get_value("allow_account_creation")
+			) {
+				$this->wf->display_error(403, "Forbidden");
+				exit(0);
 		}
 		
 		$errors;
@@ -42,7 +46,7 @@ class wfr_session_session_create extends wf_route_request {
 		/* get preferences */
 		$this->allow_pass_register = $this->core_pref->get_value('allow_pass_register');
 		$this->allow_user_register = $this->core_pref->get_value('allow_user_register');
-		$this->auto_activate = ! $this->core_pref->get_value('activation_required');
+		$this->auto_activate = !$this->registering || !$this->core_pref->get_value('activation_required');
 		
 		/* set tpl vars */
 		$this->tpl->set("username", '');
@@ -62,7 +66,9 @@ class wfr_session_session_create extends wf_route_request {
 			if(count($errors) < 1) {
 				
 				/* redirect to the proper page */
-				if(! $this->auto_activate)
+				if(! $this->registering) 
+					$this->wf->redirector($this->wf->linker("/admin/system/session"));
+				elseif(! $this->auto_activate)
 					$this->wf->redirector($this->wf->linker("/session/valshow"));
 				else
 					$this->wf->display_login("Account created, please login");
@@ -73,6 +79,7 @@ class wfr_session_session_create extends wf_route_request {
 		else
 			$errors = array();
 			
+		$this->tpl->set("registering", $this->registering);
 		$this->tpl->set("errors", $errors);
 		$this->tpl->set("allow_pass_register", $this->allow_pass_register);
 		$this->tpl->set("allow_user_register", $this->allow_user_register);

@@ -1,17 +1,24 @@
 <style>
 /* 	.ui-dialog .ui-header .ui-btn-icon-notext { display:none;}  */
 	.ui-dialog .ui-footer { font-size: 12px; }
-	.ui-dialog .owf-links { font-size: 12px; text-align: center; }
 
 </style>
 
 <div class="content-secondary">
 	<div id="jqm-homeheader">
 		<h1 id="jqm-logo"><img src="%{link '/data/session/title_adduser.png'}%" alt="%{@ 'Create user'}%" /></h1>
-		<p>%{@ 'Create new user'}%</p>
+		%{if($registering)}%
+			<p>%{@ 'Register'}%</p>
+		%{else}%
+			<p>%{@ 'Create new user'}%</p>
+		%{/if}%
 	</div>
 
-	<p class="intro">%{@ 'In order to create your account you\'ll have to fill the form below. If you are already register please'}% <a href="%{link '/session/login'}%">%{@ 'click here'}%</a></p>
+	%{if($registering)}%
+		<p class="intro">%{@ 'In order to create your account you\'ll have to fill the form below. If you are already register please'}% <a href="%{link '/session/login'}%">%{@ 'login'}%</a></p>
+	%{else}%
+		<p class="intro">%{@ 'In order to create an account you\'ll have to fill the form below.'}%</p>
+	%{/if}%
 
 
 	%{if count($errors) > 0}%
@@ -37,22 +44,22 @@
 			%{/if}%
 			
 			<li data-role="fieldcontain">
-				<label for="firstname">%{@ 'Your first name :'}%</label>
+				<label for="firstname">%{@ 'First name :'}%</label>
 				<input type="text" name="firstname" id="firstname" value="%{$firstname|html}%" placeholder="%{@ 'Firstname'}%" data-mini="true"/>
 			</li>
 			
 			<li data-role="fieldcontain">
-				<label for="name">%{@ 'Your last name :'}%</label>
+				<label for="name">%{@ 'Last name :'}%</label>
 				<input type="text" name="name" id="name" value="%{$name|html}%"  placeholder="%{@ 'Name'}%" data-mini="true"/>
 			</li>
 			
 			<li data-role="fieldcontain">
-				<label for="email">%{@ 'Your Mail address :'}%</label>
+				<label for="email">%{@ 'Email address :'}%</label>
 				<input type="email" name="email" id="email" value="%{$email|html}%" placeholder="%{@ 'Mail address'}%" data-mini="true"/>
 			</li>
 			
 			<li data-role="fieldcontain">
-				<label for="email_confirm">%{@ 'Repeat your mail address :'}%</label>
+				<label for="email_confirm">%{@ 'Repeat email address :'}%</label>
 				<input type="email" name="email_confirm" id="email_confirm" value="%{$email_confirm|html}%"  placeholder="%{@ 'Mail address confirmation'}%" data-mini="true"/>
 			</li>
 			
@@ -69,7 +76,7 @@
 			%{/if}%
 			
 			<li data-role="fieldcontain">
-				<button type="submit" data-theme="b">%{@ 'Create my account'}%</button>
+				<button type="submit" data-theme="b">%{@ 'Create account'}%</button>
 			</li>
 		</ul>
 	</form>

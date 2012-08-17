@@ -8,11 +8,13 @@
 		%{/if}%
 	</div>
 
+	<p class="intro">
 	%{if($registering)}%
-		<p class="intro">%{@ 'In order to create your account you\'ll have to fill the form below. If you are already register please'}% <a href="%{link '/session/login'}%">%{@ 'login'}%</a></p>
+		%{@ 'In order to create your account you\'ll have to fill the form below. If you are already register please'}% <a href="%{link '/session/login'}%">%{@ 'login'}%</a>
 	%{else}%
-		<p class="intro">%{@ 'In order to create an account you\'ll have to fill the form below.'}%</p>
+		%{@ 'In order to create an account you\'ll have to fill the form below.'}%
 	%{/if}%
+	</p>
 
 
 	%{if count($errors) > 0}%
@@ -66,6 +68,13 @@
 			<li data-role="fieldcontain">
 				<label for="pass_confirm">%{@ 'Password repeated:'}%</label>
 				<input type="password" name="pass_confirm" id="pass_confirm" placeholder="%{@ 'Password repeated'}%" data-mini="true"/>
+			</li>
+			%{/if}%
+			
+			%{if(!$registering)}%
+			<li data-role="fieldcontain">
+				<label for="auto_validate">%{@ 'Validated ?'}%</label>
+				<input type="checkbox" name="auto_validate" id="auto_validate" data-mini="true"/>
 			</li>
 			%{/if}%
 			

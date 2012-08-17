@@ -1,4 +1,4 @@
-<small>Bonjour %{$name}%<br>
+<small>Bonjour %{$name}% %{$firstname}%<br>
 <br>
 Vous venez de vous inscrire sur la plate forme d'administration de
 Open Web Framework.</small><small><br>

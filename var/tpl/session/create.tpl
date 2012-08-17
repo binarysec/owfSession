@@ -1,11 +1,13 @@
 <div class="content-secondary">
 	<div id="jqm-homeheader">
 		<h1 id="jqm-logo"><img src="%{link '/data/session/title_adduser.png'}%" alt="%{@ 'Create user'}%" /></h1>
+		<p>
 		%{if($registering)}%
-			<p>%{@ 'Register'}%</p>
+			%{@ 'Register'}%
 		%{else}%
-			<p>%{@ 'Create new user'}%</p>
+			%{@ 'Create new user'}%
 		%{/if}%
+		</p>
 	</div>
 
 	<p class="intro">

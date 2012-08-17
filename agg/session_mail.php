@@ -8,6 +8,10 @@ class session_mail extends wf_agg {
 	//private $current_lang;
 	//private $pref_mail;
 	
+	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+	 *
+	 * loader
+	 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 	public function loader() {
 		$this->a_session = $this->wf->session();
 		$this->core_lang = $this->wf->core_lang();
@@ -32,6 +36,11 @@ class session_mail extends wf_agg {
 		//$this->content .= 'X-Mailer: PHP/'.phpversion()."\n";
 	}
 	
+	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+	 * 
+	 * inscription
+	 * 
+	 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 	public function mail_inscription($uid, $rpass) {
 		/* get user */
 		$user = $this->a_session->user->get(array("id" => $uid));
@@ -56,6 +65,11 @@ class session_mail extends wf_agg {
 		return $this->mail($user, $rpass, "session/mail/validate", $more_vars, "Validation de votre compte OWF");
 	}
 	
+	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+	 * 
+	 * validation
+	 * 
+	 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 	public function mail_validated($uid, $rpass = "") {
 		/* get user */
 		$user = $this->a_session->user->get(array("id" => $uid));
@@ -79,6 +93,39 @@ class session_mail extends wf_agg {
 		return $this->mail($user, $rpass, "session/mail/welcome", $more_vars, "Bienvenue sur Open Web Framework");
 	}
 	
+	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+	 * 
+	 * password changed
+	 * 
+	 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+	public function mail_password_changed($uid, $pass) {
+		/* get user */
+		$user = $this->a_session->user->get(array("id" => $uid));
+		
+		/* sanatize */
+		if(!isset($user[0]))
+			return false;
+		
+		/* some more tpl vars */
+		$pref_mail = $this->wf->core_pref()->register_group("BSF WAF Mail");
+		
+		$more_vars = array(
+			"remote_addr" => $_SERVER['REMOTE_ADDR'],
+			"date" => ucfirst(date("Y-m-d H:i:s")),
+			"date_mail" => ucfirst(date("D, j M Y H:i:s")),
+			"contact_mail" => $pref_mail->get_value("contact_mail"),
+			"tech_mail" => $pref_mail->get_value("tech_mail"),
+		);
+		
+		/* process */
+		return $this->mail($user, $pass, "session/mail/password_recovered", $more_vars, "Password changed");
+	}
+	
+	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+	 * 
+	 * general
+	 * 
+	 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 	private function mail($user, $rpass, $tplpath, $tplvars = array(), $title = "", $enclosed_files = array()) {
 		
 		/* lang stuff */
@@ -102,7 +149,7 @@ class session_mail extends wf_agg {
 		$mail = $tpl->fetch($tplpath);
 		$c_mail = new core_mail(
 			$this->wf,
-			$title,
+			$this->lang->ts($title),
 			$mail,
 			$user[0]["email"],
 			"OWF <".$this->a_session->session_sender.">"

@@ -21,6 +21,9 @@ class wfm_session extends wf_module {
 	
 	public function get_actions() {
 		return(array(
+			
+			/* Login & logout */
+			
 			"/session/login" => array(
 				WF_ROUTE_ACTION,
 				"session/logon",
@@ -37,6 +40,8 @@ class wfm_session extends wf_module {
 				WF_ROUTE_HIDE,
 				array("session:ranon")
 			),
+			
+			/* User creation & validation */
 			
 			"/session/create" => array(
 				WF_ROUTE_ACTION,
@@ -66,6 +71,7 @@ class wfm_session extends wf_module {
 			
 
 			/* Admin session integration */
+			
 			"/admin/options/session" => array(
 				WF_ROUTE_ACTION,
 				"admin/options/session",
@@ -82,6 +88,16 @@ class wfm_session extends wf_module {
 				$this->ts("Gestion des utilisateurs"),
 				WF_ROUTE_SHOW,
 				array("session:manage")
+			),
+			
+			/* Password recovery */
+			"/session/recovery" => array(
+				WF_ROUTE_ACTION,
+				"session/password",
+				"show",
+				$this->ts("Récupération du mot de passe"),
+				WF_ROUTE_HIDE,
+				array("session:ranon")
 			),
 		));
 	}

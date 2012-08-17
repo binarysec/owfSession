@@ -1,9 +1,3 @@
-<style>
-/* 	.ui-dialog .ui-header .ui-btn-icon-notext { display:none;}  */
-	.ui-dialog .ui-footer { font-size: 12px; }
-
-</style>
-
 <div class="content-secondary">
 	<div id="jqm-homeheader">
 		<h1 id="jqm-logo"><img src="%{link '/data/session/title_adduser.png'}%" alt="%{@ 'Create user'}%" /></h1>

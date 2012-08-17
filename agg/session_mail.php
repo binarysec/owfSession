@@ -102,19 +102,18 @@ class session_mail extends wf_agg {
 		$mail = $tpl->fetch($tplpath);
 		$c_mail = new core_mail(
 			$this->wf,
-			"OWF <".$this->a_session->session_sender.">",
-			$user[0]["email"],
 			$title,
-			$mail
+			$mail,
+			$user[0]["email"],
+			"OWF <".$this->a_session->session_sender.">"
 		);
 		
 		foreach($enclosed_files as $name => $path)
 			$c_mail->attach($path, $name);
 		
 		/* send mail */
-		//$c_mail->render();
-		//$c_mail->send();
-		// do not send yet
+		$c_mail->render();
+		$c_mail->send();
 		
 		return true;
 	}

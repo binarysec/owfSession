@@ -34,11 +34,15 @@ class wfr_session_session_create extends wf_route_request {
 		$this->registering = is_null($this->a_session->get_perms());
 		
 		/* check if public account creation is allowed */
-		if(	(!$this->registering && !$this->a_session->iam_manager()) ||
-			!$this->core_pref->get_value("allow_account_creation")
-			) {
+		if($this->registering) {
+			if(!$this->core_pref->get_value("allow_account_creation")) {
 				$this->wf->display_error(403, "Forbidden");
 				exit(0);
+			}
+		}
+		else if(!$this->a_session->iam_manager()) {
+			$this->wf->display_error(403, "Forbidden");
+			exit(0);
 		}
 		
 		$errors;
@@ -47,6 +51,10 @@ class wfr_session_session_create extends wf_route_request {
 		$this->allow_pass_register = $this->core_pref->get_value('allow_pass_register');
 		$this->allow_user_register = $this->core_pref->get_value('allow_user_register');
 		$this->auto_activate = !$this->registering || !$this->core_pref->get_value('activation_required');
+		$auto_val = $this->wf->get_var("auto_validate");
+		
+		if($auto_val == "on" && !$this->registering)
+			$this->auto_activate = true;
 		
 		/* set tpl vars */
 		$this->tpl->set("username", '');
@@ -66,7 +74,7 @@ class wfr_session_session_create extends wf_route_request {
 			if(count($errors) < 1) {
 				
 				/* redirect to the proper page */
-				if(! $this->registering) 
+				if(! $this->registering)
 					$this->wf->redirector($this->wf->linker("/admin/system/session"));
 				elseif(! $this->auto_activate)
 					$this->wf->redirector($this->wf->linker("/session/valshow"));
@@ -85,13 +93,13 @@ class wfr_session_session_create extends wf_route_request {
 		$this->tpl->set("allow_user_register", $this->allow_user_register);
 		
 		/* Add back button */
-// 		$this->a_admin_html->set_backlink($this->wf->linker('/admin/system'));
+		$this->a_admin_html->set_backlink($this->wf->linker('/admin/system/session/'));
 		
 		/* rendering using my template */
 		$this->a_admin_html->rendering(
 			$this->tpl->fetch('session/create'),
-			false,
-			false
+			!$this->registering,
+			!$this->registering
 		);
 		
 		exit(0);

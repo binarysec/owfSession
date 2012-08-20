@@ -12,7 +12,7 @@ class session_db_user extends session_driver_user {
 	public function __construct($wf) {
 		$this->wf = $wf;
 		
-		$struct = array(
+		$this->struct = $struct = array(
 			"id" => WF_PRI,
 			"username" => WF_VARCHAR,
 			"password" => WF_VARCHAR,
@@ -234,7 +234,61 @@ class session_db_user extends session_driver_user {
 		return($res);
 	}
 	
+	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+	 *
+	 * Get all users by permission type
+	 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+	public function get_by_perm($perm, array $where = array(), array $fields = array(), $nb = 0, $offset = 0) {
+		
+		/* create cache line */
+		$cl = "session_get_by_perm";
+		foreach($where as $k => $v)
+			$cl .= "_$k:$v";
+		
+		/* get cache */
+		if(($cache = $this->gcache->get($cl))) {
+			return($cache);
+		}
+		
+		/* build query */
+		$q = new core_db_adv_select();
+		$q->alias('u', "session_user");
+		$q->alias('p', "session_perm");
+		$q->alias('pt', "session_perm_type");
+		$q->do_comp("pt.name", "=", $perm);
+		$q->do_comp("pt.id", "==", "p.obj_type");
+		$q->do_comp("p.ptr_id", "==", "u.id");
+		
+		if(!empty($where))
+			$q->where($where);
+		
+		if(!empty($fields))
+			$q->fields = $fields;
+		
+		if($nb > 0 && $offset > 0)
+			$q->limit($nb, $offset);
+		
+		$this->wf->db->query($q);
+		$res = $q->get_result();
+		
+		/* store cache */
+		if(count($res) > 0)
+			$this->gcache->store($cl, $res);
+		
+		$ret = array();
+		foreach($res as $row) {
+			$ret[] = array();
+			foreach($this->struct as $data => $v)
+				$ret[][$data] = $row["u.$data"];
+		}
+		
+		return($ret);
+	}
 	
+	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+	 *
+	 * 
+	 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 	public function generate_ref($name,$table_name,$key_field=NULL) {
 		if(!$key_field)$key_field="ref";
 		

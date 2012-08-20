@@ -93,6 +93,9 @@ class wfr_session_session_create extends wf_route_request {
 		$this->tpl->set("allow_user_register", $this->allow_user_register);
 		
 		/* Add back button */
+		$this->a_admin_html->set_title($this->lang->ts(
+			($this->registering ? "Registration" : "Adding user")
+		));
 		$this->a_admin_html->set_backlink($this->wf->linker('/admin/system/session/'));
 		
 		/* rendering using my template */

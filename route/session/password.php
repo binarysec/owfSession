@@ -36,12 +36,12 @@ class wfr_session_session_password extends wf_route_request {
 		/* init vars and get parameters */
 		$action = $this->wf->get_var("action");
 		$id = intval($this->wf->get_var("id"));
+		$code = $this->wf->get_var("c");
 		$allowed = false;
 		$errors = array();
 		$firstname = '';
 		$lastname = '';
 		$email = '';
-		$code = '';
 		$this->user = null;
 		
 		/* process vars and sanatize */
@@ -59,9 +59,15 @@ class wfr_session_session_password extends wf_route_request {
 			
 			$this->user = $this->search($errors);
 			
-			/* send an email ?? */
 			if(empty($errors)) {
+				// send an email ??
 				//$this->session_mail->mail_inscription($uid, $password);
+				
+				$code = $this->wf->generate_password(16);
+				$this->a_session->user->modify(
+					array("password_recovery" => $code),
+					$this->user['id']
+				);
 			}
 			
 			/* step back */
@@ -108,7 +114,6 @@ class wfr_session_session_password extends wf_route_request {
 			$firstname = $this->user['firstname'];
 			$lastname = $this->user['name'];
 			$email = $this->user['email'];
-			$code = sha1($this->user['password']);
 		}
 		
 		/* admin settings */
@@ -170,8 +175,16 @@ class wfr_session_session_password extends wf_route_request {
 			if(strlen($pass) > 5) {
 				if($pass == $pass_confirm) {
 					if($id > 0 && !is_null($this->user)) {
-						if($code == sha1($this->user['password'])) {
-							$this->a_session->user->modify(array("password" => $pass), $id);
+						if($code == $this->user['password_recovery']) {
+							
+							$this->a_session->user->modify(
+								array(
+									"password" => $pass,
+									"password_recovery" => "",
+								),
+								$id
+							);
+							
 							return true;
 						}
 						else

@@ -30,7 +30,8 @@ class session_db_user extends session_driver_user {
 			"remote_hostname" => WF_VARCHAR,
 			"forwarded_remote_address" => WF_BIGINT,
 			"forwarded_remote_hostname" => WF_VARCHAR,
-			"activated" => WF_VARCHAR
+			"activated" => WF_VARCHAR,
+			"password_recovery" => WF_VARCHAR,
 		);
 		$this->wf->db->register_zone(
 			"session_user", 

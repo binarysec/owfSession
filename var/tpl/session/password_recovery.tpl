@@ -1,6 +1,6 @@
 <div class="content-secondary">
 	<div id="jqm-homeheader">
-		<h1 id="jqm-logo"><img src="%{link '/data/session/title_adduser.png'}%" alt="%{@ 'Recover password'}%" /></h1>
+		<h1 id="jqm-logo"><img src="%{link '/data/session/title_recovery.png'}%" alt="%{@ 'Recover password'}%" /></h1>
 		<p>Recover your password</p>
 	</div>
 	

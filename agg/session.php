@@ -280,7 +280,7 @@ class session extends wf_agg {
 		$update = array(
 			"remote_address"  => ip2long($_SERVER["REMOTE_ADDR"]),
 // 			"remote_hostname" => gethostbyaddr($_SERVER["REMOTE_ADDR"]),
-			"lang"            => $se['code'],
+//			"lang"            => $se['code'],
 			"session_time"    => time()
 		);
 		$res = $this->user->modify($update, (int)$this->session_me["id"]);

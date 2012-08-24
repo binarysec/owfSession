@@ -12,7 +12,7 @@
 	<label for="pw" class="ui-hidden-accessible">New password:</label>
 	<input type="password" name="new_pass" id="pw" value="" placeholder="New password" />
 
-	<label for="pw" class="ui-hidden-accessible">Confirme password:</label>
+	<label for="pw" class="ui-hidden-accessible">Confirm password:</label>
 	<input type="password" name="confirm_pass" id="pw" value="" placeholder="Confirm password" />
 	
 	<button type="submit" data-theme="b">Update password</button>

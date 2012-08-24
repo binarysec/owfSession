@@ -24,7 +24,7 @@
 		</select> 
 	</li>
 %{/foreach}%
-	
+	</ul>
 	<button type="submit" data-theme="b">Update permissions</button>
 </form>
 </center>

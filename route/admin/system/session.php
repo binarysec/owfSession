@@ -7,6 +7,8 @@ class wfr_session_admin_system_session extends wf_route_request {
 		$this->a_admin_html = $this->wf->admin_html();
 		$this->a_core_cipher = $this->wf->core_cipher();
 		$this->a_session = $this->wf->session();
+		
+		$this->lang = $this->wf->core_lang()->get_context("admin/session");
 	}
 	
 	
@@ -70,6 +72,8 @@ class wfr_session_admin_system_session extends wf_route_request {
 		);
 	
 		$tpl->set_vars($in);
+		
+		$this->a_admin_html->set_title($this->lang->ts("User management"));
 		
 		/* Add back button */
 		$this->a_admin_html->set_backlink($this->wf->linker('/admin/system'));

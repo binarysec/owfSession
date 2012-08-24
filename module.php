@@ -148,14 +148,15 @@ class wfm_session extends wf_module {
 		);
 		$return[] = $info;
 		
-		$info = array(
-			"text" => $this->ts("Delete user"),
-			"route" => "/admin/options/session/delete",
-			"perm" => array("session:simple"),
-			"type" => "dialog",
-			"icon" => "delete"
-		);
-		$return[] = $info;
+		$uid = (int) $this->wf->get_var("uid");
+		if($uid > 0 && $uid != (int) $this->wf->session()->session_me["id"])
+			$return[] = array(
+				"text" => $this->ts("Delete user"),
+				"route" => "/admin/options/session/delete",
+				"perm" => array("session:simple"),
+				"type" => "dialog",
+				"icon" => "delete"
+			);
 		
 		return($return);
 	}

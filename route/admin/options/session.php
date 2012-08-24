@@ -77,6 +77,17 @@ class wfr_session_admin_options_session extends wf_route_request {
 				$this->a_admin_html->set_title($this->lang->ts('User permission'));
 				$tpl_name = 'admin/options/userpermission';
 				break;
+			
+			case "delete":
+				if($action == "mod") {
+					$this->a_session->user->remove($this->uid);
+					$this->wf->redirector($this->wf->linker("/admin/system/session"));
+					exit(0);
+				}
+				
+				$this->a_admin_html->set_title($this->lang->ts('Delete user'));
+				$tpl_name = 'admin/options/userdelete';
+				break;
 				
 			default:
 				exit(0);

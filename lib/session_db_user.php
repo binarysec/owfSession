@@ -145,6 +145,8 @@ class session_db_user extends session_driver_user {
 			array("id" => (int)$uid)
 		);
 		$this->wf->db->query($q);
+		
+		$this->session->perm->user_remove("ptr_id", (int) $uid);
 
 		return(TRUE);
 	}

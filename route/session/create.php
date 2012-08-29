@@ -62,6 +62,7 @@ class wfr_session_session_create extends wf_route_request {
 		$this->tpl->set("name", '');
 		$this->tpl->set("email", '');
 		$this->tpl->set("email_confirm", '');
+		$this->tpl->set("validated", $auto_val != NULL ? $auto_val : false);
 		
 		/* addition */
 		$action = $this->wf->get_var("action");

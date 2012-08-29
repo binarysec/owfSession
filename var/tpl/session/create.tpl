@@ -76,7 +76,7 @@
 			%{if(!$registering)}%
 			<li data-role="fieldcontain">
 				<label for="auto_validate">%{@ 'Validated ?'}%</label>
-				<input type="checkbox" name="auto_validate" id="auto_validate" data-mini="true"/>
+				<input type="checkbox" name="auto_validate" id="auto_validate" data-mini="true" %{if($validated == "on")}%checked="checked"%{/if}% />
 			</li>
 			%{/if}%
 			

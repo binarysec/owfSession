@@ -155,21 +155,18 @@ class wfr_session_admin_options_session extends wf_route_request {
 		}
 		
 		if($this->a_session->iam_admin()) {
-			if($update["perm"] < 0 && $update["perm"] > 3) {
+			if($update["perm"] == SESSION_USER_GOD)
+				$perm = "session:god";
+			else if($update["perm"] == SESSION_USER_ADMIN)
+				$perm = "session:admin";
+			else if($update["perm"] == SESSION_USER_SIMPLE)
+				$perm = "session:simple";
+			else if($update["perm"] == SESSION_USER_WS)
+				$perm = "session:ws";
+			else {
 				$this->error = $this->lang->ts("Invalid account type");
 				return(false);
 			}
-			
-			if($update["perm"] == 0)
-				$perm = "session:god";
-			else if($update["perm"] == 1)
-				$perm = "session:admin";
-			else if($update["perm"] == 2)
-				$perm = "session:simple";
-			else if($update["perm"] == 3)
-				$perm = "session:ws";
-			else
-				exit(0);
 				
 			$perms = $this->a_session->perm->user_get($this->uid);
 			

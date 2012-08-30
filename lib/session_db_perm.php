@@ -168,8 +168,8 @@ class session_db_perm extends session_driver_perm {
 		}
 
 		/* get cache */
-		if(($cache = $this->gcache->get($cl)))
-			return($cache);
+		//if(($cache = $this->gcache->get($cl)))
+			//return($cache);
 			
 		/* executing request */
 		$q = new core_db_select("session_perm");
@@ -194,7 +194,7 @@ class session_db_perm extends session_driver_perm {
 		}
 
 		/* store cache */
-		$this->gcache->store($cl, $ret);
+		//$this->gcache->store($cl, $ret);
 		
 		return($ret);
 	}

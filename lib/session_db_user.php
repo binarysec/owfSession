@@ -218,9 +218,8 @@ class session_db_user extends session_driver_user {
 // 		}
 
 		/* get cache */
-		if(($cache = $this->gcache->get($cl))) {
-			return($cache);
-		}
+		//if(($cache = $this->gcache->get($cl)))
+			//return($cache);
 		
 		/* try query */
 		$q = new core_db_select("session_user");
@@ -230,8 +229,8 @@ class session_db_user extends session_driver_user {
 		$res = $q->get_result();
 
 		/* store cache */
-		if(count($res) > 0)
-			$this->gcache->store($cl, $res);
+		//if(count($res) > 0)
+			//$this->gcache->store($cl, $res);
 			
 		return($res);
 	}

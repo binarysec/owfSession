@@ -95,10 +95,32 @@ class session_mail extends wf_agg {
 	
 	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 	 * 
+	 * password recovery request
+	 * 
+	 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+	public function mail_password_recovery_request($user, $code) {
+		/* some more tpl vars */
+		$pref_mail = $this->wf->core_pref()->register_group("BSF WAF Mail");
+		
+		$more_vars = array(
+			"remote_addr" => $_SERVER['REMOTE_ADDR'],
+			"date" => ucfirst(date("Y-m-d H:i:s")),
+			"date_mail" => ucfirst(date("D, j M Y H:i:s")),
+			"contact_mail" => $pref_mail->get_value("contact_mail"),
+			"tech_mail" => $pref_mail->get_value("tech_mail"),
+			"link" => $this->wf->linker("/session/recovery", true)."?c=$code",
+		);
+		
+		/* process */
+		return $this->mail($user, "", "session/mail/password_recovery", $more_vars, "Requesting a password change");
+	}
+		
+	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+	 * 
 	 * password changed
 	 * 
 	 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-	public function mail_password_changed($uid, $pass) {
+	public function mail_password_recovered($uid, $pass) {
 		/* get user */
 		$user = $this->a_session->user->get(array("id" => $uid));
 		

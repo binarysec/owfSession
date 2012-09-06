@@ -16,31 +16,3 @@ Notre &eacute;quipe de techniciens reste &agrave; votre disposition 24h/24 et
 7j/7. <br>
 <br>
 Merci de votre confiance. </small> <br>
-<br>
-<table border="0" cellpadding="2" cellspacing="2">
-	<tbody>
-		<tr>
-			<td valign="top">
-				<img src="cid:part1.07090200.05060806@binarysec.com" alt="">
-			</td>
-			
-			<td valign="top">
-				<small><small>
-					<b>Support Client BinarySEC</b><br>
-					Email: <a class="moz-txt-link-abbreviated" href="mailto:%{$tech_mail}%">%{$tech_mail}%</a>
-				</small></small>
-			</td>
-			
-			<td valign="top">
-				<small><small>
-					<b>BinarySEC SAS France</b><br>
-					<a class="moz-txt-link-freetext" href="http://www.binarysec.com/">http://www.binarysec.com/</a>
-					<br>
-					4, rue Franck Camille Cadet <br>
-					97427 &Eacute;tang-Sal&eacute; - R&eacute;union
-				</small></small>
-			</td>
-		</tr>
-	</tbody>
-</table>
-<small><small>%{$date}%</small></small>

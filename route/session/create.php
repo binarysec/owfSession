@@ -23,6 +23,19 @@ class wfr_session_session_create extends wf_route_request {
 		);
 		
 		$this->tpl = new core_tpl($this->wf);
+		
+		/* ini parameters */
+		$this->allow_pass_register = isset($this->wf->ini_arr['session']['allow_pass_register']) ?
+			$this->wf->ini_arr['session']['allow_pass_register'] : false;
+		
+		$this->allow_user_register = isset($this->wf->ini_arr['session']['allow_user_register']) ?
+			$this->wf->ini_arr['session']['allow_user_register'] : false;
+		
+		$this->allow_account_creation = isset($this->wf->ini_arr['session']['allow_account_creation']) ?
+			$this->wf->ini_arr['session']['allow_account_creation'] : false;
+		
+		$this->activation_required = isset($this->wf->ini_arr['session']['activation_required']) ?
+			$this->wf->ini_arr['session']['activation_required'] : false;
 	}
 
 	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -35,7 +48,7 @@ class wfr_session_session_create extends wf_route_request {
 		
 		/* check if public account creation is allowed */
 		if($this->registering) {
-			if(!$this->core_pref->get_value("allow_account_creation")) {
+			if(!$this->allow_account_creation) {
 				$this->wf->display_error(403, "Forbidden");
 				exit(0);
 			}
@@ -48,9 +61,7 @@ class wfr_session_session_create extends wf_route_request {
 		$errors;
 		
 		/* get preferences */
-		$this->allow_pass_register = $this->core_pref->get_value('allow_pass_register');
-		$this->allow_user_register = $this->core_pref->get_value('allow_user_register');
-		$this->auto_activate = !$this->registering || !$this->core_pref->get_value('activation_required');
+		$this->auto_activate = !$this->registering || !$this->activation_required;
 		$auto_val = $this->wf->get_var("auto_validate");
 		
 		if($auto_val == "on" && !$this->registering)
@@ -123,7 +134,7 @@ class wfr_session_session_create extends wf_route_request {
 		$phone = null; // not provided yet
 		
 		/* validate username */
-		if($this->core_pref->get_value('allow_user_register')) {
+		if($this->allow_user_register) {
 			
 			/* check parameter */
 			if(strlen($username) <= 5)
@@ -169,7 +180,7 @@ class wfr_session_session_create extends wf_route_request {
 		}
 		
 		/* validate the password */
-		if($this->core_pref->get_value('allow_pass_register')) {
+		if($this->allow_pass_register) {
 			if(strlen($password) <= 6)
 				$errors[] = "Your password is too short";
 			

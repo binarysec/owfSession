@@ -213,15 +213,20 @@ class session extends wf_agg {
 	 *
 	 * User online?
 	 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-	public function is_online($uid=NULL) {
-		if($uid) {
-			$res = $this->user->get("id", $uid);
-			$res = $res[0];
+	public function is_online($uid = 0) {
+		$user = null;
+		
+		if($uid > 0) {
+			$user = $this->user->get("id", (int) $uid);
+			$user = isset($user[0]) ? $user[0] : null;
 		}
-		else
-			$res = $this->get_user();
-		$online = time() - $res['session_time'];
-		return($online < $this->session_timeout);
+		
+		if($user == null)
+			$user = $this->get_user();
+		
+		$online = time() - (int) $user['session_time'];
+		
+		return $user["id"] > 0 && $online < $this->session_timeout;
 	}
 	
 	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *

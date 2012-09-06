@@ -121,7 +121,9 @@ class wfm_session extends wf_module {
 	public function admin_options() {
 		$return = array();
 		
-		if($this->core_pref->get_value("allow_pass_change")) {
+		if(	isset($this->wf->ini_arr['session']['allow_pass_change']) &&
+			$this->wf->ini_arr['session']['allow_pass_change']
+			) {
 			$return[] = array(
 				"text" => $this->ts("Change password"),
 				"route" => "/admin/options/session/password",
@@ -215,29 +217,5 @@ class wfm_session extends wf_module {
 			CORE_PREF_NUM,
 			604800 // a week
 		);
-		
-		/* register ini vars as core_pref with default values */
-		
-		$existing_options = array(
-			"allow_anonymous",
-			"allow_account_creation",
-			"allow_pass_recovering",
-			"allow_pass_register",
-			"allow_pass_change",
-			"allow_user_register",
-			"activation_required",
-		);
-		
-		foreach($this->wf->ini_arr['session'] as $k => $v) {
-			if(in_array($k, $existing_options)) {
-				$pref_grp->register(
-					$k,
-					$k,
-					CORE_PREF_BOOL,
-					$v
-				);
-				$pref_grp->set_value($k, $v);
-			}
-		}
 	}
 }

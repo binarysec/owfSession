@@ -50,13 +50,7 @@ class session_mail extends wf_agg {
 			return false;
 		
 		/* validation link */
-		$link = "http://";
-		$link .= $this->wf->core_pref()->register_group("core")->get_value("site_name");
-		$link .= $this->wf->linker("/session/validate")."?c=".$user[0]["activated"];
-		
-		/* easywaf linker hack .. */
-		if(isset($this->wf->modules["easywaf"]))
-			$link = $this->wf->linker("/session/validate")."?c=".$user[0]["activated"];
+		$link = $this->wf->linker("/session/validate", true)."?c=".$user[0]["activated"];
 		
 		/* some more tpl vars */
 		$more_vars = array("validate" => $link);

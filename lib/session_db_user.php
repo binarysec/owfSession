@@ -63,7 +63,8 @@ class session_db_user extends session_driver_user {
 				"Open Web Framework", 
 				"user",
 				"session:god",
-				"0262458307"
+				"0262458307",
+				true
 			);
 			$this->wf->log(
 				"Adding Default user - Login : OWF - Password : $pass"

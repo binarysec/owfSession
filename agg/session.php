@@ -418,14 +418,22 @@ class session extends wf_agg {
 	 *
 	 * Get a registered permissions view
 	 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-	public function get_pview($view) {
-		/** \todo caching */
-		$r = $this->wf->execute_hook("session_permissions_view");
-		foreach($r as $h) {
-			if($h[$view])
-				return($h);
-		}
-		return(NULL);
+	public function get_pview($view = null) {
+		// todo caching
+		$ret = array();
+		$pviews = array_filter($this->wf->execute_hook("session_permissions_view"));
+		
+		/* if no pview registered, return false */		
+		if(count($pviews) < 1)
+			return false;
+		
+		foreach($pviews as $pview)
+			if($view != null && isset($pview[$view]))
+				return $pview;
+			else
+				$ret = array_merge($ret, $pview);
+		
+		return $ret;
 	}
 	
 	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *

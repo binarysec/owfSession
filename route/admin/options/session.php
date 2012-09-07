@@ -50,8 +50,10 @@ class wfr_session_admin_options_session extends wf_route_request {
 				break;
 				
 			case "userpermission":
-				if(!$this->a_session->iam_admin())
+				if(!$this->a_session->iam_admin()) {
+					$this->wf->display_error(403, $this->lang->ts("You are not an administrator"));
 					exit(0);
+				}
 					
 				$perms = $this->a_session->perm->user_get($this->uid);
 				
@@ -76,6 +78,31 @@ class wfr_session_admin_options_session extends wf_route_request {
 
 				$this->a_admin_html->set_title($this->lang->ts('User permission'));
 				$tpl_name = 'admin/options/userpermission';
+				break;
+			
+			case "userpview":
+				if(!$this->a_session->iam_admin()) {
+					$this->wf->display_error(403, $this->lang->ts("You are not an administrator"));
+					exit(0);
+				}
+					
+				//$perms = $this->a_session->perm->user_get($this->uid);
+				
+				if($action == "mod")
+					$this->process_pview();//$perms);
+					
+				/* get session permissions */
+				$pviews = $this->a_session->get_pview();
+				$results = array();
+				
+				foreach($pviews as $name => $pview) {
+					$o = new ${"name"}($this->wf, $name, $this->uid);
+					$results[$name] = &$o->resolv;
+				}
+				
+				$tpl->set("results", $results);
+				$this->a_admin_html->set_title($this->lang->ts('User pview'));
+				$tpl_name = 'admin/options/userpview';
 				break;
 			
 			case "delete":
@@ -198,10 +225,7 @@ class wfr_session_admin_options_session extends wf_route_request {
 		exit(0);
 	}
 	
-	
 	private function process_permissions(&$perms) {
-		
-		
 		/* update session permissions */
 		$ret = $this->wf->execute_hook("session_permissions");
 		foreach($ret as $sp_perms) {
@@ -233,9 +257,9 @@ class wfr_session_admin_options_session extends wf_route_request {
 		
 		$this->wf->redirector($this->a_core_cipher->get_var("back"));
 		exit(0);
-
 	}
 
-				
+	private function process_pview() {
+	}
+	
 }
-

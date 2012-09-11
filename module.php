@@ -160,14 +160,14 @@ class wfm_session extends wf_module {
 				"icon" => "delete"
 			);
 		
-		if($this->wf->session()->get_pview())
+		/*if($this->wf->session()->get_pview())
 			$return[] = array(
 				"text" => $this->ts("User permissions"),
 				"route" => "/admin/options/session/userpview",
 				"perm" => array("session:manage"),
 				"type" => "dialog",
 				"icon" => "gear"
-			);
+			);*/
 		
 		return($return);
 	}

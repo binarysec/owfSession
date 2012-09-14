@@ -44,7 +44,7 @@ class wfr_session_session_create extends wf_route_request {
 	 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 	public function show() {
 		
-		$this->registering = is_null($this->a_session->get_perms());
+		$this->registering = !$this->a_session->is_online();
 		
 		/* check if public account creation is allowed */
 		if($this->registering) {
@@ -53,10 +53,8 @@ class wfr_session_session_create extends wf_route_request {
 				exit(0);
 			}
 		}
-		else if(!$this->a_session->iam_manager()) {
-			$this->wf->display_error(403, "Forbidden");
-			exit(0);
-		}
+		elseif(!$this->a_session->iam_manager())
+			$this->registering = true;
 		
 		$errors;
 		

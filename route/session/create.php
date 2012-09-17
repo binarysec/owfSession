@@ -59,10 +59,10 @@ class wfr_session_session_create extends wf_route_request {
 		$errors;
 		
 		/* get preferences */
-		$this->auto_activate = !$this->registering || !$this->activation_required;
+		$this->auto_activate = !$this->activation_required;
 		$auto_val = $this->wf->get_var("auto_validate");
 		
-		if($auto_val == "on" && !$this->registering)
+		if(!$this->registering && $auto_val == "on")
 			$this->auto_activate = true;
 		
 		/* set tpl vars */

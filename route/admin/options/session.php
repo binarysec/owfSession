@@ -192,6 +192,7 @@ class wfr_session_admin_options_session extends wf_route_request {
 				
 				/* render */
 				$this->a_admin_html->set_title($obj->get_title());
+				$this->a_admin_html->set_backlink($this->a_core_cipher->get_var("back"));
 				$this->a_admin_html->rendering($tpl->fetch("session/pview"));
 				exit(0);
 				

@@ -16,8 +16,16 @@
 					pvvalue: checked,
 				},
 				function(data, textStatus, jqXHR) {
-					// Treat errors here
-				}
+					if(textStatus == 'success') {
+						var message = 'Success updating "'+data["name"]+'" to "'+data["value"]+'".';
+						%{msg message}%
+					}
+					else if(textStatus == 'error')
+						%{msg "An error occured while updating permission", true}%
+					else if(textStatus == 'timeout')
+						%{msg "Connection timed out", true}%
+				},
+				"json"
 			);
 			return false;
 		});

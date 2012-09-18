@@ -383,7 +383,7 @@ class wfr_session_admin_options_session extends wf_route_request {
 		/* update array */
 		foreach($current_perms as $name => $checked)
 			if($name == $pvname)
-				$current_perms[$name] = $pvvalue ? "on" : "off";
+				$current_perms[$name] = $pvvalue == "true" ? "on" : "off";
 		
 		/* update database */
 		$this->a_session->perm->user_mod(
@@ -395,6 +395,11 @@ class wfr_session_admin_options_session extends wf_route_request {
 				"obj_id" => (int) $this->oid
 			)
 		);
+		
+		echo json_encode(array(
+			"name" => $pvname,
+			"value" => $pvvalue,
+		));
 		
 		return 0;
 	}

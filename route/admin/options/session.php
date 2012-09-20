@@ -93,105 +93,109 @@ class wfr_session_admin_options_session extends wf_route_request {
 				$errors = array();
 				$default_perms = array();
 				$pviewvar = $this->wf->get_var("pviewvar");
-				$this->oid = $oid = $this->wf->get_var($pviewvar != null ? $pviewvar : "oid");
-				$this->pview_name = $pview_name = $this->wf->get_var("pview");
+				$this->oid = $this->wf->get_var($pviewvar != null ? $pviewvar : "oid");
+				$this->pview_name = $this->wf->get_var("pview");
+				$this->uid = (int) $this->wf->get_var("uid");
+				if($this->uid > 0)
+					$this->user = current($this->a_session->user->get("id", $this->uid));
 				
 				/* not enough parameters */
-				if($oid == null || $pview_name == null) {
-					$this->wf->display_error(404, $this->lang->ts("Not enough parameters"));
-					exit(0);
-				}
+				if($this->oid == null)
+					$this->wf->display_error(404, $this->lang->ts("Parameter \"oid\" is missing"), true);
+				elseif($this->pview_name == null)
+					$this->wf->display_error(404, $this->lang->ts("Parameter \"pview\" is missing"), true);
 				
 				/* look for permisison */
-				$this->pview = $pview = $this->a_session->get_pview($pview_name);
-				if(!$pview) {
-					$this->wf->display_error(404, $this->lang->ts("Permission not found"));
-					exit(0);
-				}
+				$this->pview = $this->a_session->pview->get_pview($this->pview_name);
 				
-				/* get perms */
-				$this->pview_perm_name = $pview_perm_name = $pview[$pview_name];
-				$pview_perm = $this->a_session->perm->get_type(
-					"name", 
-					$pview_perm_name
-				);
-				
-				if(!isset($pview_perm[0])) {
-					$this->wf->display_error(404, $this->lang->ts("Permission not found"));
-					exit(0);
-				}
-				else
-					$this->pview_perm = $pview_perm = $pview_perm[0];
-				
-				$this->obj = $obj = new ${"pview_name"}($this->wf, $pview_name, $oid);
+				if(!$this->pview)
+					$this->wf->display_error(404, $this->lang->ts("Permission \"$this->pview_name\" not found"), true);
 				
 				/* process actions */
 				if($action == "add") {
-					$ret = $this->process_pview_add();
-					if($ret)
-						$errors[] = $ret;
-				}
-				elseif($action == "del") {
-					$ret = $this->process_pview_del();
-					if($ret)
-						$errors[] = $ret;
-				}
-				elseif($action == "mod")
-					exit($this->process_pview());
-				
-				/* search pviews */
-				$q = new core_db_adv_select();
-				$q->alias("p", "session_perm");
-				$q->do_comp("p.ptr_type", "=", SESSION_PERM_USER);
-				$q->do_comp("p.obj_type", "=", $this->pview_perm["id"]);
-				$q->do_comp("p.obj_id", "=", $oid);
-				$this->wf->db->query($q);
-				$results = array();
-				foreach($q->get_result() as $datum) {
-					$user = $this->a_session->user->get("id", $datum["ptr_id"]);
-					$user = $user[0];
-					$perm = $this->a_session->perm->user_get($datum["ptr_id"], null, $oid);
+					$search = $this->wf->get_var("user");
+					$user = $this->a_session->user->get("username", $search);
+					if(!count($user))
+						$user = $this->a_session->user->get("email", $search);
 					
-					/* perm matrix for user */
-					$perm_arr = $perm[$pview[$pview_name]][0]["value"];
+					if(!count($user))
+						$errors[] = "User not found";
+					
+					if(empty($errors))
+						$this->pview->add($user[0]["id"], $this->oid);
+				}
+				elseif($action == "del" && $this->user != null) {
+					$this->a_session->perm->user_remove(array(
+						"ptr_id" => (int) $this->uid,
+						"obj_type" => $this->pview->perm["id"],
+						"obj_id" => (int) $this->oid
+					));
+				}
+				elseif($action == "mod" && $this->user != null) {
+					$pvname = $this->wf->get_var("pvname");
+					$pvvalue = $this->wf->get_var("pvvalue");
+					
+					$this->pview->set(
+						$this->uid,
+						$this->oid,
+						array($pvname => $pvvalue == "true" ? "on" : "off")
+					);
+					
+					echo json_encode(array(
+						"name" => $pvname,
+						"value" => $pvvalue,
+					));
+					
+					exit(0);
+				}
+				
+				$data = array();
+				$results = $this->pview->get_data($this->oid);
+				
+				/* adapt struct */
+				
+				foreach($results as $perms) {
+					$user = current($this->a_session->user->get("id", $perms["ptr_id"]));
+					
+					$perm_arr = $perms["data"];
 					
 					/* if not defined yet, build and save default perms */
 					if($perm_arr == null) {
-						if(empty($default_perms))
-							foreach($obj->resolv as $name => $idontcareaboutthisvar)
-								$default_perms[$name] = "off";
-						$perm_arr = $default_perms;
+						$perm_arr = $this->pview->default_struct;
 						$this->a_session->perm->user_mod(
 							array("data" => serialize($perm_arr)),
 							array(
 								"ptr_type" => SESSION_PERM_USER,
 								"ptr_id" => $user["id"],
-								"obj_type" => $pview_perm["id"],
-								"obj_id" => (int) $oid
+								"obj_type" => $this->pview->perm["id"],
+								"obj_id" => (int) $this->oid
 							)
 						);
 					}
 					
 					/* save to an array for the tpl */
-					$results[] = array(
+					$data[] = array(
 						"user" => $user,
 						"perm" => $perm_arr,
 						"create_time" => date(
 							DATE_RFC822,
-							isset($datum['create_t']) ? $datum['create_t'] : $datum['t.create_t']
+							isset($perms['create_t']) ? $perms['create_t'] : $perms['t.create_t']
 						)
 					);
 				}
 				
+				$title = $this->pview->get_title();
+				
 				/* set tpl vars */
-				$tpl->set("results", $results);
+				$tpl->set("results", $data);
 				$tpl->set("errors", $errors);
-				$tpl->set("title", $obj->get_title());
-				$tpl->set("pview", $pview_name);
-				$tpl->set("oid", $oid);
+				$tpl->set("title", $title);
+				$tpl->set("back", $this->wf->get_var('back'));
+				$tpl->set("pview", $this->pview_name);
+				$tpl->set("oid", $this->oid);
 				
 				/* render */
-				$this->a_admin_html->set_title($obj->get_title());
+				$this->a_admin_html->set_title($title);
 				$this->a_admin_html->set_backlink($this->a_core_cipher->get_var("back"));
 				$this->a_admin_html->rendering($tpl->fetch("session/pview"));
 				exit(0);
@@ -348,92 +352,5 @@ class wfr_session_admin_options_session extends wf_route_request {
 		
 		$this->wf->redirector($this->a_core_cipher->get_var("back"));
 		exit(0);
-	}
-
-	private function process_pview() {
-		/*
-		$this->pview_name
-		$this->oid
-		$this->pview_perm
-		$this->obj
-		$this->pview_perm_name
-		*/
-		/* vars & parameters */
-		$uid = $this->wf->get_var("uid");
-		$pvname = $this->wf->get_var("pvname");
-		$pvvalue = $this->wf->get_var("pvvalue");
-		$current_perms = array();
-		
-		/* get perms */
-		$q = new core_db_adv_select();
-		$q->alias("p", "session_perm");
-		$q->do_comp("p.ptr_type", "=", SESSION_PERM_USER);
-		$q->do_comp("p.obj_type", "=", $this->pview_perm["id"]);
-		$q->do_comp("p.obj_id", "=", $this->oid);
-		$q->do_comp("p.ptr_id", "=", $uid);
-		$this->wf->db->query($q);
-		foreach($q->get_result() as $datum) {
-			$perm = $this->a_session->perm->user_get($datum["ptr_id"], null, $this->oid);
-			$current_perms = $perm[$this->pview[$this->pview_name]][0]["value"];
-		}
-		
-		if(!count($current_perms))
-			return 1;
-		
-		/* update array */
-		foreach($current_perms as $name => $checked)
-			if($name == $pvname)
-				$current_perms[$name] = $pvvalue == "true" ? "on" : "off";
-		
-		/* update database */
-		$this->a_session->perm->user_mod(
-			array("data" => serialize($current_perms)),
-			array(
-				"ptr_type" => SESSION_PERM_USER,
-				"ptr_id" => (int) $uid,
-				"obj_type" => $this->pview_perm["id"],
-				"obj_id" => (int) $this->oid
-			)
-		);
-		
-		echo json_encode(array(
-			"name" => $pvname,
-			"value" => $pvvalue,
-		));
-		
-		return 0;
-	}
-	
-	private function process_pview_add() {
-		$search = $this->wf->get_var("user");
-		$user = $this->a_session->user->get("username", $search);
-		if(!count($user))
-			$user = $this->a_session->user->get("email", $search);
-		
-		if(!count($user))
-			return "User not found";
-		
-		$this->a_session->perm->user_add(
-			$user[0]["id"],
-			$this->pview_perm_name,
-			$this->oid
-		);
-		
-		return false;
-	}
-	
-	private function process_pview_del() {
-		$uid = (int) $this->wf->get_var("uid");
-		
-		if($uid < 1)
-			return "User not found";
-		
-		$this->a_session->perm->user_remove(array(
-			"ptr_id" => (int) $uid,
-			"obj_type" => $this->pview_perm["id"],
-			"obj_id" => (int) $this->oid
-		));
-		
-		return false;
 	}
 }

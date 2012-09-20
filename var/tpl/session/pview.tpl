@@ -17,7 +17,9 @@
 				},
 				function(data, textStatus, jqXHR) {
 					if(textStatus == 'success') {
-						var message = 'Success updating "'+data["name"]+'" to "'+data["value"]+'".';
+						var message = data ?
+							'Success updating "'+data["name"]+'" to "'+data["value"]+'".' :
+							'An error occured while updating permission';
 						%{msg message}%
 					}
 					else if(textStatus == 'error')
@@ -44,6 +46,7 @@
 	
 	<form action="%{link '/admin/options/session/userpview'}%">
 		<input type="hidden" name="action" value="add" />
+		<input type="hidden" name="back" value="%{$back|entities}%" />
 		<input type="hidden" name="pview" value="%{$pview}%" />
 		<input type="hidden" name="oid" value="%{$oid}%" />
 		<ul data-role="listview" data-inset="true" data-mine="true">
@@ -82,7 +85,7 @@
 			</h3>
 			<ul data-role="listview">
 				<li data-role="fieldcontain" data-mini="true" data-icon="false">
-					<a data-role="button" data-mini="true" href='%{link "/admin/options/session/userpview"}%?action=del&pview=%{$pview}%&uid=%{$pviewset["user"]["id"]}%&oid=%{$oid}%'>%{@ "Supprimer"}%</a>
+					<a data-role="button" data-mini="true" href='%{link "/admin/options/session/userpview"}%?action=del&back=%{$back|entities}%&pview=%{$pview}%&uid=%{$pviewset["user"]["id"]}%&oid=%{$oid}%'>%{@ "Supprimer"}%</a>
 				</li>
 				%{foreach $pviewset["perm"] as $name => $checked}%
 				<li data-role="fieldcontain" data-mini="true">

@@ -85,6 +85,8 @@ class session extends wf_agg {
 		$this->lang = $this->wf->core_lang()->get_context(
 			"session/profil"
 		);
+		
+		$this->pview = $this->wf->session_pview();
 	}
 
 	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -412,28 +414,6 @@ class session extends wf_agg {
 		$s1 = $this->wf->get_rand();
 		$s2 = $this->wf->get_rand();
 		return("E".$this->wf->hash($s1).$this->wf->hash($s2));
-	}
-	
-	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-	 *
-	 * Get a registered permissions view
-	 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-	public function get_pview($view = null) {
-		// todo caching
-		$ret = array();
-		$pviews = array_filter($this->wf->execute_hook("session_permissions_view"));
-		
-		/* if no pview registered, return false */		
-		if(count($pviews) < 1)
-			return false;
-		
-		foreach($pviews as $pview)
-			if($view != null && isset($pview[$view]))
-				return $pview;
-			else
-				$ret = array_merge($ret, $pview);
-		
-		return $ret;
 	}
 	
 	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *

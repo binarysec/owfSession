@@ -32,6 +32,7 @@
 			return false;
 		});
 	});
+	
 </script>
 
 <div class="content-secondary">
@@ -85,7 +86,7 @@
 			</h3>
 			<ul data-role="listview">
 				<li data-role="fieldcontain" data-mini="true" data-icon="false">
-					<a data-role="button" data-mini="true" href='%{link "/admin/options/session/userpview"}%?action=del&back=%{$back|entities}%&pview=%{$pview}%&uid=%{$pviewset["user"]["id"]}%&oid=%{$oid}%'>%{@ "Supprimer"}%</a>
+					<a data-role="button" data-mini="true" href='' onclick='owf_admin_confirm_deletion("%{link "/admin/options/session/userpview"}%?action=del&back=%{$back|entities}%&pview=%{$pview}%&uid=%{$pviewset["user"]["id"]}%&oid=%{$oid}%")'>%{@ "Supprimer"}%</a>
 				</li>
 				%{foreach $pviewset["perm"] as $name => $checked}%
 				<li data-role="fieldcontain" data-mini="true">

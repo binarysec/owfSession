@@ -2,7 +2,12 @@
 %{if $error}%
 <p><strong>%{$error}%</strong></p>
 %{/if}%
-<p>You are editing specials roles of <strong>%{$user['firstname']|html}% %{$user['name']|html}%</strong></p>
+
+%{if $uid == $me['id']}%
+	<p>You are editing your specials roles</p>
+%{else}%
+	<p>You are editing specials roles of <strong>%{$user['firstname']|html}% %{$user['name']|html}%</strong></p>
+%{/if}%
 
 <form action="?" method="get" data-ajax="false">
 	<input type="hidden" name="back" value="%{$back}%" />

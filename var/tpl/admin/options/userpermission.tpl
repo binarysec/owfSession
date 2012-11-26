@@ -17,7 +17,7 @@
 	<ul data-role="listview" data-inset="true">
 %{foreach $sp as $spkey => $spval}%
 	<li data-role="fieldcontain">
-		<label for="flip-%{$spkey}%" data-mini="true">%{$spval[1]}%</label>
+		<label for="flip-%{$spkey}%" data-mini="true" style="width: 75%;">%{$spval[1]}%</label>
 		<select name="%{$spkey}%" id="flip-%{$spkey}%" data-role="slider" data-mini="true">
 		%{if $spval[0]}%
 			<option value="off">Off</option>

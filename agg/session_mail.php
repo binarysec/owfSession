@@ -8,6 +8,31 @@ class session_mail extends wf_agg {
 	//private $current_lang;
 	//private $pref_mail;
 	
+	var $configuration;
+	private function init_config() {
+		$this->configuration = array(
+			"mail_inscription" => array(
+				"tpl" => "session/mail/validate",
+				"title" => $this->lang->ts("Validation de votre compte OWF"),
+			),
+			"mail_validated" => array(
+				"tpl" => "session/mail/welcome",
+				"title" => $this->lang->ts("Bienvenue sur Open Web Framework"),
+			),
+			"mail_password_recovery_request" => array(
+				"tpl" => "session/mail/password_recovery",
+				"title" => $this->lang->ts("Requesting a password change"),
+			),
+			"mail_password_recovered" => array(
+				"tpl" => "session/mail/password_recovered",
+				"title" => $this->lang->ts("Password changed"),
+			),
+			"mail_footer" => array(
+				"tpl" => "core/mail_footer"
+			),
+		);
+	}
+	
 	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 	 *
 	 * loader
@@ -18,6 +43,7 @@ class session_mail extends wf_agg {
 		$this->lang = $this->wf->core_lang()->get_context(
 			"session/mail"
 		);
+		$this->init_config();
 		
 		//$this->lang = $this->core_lang->get_context(
 			//"session/mail"
@@ -56,7 +82,13 @@ class session_mail extends wf_agg {
 		$more_vars = array("validate" => $link);
 		
 		/* process */
-		return $this->mail($user, $rpass, "session/mail/validate", $more_vars, "Validation de votre compte OWF");
+		return $this->mail(
+			$user,
+			$rpass,
+			$this->configuration[__FUNCTION__]["tpl"],
+			$more_vars,
+			$this->configuration[__FUNCTION__]["title"]
+		);
 	}
 	
 	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -84,7 +116,13 @@ class session_mail extends wf_agg {
 		);
 		
 		/* process */
-		return $this->mail($user, $rpass, "session/mail/welcome", $more_vars, "Bienvenue sur Open Web Framework");
+		return $this->mail(
+			$user,
+			$rpass,
+			$this->configuration[__FUNCTION__]["tpl"],
+			$more_vars,
+			$this->configuration[__FUNCTION__]["title"]
+		);
 	}
 	
 	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -106,7 +144,13 @@ class session_mail extends wf_agg {
 		);
 		
 		/* process */
-		return $this->mail($user, "", "session/mail/password_recovery", $more_vars, "Requesting a password change");
+		return $this->mail(
+			$user,
+			"",
+			$this->configuration[__FUNCTION__]["tpl"],
+			$more_vars,
+			$this->configuration[__FUNCTION__]["title"]
+		);
 	}
 		
 	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -134,7 +178,13 @@ class session_mail extends wf_agg {
 		);
 		
 		/* process */
-		return $this->mail($user, $pass, "session/mail/password_recovered", $more_vars, "Password changed");
+		return $this->mail(
+			$user,
+			$pass,
+			$this->configuration[__FUNCTION__]["tpl"],
+			$more_vars,
+			$this->configuration[__FUNCTION__]["title"]
+		);
 	}
 	
 	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -170,6 +220,8 @@ class session_mail extends wf_agg {
 			$user[0]["email"],
 			"OWF <".$this->a_session->session_sender.">"
 		);
+		$footer_tpl = new core_tpl($this->wf);
+		$c_mail->set_footer($footer_tpl->fetch($this->configuration["mail_footer"]["tpl"]));
 		
 		foreach($enclosed_files as $name => $path)
 			$c_mail->attach($path, $name);

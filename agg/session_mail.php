@@ -211,7 +211,7 @@ class session_mail extends wf_agg {
 			$tpl->set($k, $v);
 		
 		/* create mail */
-		$title = empty($title) ? "Open Web Framework Email" : $this->lang->ts($title);
+		$title = empty($title) ? "Open Web Framework Email" : $title;
 		$mail = $tpl->fetch($tplpath);
 		$c_mail = new core_mail(
 			$this->wf,

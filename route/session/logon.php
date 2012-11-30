@@ -31,7 +31,7 @@ class wfr_session_session_logon extends wf_route_request {
 			if(isset($this->wf->ini_arr["session"]["default_url"]))
 				$link = $this->wf->linker($this->wf->ini_arr["session"]["default_url"]);
 			else	
-				$link = $this->wf->linker('/admin');
+				$link = $this->wf->linker('/');
 			$url = "/";
 		}
 		else

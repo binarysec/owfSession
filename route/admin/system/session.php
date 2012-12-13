@@ -90,18 +90,33 @@ class wfr_session_admin_system_session extends wf_route_request {
 		if(!$this->a_session->is_online($datum["id"])) {
 			$login_icon = '<img src="'.
 				$this->wf->linker('/data/session/offline.png').
-				'" alt="[Off line]" title="Off line" class="ui-li-icon"/>';
+				'" alt="[Off line]" title="Off line" class="ui-li-icon" />';
 			$ip = '-';
 		}
 		else {
 			$login_icon = '<img src="'.
 				$this->wf->linker('/data/session/online.png').
-				'" alt="[On line]" title="On line" class="ui-li-icon"/>';
+				'" alt="[On line]" title="On line" class="ui-li-icon" />';
 			
 			$ip = long2ip($datum["remote_address"])." (".
 				$datum["remote_hostname"].
 				")";
 		}
+		
+		/* activated icon */
+		$activation_required = isset($this->wf->ini_arr['session']['activation_required']) ?
+			$this->wf->ini_arr['session']['activation_required'] : false;
+		if($activation_required) {
+			$activated_icon = $datum["activated"] != "true" ?
+				'&nbsp;&nbsp;&nbsp;<img width="16px" src="'.
+				$this->wf->linker("/data/session/warning.png").
+				'" alt="Not activated" title="Not activated" />' :
+				'&nbsp;&nbsp;&nbsp;<img width="16px" src="'.
+				$this->wf->linker("/data/session/right.png").
+				'" alt="Activated" title="Activated" />';
+		}
+		else
+			$activated_icon = "";
 		
 		/* type icon */
 		if(isset($perm["session:admin"])) {
@@ -125,6 +140,8 @@ class wfr_session_admin_system_session extends wf_route_request {
 				'" alt="[God]" title="God" />';
 		}
 		
+		$type_icon .= "<br/><img src='".$this->wf->linker('/data/session/right.png').' />';
+		
 		/* adresse IP */
 		if($datum['session_time_auth'])
 			$login_date = ' - Last login: '.date('d/m/Y H:i:s', $datum['session_time_auth']);
@@ -143,7 +160,7 @@ class wfr_session_admin_system_session extends wf_route_request {
 		
 		$r = '<li><a href="'.$opt_link.'">'.$login_icon.
 				'<h3>'.$st.'</h3>'.
-				'<p><u>'.$username.'</u> - '.$mail.$login_date.'</p>'.
+				'<p><u>'.$username.'</u> - '.$mail.$login_date.$activated_icon.'</p>'.
 				'<span class="ui-li-count">'.$type_icon.'</span>'.
 			'</a></li>';
 		return($r);

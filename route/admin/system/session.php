@@ -140,8 +140,6 @@ class wfr_session_admin_system_session extends wf_route_request {
 				'" alt="[God]" title="God" />';
 		}
 		
-		$type_icon .= "<br/><img src='".$this->wf->linker('/data/session/right.png').' />';
-		
 		/* adresse IP */
 		if($datum['session_time_auth'])
 			$login_date = ' - Last login: '.date('d/m/Y H:i:s', $datum['session_time_auth']);

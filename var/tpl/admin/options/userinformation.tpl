@@ -28,22 +28,22 @@
 		<label for="perm">%{@ 'Permissions :'}%</label>
 		<select name="perm" data-mini="true">
 		%{if isset($perms["session:god"])}%
-			<option value="%{const SESSION_USER_GOD}%" selected="selected">Super administrateur</option>
+			%{if($god)}%<option value="%{const SESSION_USER_GOD}%" selected="selected">Super administrateur</option>%{/if}%
 			<option value="%{const SESSION_USER_ADMIN}%">Administrateur</option>
 			<option value="%{const SESSION_USER_SIMPLE}%">Utilisateur simple</option>
 			<option value="%{const SESSION_USER_WS}%">Web services</option>
 		%{elseif isset($perms["session:admin"])}%
-			<option value="%{const SESSION_USER_GOD}%">Super administrateur</option>
+			%{if($god)}%<option value="%{const SESSION_USER_GOD}%">Super administrateur</option>%{/if}%
 			<option value="%{const SESSION_USER_ADMIN}%" selected="selected">Administrateur</option>
 			<option value="%{const SESSION_USER_SIMPLE}%">Utilisateur simple</option>
 			<option value="%{const SESSION_USER_WS}%">Web services</option>
 		%{elseif isset($perms["session:simple"])}%
-			<option value="%{const SESSION_USER_GOD}%">Super administrateur</option>
+			%{if($god)}%<option value="%{const SESSION_USER_GOD}%">Super administrateur</option>%{/if}%
 			<option value="%{const SESSION_USER_ADMIN}%">Administrateur</option>
 			<option value="%{const SESSION_USER_SIMPLE}%" selected="selected">Utilisateur simple</option>
 			<option value="%{const SESSION_USER_WS}%">Web services</option>
 		%{elseif isset($perms["session:ws"])}%
-			<option value="%{const SESSION_USER_GOD}%">Super administrateur</option>
+			%{if($god)}%<option value="%{const SESSION_USER_GOD}%">Super administrateur</option>%{/if}%
 			<option value="%{const SESSION_USER_ADMIN}%">Administrateur</option>
 			<option value="%{const SESSION_USER_SIMPLE}%">Utilisateur simple</option>
 			<option value="%{const SESSION_USER_WS}%" selected="selected">Web services</option>

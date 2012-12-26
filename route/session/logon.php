@@ -26,7 +26,7 @@ class wfr_session_session_logon extends wf_route_request {
 		$pass = $this->wf->get_var("pass");
 
 		$url = $this->a_core_cipher->get_var("back_url");
-	
+		
 		if(strlen($url) == 0) {
 			if(isset($this->wf->ini_arr["session"]["default_url"]))
 				$link = $this->wf->linker($this->wf->ini_arr["session"]["default_url"]);
@@ -36,12 +36,12 @@ class wfr_session_session_logon extends wf_route_request {
 		}
 		else
 			$link = $url;
-			
+		
 		if(!isset($user) || !isset($pass)) {
 			$this->wf->display_login();
 			exit(0);
 		}
-			
+		
 		/* vérification de l'utilisateur */
 		$ret = $this->a_session->identify(
 			$user,
@@ -58,7 +58,6 @@ class wfr_session_session_logon extends wf_route_request {
 			header("X-Owf-Session: ".$ret["session_id"]);
 			header("X-Owf-Session-Var: ".$this->a_session->session_var);
 			$this->wf->redirector($link);
-			exit(0);
 		}
 	}
 	

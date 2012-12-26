@@ -225,7 +225,8 @@ class wfr_session_admin_options_session extends wf_route_request {
 			"user" => $user,
 			"me" => $this->a_session->session_me,
 			"perms" => $perms,
-			"admin" => $this->a_session->iam_admin()
+			"admin" => $this->a_session->iam_admin(),
+			"god" => $this->a_session->iam_god()
 		);
 
 		$tpl->merge_vars($in);
@@ -277,8 +278,14 @@ class wfr_session_admin_options_session extends wf_route_request {
 		}
 		
 		if($this->a_session->iam_admin()) {
-			if($update["perm"] == SESSION_USER_GOD)
-				$perm = "session:god";
+			if($update["perm"] == SESSION_USER_GOD) {
+				if($this->a_session->iam_god())
+					$perm = "session:god";
+				else {
+					$this->error = $this->lang->ts("You cannot grant yourself more rights");
+					return(false);
+				}
+			}
 			else if($update["perm"] == SESSION_USER_ADMIN)
 				$perm = "session:admin";
 			else if($update["perm"] == SESSION_USER_SIMPLE)
@@ -306,8 +313,8 @@ class wfr_session_admin_options_session extends wf_route_request {
 				"obj_type" => $old_obj_type
 			));
 			$this->a_session->perm->user_add($this->uid, $perm);
-			
 		}
+		
 		if(isset($update["perm"]))
 			unset($update["perm"]);
 			

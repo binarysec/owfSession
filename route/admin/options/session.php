@@ -34,14 +34,18 @@ class wfr_session_admin_options_session extends wf_route_request {
 		
 		/* check permissions */
 		$ret = $this->wf->execute_hook("waf_website_options");
-		foreach($ret as $aopts)
-			foreach($aopts as $aopt)
-				if(	end(explode("/", $aopt["route"])) == $opt &&
-					!$this->a_session->check_permission($aopt["perm"])
-					) {
-						$this->wf->display_error(403, $this->lang->ts("You don't have enought permissions"));
-						exit(0);
-					}
+		foreach($ret as $aopts) {
+			if(is_array($aopts)) {
+				foreach($aopts as $aopt) {
+					if(	end(explode("/", $aopt["route"])) == $opt &&
+						!$this->a_session->check_permission($aopt["perm"])
+						) {
+							$this->wf->display_error(403, $this->lang->ts("You don't have enought permissions"));
+							exit(0);
+						}
+				}
+			}
+		}
 					
 		
 		switch($opt) {

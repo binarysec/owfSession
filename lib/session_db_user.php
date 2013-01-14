@@ -48,14 +48,12 @@ class session_db_user extends session_driver_user {
 		$idx->register("sessionsearch_e", "email");
 		$this->wf->db->query($idx);
 		
-		
 		$this->session = $this->wf->session();
 
 		$this->core_cache = $this->wf->core_cacher();
 		$this->gcache = $this->core_cache->create_group("session_db_user_gcache");
 
-		$r = $this->get();
-		if(!isset($r[0]) || !is_array($r[0])) {
+		if($this->session->user_count() < 1) {
 			$pass = $this->generate_password();
 			$this->add(
 				"OWF",
@@ -93,11 +91,11 @@ class session_db_user extends session_driver_user {
 
 		/* vérification si l'utilisateur existe */
 		$r = $this->get("email", $email);
-		if(isset($r[0]) && is_array($r[0]))
+		if(is_array($r) && !empty($r))
 			return(FALSE);
 		
 		$r = $this->get("username", $username);
-		if(isset($r[0]) && is_array($r[0]))
+		if(is_array($r) && !empty($r))
 			return(FALSE);
 
 		/* input */
@@ -117,15 +115,9 @@ class session_db_user extends session_driver_user {
 		$q = new core_db_insert("session_user", $insert);
 		$this->wf->db->query($q);
 		$uid = $this->wf->db->get_last_insert_id('session_user_id_seq');
-
-		/* reprend les informations */
-		$user = $this->get("username", $username);
 		
 		/* add initials permissions */
-		$this->session->perm->user_add(
-			$user[0]["id"],
-			$type
-		);
+		$this->session->perm->user_add($uid, $type);
 		
 		/* retourne l'identifiant de l'utisateur créé */
 		return($uid);

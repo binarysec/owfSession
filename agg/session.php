@@ -193,8 +193,9 @@ class session extends wf_agg {
 	 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 	public function iam_admin() {
 		return 
+			is_array($this->session_my_perms) && (
 			array_key_exists("session:god", $this->session_my_perms) ||
-			array_key_exists("session:admin", $this->session_my_perms)
+			array_key_exists("session:admin", $this->session_my_perms))
 		;
 	}
 	
@@ -203,7 +204,10 @@ class session extends wf_agg {
 	 * Am i god ?
 	 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 	public function iam_god() {
-		return array_key_exists("session:god", $this->session_my_perms);
+		return
+			is_array($this->session_my_perms) &&
+			array_key_exists("session:god", $this->session_my_perms)
+		;
 	}
 	
 	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *

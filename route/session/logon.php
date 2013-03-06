@@ -37,6 +37,10 @@ class wfr_session_session_logon extends wf_route_request {
 		else
 			$link = $url;
 		
+		/* if user already loggued in, redirect to / */
+		if($this->a_session->is_online())
+			$this->wf->redirector($this->wf->linker("/"));
+		
 		if(!isset($user) || !isset($pass)) {
 			$this->wf->display_login();
 			exit(0);

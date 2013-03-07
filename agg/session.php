@@ -60,8 +60,9 @@ class session extends wf_agg {
 		define("SESSION_USER_RANON",   $this->perm->register("session:ranon"));
 		define("SESSION_USER_WS",      $this->perm->register("session:ws"));
 		foreach($this->wf->execute_hook("session_permissions") as $perm)
-			foreach($perm as $name => $desc)
-				$this->perm->register($name);
+			if($perm && is_array($perm))
+				foreach($perm as $name => $desc)
+					$this->perm->register($name);
 
 		/* load user interface */
 		$this->user = new session_db_user($wf);

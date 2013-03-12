@@ -270,7 +270,6 @@ class wfr_session_admin_options_session extends wf_route_request {
 		$update["firstname"] = $this->wf->get_var("firstname");
 		$update["name"] = $this->wf->get_var("name");
 		$update["email"] = $this->wf->get_var("email");
-		$update["perm"] = $this->wf->get_var("perm");
 		
 		if(strlen($update["firstname"]) <= 2) {
 			$this->error = $this->lang->ts("Your first name is too short");
@@ -282,6 +281,7 @@ class wfr_session_admin_options_session extends wf_route_request {
 		}
 		
 		if($this->a_session->iam_admin()) {
+			$update["perm"] = $this->wf->get_var("perm");
 			if($update["perm"] == SESSION_USER_GOD) {
 				if($this->a_session->iam_god())
 					$perm = "session:god";
@@ -319,7 +319,7 @@ class wfr_session_admin_options_session extends wf_route_request {
 			$this->a_session->perm->user_add($this->uid, $perm);
 		}
 		
-		if(isset($update["perm"]))
+		if(array_key_exists('perm', $update))
 			unset($update["perm"]);
 			
 		$this->a_session->user->modify(

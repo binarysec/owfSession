@@ -68,7 +68,7 @@ class wfr_session_session_logon extends wf_route_request {
 	public function logout() {
 		$this->wf->session()->logout();
 		$link = $this->wf->get_default_url();
-		header("Location: $link");
+		$this->wf->redirector($link);
 		exit(0);
 	}
 }

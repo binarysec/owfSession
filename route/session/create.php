@@ -44,17 +44,12 @@ class wfr_session_session_create extends wf_route_request {
 	 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 	public function show() {
 		
-		$this->registering = !$this->a_session->is_online();
+		/* if offline or not manager, then is registering */
+		$this->registering = !$this->a_session->is_online() || !$this->a_session->iam_manager();
 		
 		/* check if public account creation is allowed */
-		if($this->registering) {
-			if(!$this->allow_account_creation) {
-				$this->wf->display_error(403, "Forbidden");
-				exit(0);
-			}
-		}
-		elseif(!$this->a_session->iam_manager())
-			$this->registering = true;
+		if($this->registering && !$this->allow_account_creation)
+			$this->wf->display_error(403, "Forbidden", true);
 		
 		$errors;
 		

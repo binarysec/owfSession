@@ -86,7 +86,7 @@
 			</h3>
 			<ul data-role="listview">
 				<li data-role="fieldcontain" data-mini="true" data-icon="false">
-					<a href="#owf-session-pview-delete" data-rel="popup" data-position-to="window" data-role="button" data-inline="true" data-transition="pop" data-theme="f" style="width: 100%;">%{@ "Supprimer"}%</a>'
+					<a href="#owf-session-pview-delete" data-rel="popup" data-position-to="window" data-inline="true" data-transition="pop" data-theme="f" style="text-align: center;">%{@ "Supprimer"}%</a>
 					<div data-role="popup" id="owf-session-pview-delete" data-theme="f" class="ui-corner-all">
 						<a href="#" data-rel="back" data-role="button" data-theme="a" data-icon="delete" data-iconpos="notext" class="ui-btn-right">%{@ "Close"}%</a>
 						<div data-role="header" data-theme="a" class="ui-corner-top"><h1>%{@ "Delete this object ?"}%</h1></div>

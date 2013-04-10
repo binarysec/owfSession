@@ -28,8 +28,10 @@ class session_mail extends wf_agg {
 				"title" => $this->lang->ts("Password changed"),
 			),
 			"mail_footer" => array(
-				"tpl" => "core/mail_footer"
+				"tpl" => "core/mail_footer",
+				"tpl_vars" => array()
 			),
+			"user_from" => "OWF"
 		);
 	}
 	
@@ -218,9 +220,10 @@ class session_mail extends wf_agg {
 			$this->lang->ts($title),
 			$mail,
 			$user[0]["email"],
-			"OWF <".$this->a_session->session_sender.">"
+			$this->configuration["user_from"]." <".$this->a_session->session_sender.">"
 		);
 		$footer_tpl = new core_tpl($this->wf);
+		$footer_tpl->set_vars($this->configuration["mail_footer"]["tpl_vars"]);
 		$c_mail->set_footer($footer_tpl->fetch($this->configuration["mail_footer"]["tpl"]));
 		
 		foreach($enclosed_files as $name => $path)

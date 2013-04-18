@@ -36,43 +36,43 @@
 		<ul data-role="listview" data-inset="true">
 			%{if $allow_user_register}%
 			<li data-role="fieldcontain">
-				<label for="username">%{@ 'Username :'}%</label>
-				<input type="text" name="username" id="username" value="%{$username|html}%" placeholder="%{@ 'Username'}%" data-mini="true"/>
+					<label for="username">%{@ 'User name'}%</label>
+					<input type="text" name="username" id="username" value="%{$username|html}%" placeholder="%{@ 'User name'}%" data-mini="true"/>
 			</li>
 			%{/if}%
-			
+
 			<li data-role="fieldcontain">
-				<label for="firstname">%{@ 'First name :'}%</label>
-				<input type="text" name="firstname" id="firstname" value="%{$firstname|html}%" placeholder="%{@ 'Firstname'}%" data-mini="true"/>
+					<label for="firstname">%{@ 'First name'}%</label>
+					<input type="text" name="firstname" id="firstname" value="%{$firstname|html}%" placeholder="%{@ 'First name'}%" data-mini="true"/>
 			</li>
-			
+
 			<li data-role="fieldcontain">
-				<label for="name">%{@ 'Last name :'}%</label>
-				<input type="text" name="name" id="name" value="%{$name|html}%"  placeholder="%{@ 'Name'}%" data-mini="true"/>
+					<label for="name">%{@ 'Last name'}%</label>
+					<input type="text" name="name" id="name" value="%{$name|html}%"  placeholder="%{@ 'Last name'}%" data-mini="true"/>
 			</li>
-			
+
 			<li data-role="fieldcontain">
-				<label for="email">%{@ 'Email address :'}%</label>
-				<input type="email" name="email" id="email" value="%{$email|html}%" placeholder="%{@ 'Mail address'}%" data-mini="true"/>
+					<label for="email">%{@ 'Email'}%</label>
+					<input type="email" name="email" id="email" value="%{$email|html}%" placeholder="%{@ 'Email'}%" data-mini="true"/>
 			</li>
-			
+
 			<li data-role="fieldcontain">
-				<label for="email_confirm">%{@ 'Repeat email address :'}%</label>
-				<input type="email" name="email_confirm" id="email_confirm" value="%{$email_confirm|html}%"  placeholder="%{@ 'Mail address confirmation'}%" data-mini="true"/>
+					<label for="email_confirm">%{@ 'Confirm email'}%</label>
+					<input type="email" name="email_confirm" id="email_confirm" value="%{$email_confirm|html}%"  placeholder="%{@ 'Confirm email'}%" data-mini="true"/>
 			</li>
-			
+
 			%{if $allow_pass_register}%
-			<li data-role="fieldcontain">			
-				<label for="pass">%{@ 'Password :'}%</label>
-				<input type="password" name="pass" id="pass" placeholder="%{@ 'Password'}%" data-mini="true"/>
-			</li>
-			
 			<li data-role="fieldcontain">
-				<label for="pass_confirm">%{@ 'Password repeated:'}%</label>
-				<input type="password" name="pass_confirm" id="pass_confirm" placeholder="%{@ 'Password repeated'}%" data-mini="true"/>
+					<label for="pass">%{@ 'Password'}%</label>
+					<input type="password" name="pass" id="pass" placeholder="%{@ 'Password'}%" data-mini="true"/>
+			</li>
+
+			<li data-role="fieldcontain">
+					<label for="pass_confirm">%{@ 'Confirm password'}%</label>
+					<input type="password" name="pass_confirm" id="pass_confirm" placeholder="%{@ 'Confirm password'}%" data-mini="true"/>
 			</li>
 			%{/if}%
-			
+
 			%{if(!$registering)}%
 			<li data-role="fieldcontain">
 				<label for="auto_validate">%{@ 'Validated ?'}%</label>

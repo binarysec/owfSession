@@ -49,6 +49,7 @@ class session_db_user extends session_driver_user {
 		$this->wf->db->query($idx);
 		
 		$this->session = $this->wf->session();
+		$this->core_lang = $this->wf->core_lang();
 
 		$this->core_cache = $this->wf->core_cacher();
 		$this->gcache = $this->core_cache->create_group("session_db_user_gcache");
@@ -106,7 +107,8 @@ class session_db_user extends session_driver_user {
 			"firstname" => $firstname,
 			"password" => $this->wf->hash($password),
 			"create_time" => time(),
-			"activated" => $activated ? "true" : $this->generate_validation_code()
+			"activated" => $activated ? "true" : $this->generate_validation_code(),
+			"lang" => $this->core_lang->get_code()
 		);
 		if($phone)
 			$insert["phone"] = $phone;

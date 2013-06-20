@@ -18,21 +18,27 @@ class wfr_session_admin_system_session extends wf_route_request {
 		$dsrc  = new core_datasource_db($this->wf, "session_user");
 		$dset  = new core_dataset($this->wf, $dsrc);
 		
-		$filters = array();
+		$filters = array(
+			'lang' => array(
+				'type' => WF_CORE_DATASET_SELECT,
+				'label' => $this->lang->ts("Langue"),
+				
+			),
+		);
 		$cols = array(
 			'type_icon' => array(),
 			'name' => array(
-				'name'      => 'Nom',
+				'name'      => 'Name',
 				'orderable' => true,
 				'search' => true
 			),
 			'firstname' => array(
-				'name'      => 'Nom',
+				'name'      => 'Firstname',
 				'orderable' => true,
 				'search' => true
 			),
 			'email' => array(
-				'name'      => 'E-mail',
+				'name'      => 'Email',
 				'orderable' => true,
 				'search' => true
 			),
@@ -45,18 +51,14 @@ class wfr_session_admin_system_session extends wf_route_request {
 				'name'      => 'Adresse IP',
 				'orderable' => true,
 			),
-			'login_icon' => array(),
 			'session_time_auth' => array(
 				'name'      => 'Login',
 				'orderable' => true,
 			),
-			'actions' => array()
-			
 		);
 		
 		$dset->set_cols($cols);
 		$dset->set_filters($filters);
-		$dset->set_order(array("name" => WF_ASC));
 		$dset->set_row_callback(array($this, 'callback_row'));
 
 		/* template utilisateur */

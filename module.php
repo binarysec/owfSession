@@ -133,6 +133,15 @@ class wfm_session extends wf_module {
 		}
 		
 		$info = array(
+			"text" => $this->ts("Change language"),
+			"route" => "/admin/options/session/changelang",
+			"perm" => array("session:simple"),
+			"type" => "dialog",
+			"icon" => "bars"
+		);
+		$return[] = $info;
+		
+		$info = array(
 			"text" => $this->ts("Update personnals informations"),
 			"route" => "/admin/options/session/userinformation",
 			"perm" => array("session:simple"),

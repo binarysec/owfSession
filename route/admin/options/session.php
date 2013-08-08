@@ -57,6 +57,15 @@ class wfr_session_admin_options_session extends wf_route_request {
 				$tpl_name = 'admin/options/changepassword';
 				break;
 				
+			case "changelang":
+				if($action == "mod")
+					$this->process_changelang();
+					
+				$this->a_admin_html->set_title($this->lang->ts('Change language'));
+				$tpl_name = 'admin/options/changelang';
+				$tpl->set("langs", $this->wf->core_lang()->get_list());
+				break;
+				
 			case "userinformation":
 				if($action == "mod")
 					$this->process_information();
@@ -262,6 +271,18 @@ class wfr_session_admin_options_session extends wf_route_request {
 		
 		$this->wf->redirector($this->a_core_cipher->get_var("back"));
 		exit(0);
+	}
+	
+	private function process_changelang() {
+		$new_lang = $this->wf->get_var("lang");
+		
+		if(!$this->wf->core_lang()->resolv($new_lang)) {
+			$this->error = $this->lang->ts("Incorrect lang code");
+			return(false);
+		}
+		
+		$this->a_session->user->modify(array("lang" => $new_lang), $this->uid);
+		$this->wf->redirector($this->a_core_cipher->get_var("back"));
 	}
 	
 	private function process_information() {

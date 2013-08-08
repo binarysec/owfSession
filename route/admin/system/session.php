@@ -109,7 +109,7 @@ class wfr_session_admin_system_session extends wf_route_request {
 		$activation_required = isset($this->wf->ini_arr['session']['activation_required']) ?
 			$this->wf->ini_arr['session']['activation_required'] : false;
 		if($activation_required) {
-			$activated_icon = $datum["activated"] != "true" ?
+			$activated_icon = $datum["activated"] && $datum["activated"] != "true" ?
 				'&nbsp;&nbsp;&nbsp;<img width="16px" src="'.
 				$this->wf->linker("/data/session/warning.png").
 				'" alt="Not activated" title="Not activated" />' :

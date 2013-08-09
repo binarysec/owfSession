@@ -4,8 +4,6 @@
 	%{/if}%
 	<p>
 		Changement de la langue de l'interface
-		<br/>
-		<strong>Attention, vous serez redirigé sur la page d'accueil après ce changement</strong>
 	</p>
 </center>
 <form action="?" method="get" data-ajax="false">
@@ -13,7 +11,7 @@
 	<input type="hidden" name="uid" value="%{$uid}%" />
 	<input type="hidden" name="action" value="mod" />
 	
-	<select name="lang" data-native-menu="false" data-mini="true">
+	<select name="lang" data-native-menu="false">
 		%{foreach($langs as $lang)}%
 			<option value="%{$lang['code']}%" %{if($lang['code']==$user['lang'])}%selected=selected%{/if}%>%{$lang['name']}%</option>
 		%{/foreach}%

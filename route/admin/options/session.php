@@ -282,7 +282,7 @@ class wfr_session_admin_options_session extends wf_route_request {
 		}
 		
 		$this->a_session->user->modify(array("lang" => $new_lang), $this->uid);
-		$this->wf->redirector($this->a_core_cipher->get_var("back"));
+		$this->wf->redirector($this->wf->linker("/"));
 	}
 	
 	private function process_information() {

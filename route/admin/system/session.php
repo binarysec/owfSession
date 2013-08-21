@@ -45,7 +45,8 @@ class wfr_session_admin_system_session extends wf_route_request {
 			'username' => array(
 				'name'      => 'Username',
 				'orderable' => true,
-				'search' => true
+				'search' => true,
+				'order-default' => WF_ASC
 			),
 			'remote_address' => array(
 				'name'      => 'Adresse IP',

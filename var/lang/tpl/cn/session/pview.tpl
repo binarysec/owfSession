@@ -86,8 +86,8 @@
 			</h3>
 			<ul data-role="listview">
 				<li data-role="fieldcontain" data-mini="true" data-icon="false">
-					<a href="#owf-session-pview-delete" data-rel="popup" data-position-to="window" data-inline="true" data-transition="pop" data-theme="f" style="text-align: center;">%{@ "Supprimer"}%</a>
-					<div data-role="popup" id="owf-session-pview-delete" data-theme="f" class="ui-corner-all">
+					<a href="#owf-session-pview-delete-%{$pviewset['uniq_id']}%" data-rel="popup" data-position-to="window" data-inline="true" data-transition="pop" data-theme="f" style="text-align: center;">%{@ "Supprimer"}%</a>
+					<div data-role="popup" id="owf-session-pview-delete-%{$pviewset['uniq_id']}%" data-theme="f" class="ui-corner-all">
 						<a href="#" data-rel="back" data-role="button" data-theme="a" data-icon="delete" data-iconpos="notext" class="ui-btn-right">%{@ "Close"}%</a>
 						<div data-role="header" data-theme="a" class="ui-corner-top"><h1>%{@ "Delete this object ?"}%</h1></div>
 						<div data-role="content" data-theme="b" class="ui-corner-bottom ui-content">
@@ -101,8 +101,8 @@
 				%{foreach $pviewset["perm"] as $name => $checked}%
 				<li data-role="fieldcontain" data-mini="true">
 					<fieldset data-role='controlgroup'>
-						<label for='owf-session-pview-%{$pviewset["user"]["id"]}%-%{$name}%'>%{$name}%</label>
-						<input id='owf-session-pview-%{$pviewset["user"]["id"]}%-%{$name}%' class="owf-session-pview-checkbox" type='checkbox' name='%{$name}%' data-mini="true" %{if($checked == "on")}%checked='checked' %{/if}%/>
+						<label for='owf-session-pview-%{$pviewset['uniq_id']}%'>%{$name}%</label>
+						<input id='owf-session-pview-%{$pviewset['uniq_id']}%' class="owf-session-pview-checkbox" type='checkbox' name='%{$name}%' data-mini="true" %{if($checked == "on")}%checked='checked' %{/if}%/>
 					</fieldset>
 				</li>
 				%{/foreach}%

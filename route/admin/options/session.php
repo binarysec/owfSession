@@ -167,6 +167,7 @@ class wfr_session_admin_options_session extends wf_route_request {
 				
 				/* adapt struct */
 				
+				$uniq_id = 0;
 				foreach($results as $perms) {
 					$user = current($this->a_session->user->get("id", $perms["ptr_id"]));
 					
@@ -188,6 +189,7 @@ class wfr_session_admin_options_session extends wf_route_request {
 					
 					/* save to an array for the tpl */
 					$data[] = array(
+						"uniq_id" => $uniq_id,
 						"user" => $user,
 						"perm" => $perm_arr,
 						"create_time" => date(
@@ -195,6 +197,7 @@ class wfr_session_admin_options_session extends wf_route_request {
 							isset($perms['create_t']) ? $perms['create_t'] : $perms['t.create_t']
 						)
 					);
+					$uniq_id++;
 				}
 				
 				$title = $this->pview->get_title();

@@ -101,8 +101,8 @@
 				%{foreach $pviewset["perm"] as $name => $checked}%
 				<li data-role="fieldcontain" data-mini="true">
 					<fieldset data-role='controlgroup'>
-						<label for='owf-session-pview-%{$pviewset['uniq_id']}%'>%{$name}%</label>
-						<input id='owf-session-pview-%{$pviewset['uniq_id']}%' class="owf-session-pview-checkbox" type='checkbox' name='%{$name}%' data-mini="true" %{if($checked == "on")}%checked='checked' %{/if}%/>
+						<label for='owf-session-pview-%{$pviewset["user"]["id"]}%-%{$name}%'>%{$name}%</label>
+						<input id='owf-session-pview-%{$pviewset["user"]["id"]}%-%{$name}%' class="owf-session-pview-checkbox" type='checkbox' name='%{$name}%' data-mini="true" %{if($checked == "on")}%checked='checked' %{/if}%/>
 					</fieldset>
 				</li>
 				%{/foreach}%

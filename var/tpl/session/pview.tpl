@@ -86,15 +86,15 @@
 			</h3>
 			<ul data-role="listview">
 				<li data-role="fieldcontain" data-mini="true" data-icon="false">
-					<a href="#owf-session-pview-delete-%{$pviewset['uniq_id']}%" data-rel="popup" data-position-to="window" data-inline="true" data-transition="pop" data-theme="f" style="text-align: center;">%{@ "Supprimer"}%</a>
+					<a href="#owf-session-pview-delete-%{$pviewset['uniq_id']}%" data-rel="popup" data-position-to="window" data-inline="true" data-transition="pop" data-theme="f" data-icon="delete" style="text-align: center;">%{@ "Supprimer"}%</a>
 					<div data-role="popup" id="owf-session-pview-delete-%{$pviewset['uniq_id']}%" data-theme="f" class="ui-corner-all">
 						<a href="#" data-rel="back" data-role="button" data-theme="a" data-icon="delete" data-iconpos="notext" class="ui-btn-right">%{@ "Close"}%</a>
 						<div data-role="header" data-theme="a" class="ui-corner-top"><h1>%{@ "Delete this object ?"}%</h1></div>
 						<div data-role="content" data-theme="b" class="ui-corner-bottom ui-content">
 							<h3 class="ui-title">%{@ "Are you sure you want to delete this object ?"}%</h3>
 							<p>%{@ "This action cannot be undone."}%</p>
-							<a href="#" data-role="button" data-inline="true" data-rel="back" style="width: 40%;">%{@ "Cancel"}%</a>
-							<a href="%{link '/admin/options/session/userpview'}%?action=del&back=%{$back|entities}%&pview=%{$pview}%&uid=%{$pviewset['user']['id']}%&oid=%{$oid}%" data-theme="f" data-role="button" data-inline="true" data-transition="flow" style="width: 40%;">%{@ "Delete"}%</a>
+							<a href="#" data-role="button" data-inline="true" data-rel="back" data-icon="back" style="width: 40%;">%{@ "Cancel"}%</a>
+							<a href="%{link '/admin/options/session/userpview'}%?action=del&back=%{$back|entities}%&pview=%{$pview}%&uid=%{$pviewset['user']['id']}%&oid=%{$oid}%" data-theme="f" data-role="button" data-inline="true" data-transition="flow" data-icon="delete" style="width: 40%;">%{@ "Delete"}%</a>
 						</div>
 					</div>
 				</li>

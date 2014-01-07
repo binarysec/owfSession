@@ -318,14 +318,19 @@ class session extends wf_agg {
 	 *
 	 * Auth
 	 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-	public function identify($user, $pass) {
+	public function identify($user, $pass, $passCypher=false) {
 		$this->wf->no_cache();
 		$remote_addr = isset($_SERVER["REMOTE_ADDR"]) ? $_SERVER["REMOTE_ADDR"] : null;
+		
+		if(!$passCypher)
+			$checkPass = $this->wf->hash($pass);
+		else
+			$checkPass = $pass;
 		
 		/* vérification si l'utilisateur existe */
 		$res = $this->user->get(array(
 			"username" => $user,
-			"password" => $this->wf->hash($pass)
+			"password" => $checkPass
 		));
 
 		if(!isset($res[0]) || !is_array($res[0])) {

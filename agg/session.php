@@ -322,7 +322,7 @@ class session extends wf_agg {
 		$this->wf->no_cache();
 		$remote_addr = isset($_SERVER["REMOTE_ADDR"]) ? $_SERVER["REMOTE_ADDR"] : null;
 		
-		if(!$passCypher)
+		if($passCypher == false)
 			$checkPass = $this->wf->hash($pass);
 		else
 			$checkPass = $pass;

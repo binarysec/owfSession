@@ -357,24 +357,29 @@ class session extends wf_agg {
 		/* load user permissions */
 		$this->session_my_perms = $this->perm->user_get($res[0]["id"]);
 
+		/* checking if we need to update session id */
+		if(time()-$res[0]['session_time'] > $this->session_timeout) {
+			/* update les informations dans la bdd */
+			$update = array(
+				"session_id"        => $this->generate_session_id(),
+				"session_time"      => time(),
+				"remote_address"    => ip2long($remote_addr),
+				"remote_hostname"   => gethostbyaddr($_SERVER["REMOTE_ADDR"])
+			);
+			$this->user->modify($update, (int)$this->session_me["id"]);
+			$this->session_me = array_merge($this->session_me, $update);
+		}
+		
 		/* update les informations dans la bdd */
 		$update = array(
-			"session_id"        => $this->generate_session_id(),
-			"session_time_auth" => time(),
-			"session_time"      => time(),
-			"remote_address"    => ip2long($remote_addr),
-// 			"remote_hostname"   => gethostbyaddr($_SERVER["REMOTE_ADDR"])
+			"session_time_auth" => time()
 		);
 		$this->user->modify($update, (int)$this->session_me["id"]);
-		$this->session_me = array_merge($this->session_me, $update);
-		
-// 		/* merge data & update */
-// 		$this->session_me = array_merge($this->session_me, $update);
-		
+			
 		/* utilisation d'un cookie */
 		setcookie(
 			$this->session_var,
-			$update["session_id"],
+			$this->session_me["session_id"],
 			time()+$this->session_timeout,
 			"/"
 		);
@@ -406,13 +411,13 @@ class session extends wf_agg {
 		$update = array(
 			"remote_address"    => ip2long($_SERVER["REMOTE_ADDR"]),
 // 			"remote_hostname"   => gethostbyaddr($_SERVER["REMOTE_ADDR"]),
-			"session_id"        => '',
-			"session_time"      => NULL
+// 			"session_id"        => '',
+			"session_time"      => 0
 		);
 		setcookie(
 			$this->session_var,
 			"",		// => There were $session variable here throwing a Notice cause this variable is not declared anywhere
-			time(),
+			time()-3600,
 			"/"
 		);
 		$this->user->modify($update, (int)$this->session_me["id"]);

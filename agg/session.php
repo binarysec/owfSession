@@ -86,6 +86,14 @@ class session extends wf_agg {
 		
 		$this->session_sender = $this->core_pref->get_value("sender");
 		
+		/* cookie host */
+		$this->cookie_host = $this->core_pref->register(
+			"host",
+			"Session host for cookie",
+			CORE_PREF_VARCHAR,
+			""
+		);
+		
 		$this->lang = $this->wf->core_lang()->get_context(
 			"session/profil"
 		);
@@ -377,11 +385,10 @@ class session extends wf_agg {
 		$this->user->modify($update, (int)$this->session_me["id"]);
 			
 		/* utilisation d'un cookie */
-		setcookie(
+		$this->setcookie(
 			$this->session_var,
 			$this->session_me["session_id"],
-			time()+$this->session_timeout,
-			"/"
+			time()+$this->session_timeout
 		);
 
 		/* log */
@@ -414,14 +421,9 @@ class session extends wf_agg {
 // 			"session_id"        => '',
 			"session_time"      => 0
 		);
-		setcookie(
-			$this->session_var,
-			"",		// => There were $session variable here throwing a Notice cause this variable is not declared anywhere
-			time()-3600,
-			"/"
-		);
+		$this->setcookie($this->session_var, "", time() - 3600);
 		$this->user->modify($update, (int)$this->session_me["id"]);
-		return(TRUE);
+		return true;
 	}
 	
 	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -496,5 +498,16 @@ class session extends wf_agg {
 		$this->wf->db->query($q);
 		$res = $q->get_result();
 		return isset($res[0]["COUNT(*)"]) ? (int) $res[0]["COUNT(*)"] : 0;
+	}
+	
+	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+	 *
+	 * Set the cookie with proper host
+	 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+	public function setcookie($name, $value, $expire = 0, $path = "/") {
+		if($this->cookie_host)
+			setcookie($name, $value, $expire, $path, $this->cookie_host);
+		else
+			setcookie($name, $value, $expire, $path);
 	}
 }

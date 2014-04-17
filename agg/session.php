@@ -314,6 +314,8 @@ class session extends wf_agg {
 
 		/* utilisation d'un cookie */
 		$c = $this->session_var."=$session; expires=".date(DATE_COOKIE, time()+$this->session_timeout)."; path=/";
+		if($this->cookie_host)
+			$c .= "; Domain=".$this->cookie_host;
 		$this->a_core_request->set_header(
 			"Set-Cookie", 
 			$c

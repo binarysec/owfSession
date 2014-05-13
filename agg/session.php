@@ -484,7 +484,8 @@ class session extends wf_agg {
 	
 		unset($sm["password"]);
 		unset($sm["session_id"]);
-	
+		
+		$this->wf->no_cache();
 		return(array(
 			"info" => $sm,
 			"perm" => $this->session_my_perms,

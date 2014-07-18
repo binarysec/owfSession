@@ -285,7 +285,7 @@ class session extends wf_agg {
 		if(time() - $this->session_me["session_time"] > $this->session_timeout) {
 			$this->session_me = array(
 				"id"              => -1,
-				"remote_address"  => ip2long($_SERVER["REMOTE_ADDR"]),
+				"remote_address"  => ip2long(isset($_SERVER["REMOTE_ADDR"]) ? $_SERVER["REMOTE_ADDR"] : "127.0.0.1"),
 // 				"remote_hostname" => gethostbyaddr($_SERVER["REMOTE_ADDR"]),
 				"session_time"    => time()
 			);
@@ -301,7 +301,7 @@ class session extends wf_agg {
 		
 		/* modification de l'adresse en base + time update */
 		$update = array(
-			"remote_address"  => ip2long($_SERVER["REMOTE_ADDR"]),
+			"remote_address"  => ip2long(isset($_SERVER["REMOTE_ADDR"]) ? $_SERVER["REMOTE_ADDR"] : "127.0.0.1"),
 // 			"remote_hostname" => gethostbyaddr($_SERVER["REMOTE_ADDR"]),
 //			"lang"            => $se['code'],
 			"session_time"    => time()
@@ -508,6 +508,11 @@ class session extends wf_agg {
 	 * Set the cookie with proper host
 	 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 	public function setcookie($name, $value, $expire = 0, $path = "/") {
+		if(php_sapi_name() == "cli") {
+			$_COOKIE[$name] = $value;
+			return true;
+		}
+		
 		if($this->cookie_host)
 			setcookie($name, $value, $expire, $path, $this->cookie_host);
 		else
